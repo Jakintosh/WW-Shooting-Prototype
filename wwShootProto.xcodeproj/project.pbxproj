@@ -15,6 +15,8 @@
 		21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF8019CF8D17004B00C9 /* Images.xcassets */; };
 		21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */; };
 		21B5AF9019CF8D17004B00C9 /* wwShootProtoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF8F19CF8D17004B00C9 /* wwShootProtoTests.swift */; };
+		21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF9919CF8D80004B00C9 /* textures.atlas */; };
+		21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF9E19CF9336004B00C9 /* Whale.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,8 @@
 		21B5AF8919CF8D17004B00C9 /* wwShootProtoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wwShootProtoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B5AF8E19CF8D17004B00C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21B5AF8F19CF8D17004B00C9 /* wwShootProtoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wwShootProtoTests.swift; sourceTree = "<group>"; };
+		21B5AF9919CF8D80004B00C9 /* textures.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = textures.atlas; path = resources/textures.atlas; sourceTree = SOURCE_ROOT; };
+		21B5AF9E19CF9336004B00C9 /* Whale.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Whale.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,13 +85,7 @@
 		21B5AF7219CF8D17004B00C9 /* wwShootProto */ = {
 			isa = PBXGroup;
 			children = (
-				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
-				21B5AF7719CF8D17004B00C9 /* GameScene.sks */,
-				21B5AF7919CF8D17004B00C9 /* GameScene.swift */,
-				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
-				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
-				21B5AF8019CF8D17004B00C9 /* Images.xcassets */,
-				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
+				21B5AF9B19CF92E9004B00C9 /* Game */,
 				21B5AF7319CF8D17004B00C9 /* Supporting Files */,
 			);
 			path = wwShootProto;
@@ -96,6 +94,12 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
+				21B5AF7719CF8D17004B00C9 /* GameScene.sks */,
+				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
+				21B5AF8019CF8D17004B00C9 /* Images.xcassets */,
+				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
+				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
 				21B5AF7419CF8D17004B00C9 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -116,6 +120,32 @@
 				21B5AF8E19CF8D17004B00C9 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		21B5AF9B19CF92E9004B00C9 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				21B5AF9D19CF9322004B00C9 /* Entities */,
+				21B5AF9C19CF92F4004B00C9 /* Scenes */,
+				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
+			);
+			name = Game;
+			sourceTree = "<group>";
+		};
+		21B5AF9C19CF92F4004B00C9 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				21B5AF7919CF8D17004B00C9 /* GameScene.swift */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		21B5AF9D19CF9322004B00C9 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				21B5AF9E19CF9336004B00C9 /* Whale.swift */,
+			);
+			name = Entities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +197,7 @@
 				TargetAttributes = {
 					21B5AF6F19CF8D17004B00C9 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = C8L677C7HM;
 					};
 					21B5AF8819CF8D17004B00C9 = {
 						CreatedOnToolsVersion = 6.0;
@@ -199,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */,
+				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
 				21B5AF7819CF8D17004B00C9 /* GameScene.sks in Resources */,
 				21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */,
@@ -222,6 +254,7 @@
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
+				21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +377,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jak Tiano (A845JA3URG)";
 				INFOPLIST_FILE = wwShootProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -354,6 +388,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jak Tiano (A845JA3URG)";
 				INFOPLIST_FILE = wwShootProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -413,6 +448,7 @@
 				21B5AF9519CF8D17004B00C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		21B5AF9619CF8D17004B00C9 /* Build configuration list for PBXNativeTarget "wwShootProtoTests" */ = {
 			isa = XCConfigurationList;
@@ -421,6 +457,7 @@
 				21B5AF9819CF8D17004B00C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
