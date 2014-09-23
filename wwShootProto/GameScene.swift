@@ -45,6 +45,7 @@ class GameScene: SKScene {
         addChild(water)
         
         // run actions
+        //addWhale(position: CGPointMake(frame.width/2, frame.height/2))
         runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: nil)}), SKAction.waitForDuration(7)])))
     }
     
@@ -62,6 +63,9 @@ class GameScene: SKScene {
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         touchLocation = nil
+        for whale in whales {
+            whale.disengage()
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -69,12 +73,16 @@ class GameScene: SKScene {
         if let u_touchLocation = touchLocation {
             reticle.position = u_touchLocation
             reticle.position.y += 100
-            reticle.strokeColor = SKColor.redColor()
             for whale in whales {
                 whale.update(touchPos: reticle.position)
             }
+            reticle.strokeColor = SKColor.redColor()
         } else {
             reticle.strokeColor = SKColor.clearColor()
+        }
+        
+        for whale in whales {
+            whale.update(touchPos: nil)
         }
     }
     

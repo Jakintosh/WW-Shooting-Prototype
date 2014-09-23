@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
 		21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */; };
 		21B5AF7819CF8D17004B00C9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF7719CF8D17004B00C9 /* GameScene.sks */; };
 		21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF7919CF8D17004B00C9 /* GameScene.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
 		21B5AF7019CF8D17004B00C9 /* wwShootProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwShootProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B5AF7419CF8D17004B00C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +66,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2181E16C19D10E93009FE3FB /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				216F548819D114740040BB89 /* bokeh.png */,
+			);
+			name = Particles;
+			sourceTree = "<group>";
+		};
 		21B5AF6719CF8D17004B00C9 = {
 			isa = PBXGroup;
 			children = (
@@ -94,13 +104,14 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
-				21B5AF7719CF8D17004B00C9 /* GameScene.sks */,
-				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
-				21B5AF8019CF8D17004B00C9 /* Images.xcassets */,
-				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
-				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
 				21B5AF7419CF8D17004B00C9 /* Info.plist */,
+				21B5AF7719CF8D17004B00C9 /* GameScene.sks */,
+				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
+				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
+				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
+				21B5AF8019CF8D17004B00C9 /* Images.xcassets */,
+				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
+				2181E16C19D10E93009FE3FB /* Particles */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -232,6 +243,7 @@
 				21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */,
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
+				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* GameScene.sks in Resources */,
 				21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */,
 			);
