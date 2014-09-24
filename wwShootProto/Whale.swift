@@ -17,14 +17,13 @@ class EnergyParticle {
     init(scene: SKScene) {
         particle = SKSpriteNode(imageNamed: "bokeh")
         particle.zPosition = 50
-        particle.xScale = 0.1
-        particle.yScale = 0.1
+        particle.xScale = 0.15
+        particle.yScale = 0.15
         particle.color = SKColor.greenColor()
         particle.colorBlendFactor = 1.0
         particle.alpha = 0.5
         particle.blendMode = SKBlendMode.Add
         scene.addChild(particle)
-        
     }
     
     func setMovement(#start: CGPoint, end: CGPoint, duration: Float) {
@@ -39,7 +38,7 @@ class EnergyParticle {
         let rotateFade = SKAction.sequence([ SKAction.group([ SKAction.rotateByAngle(thing*4, duration: NSTimeInterval(durations)),
                                                               SKAction.moveByX(thing*10, y: thing*10 - 30, duration: NSTimeInterval(durations)),
                                                               SKAction.fadeOutWithDuration(NSTimeInterval(durations)),
-                                                              SKAction.scaleBy(thing - 0.5, duration: NSTimeInterval(durations))]),
+                                                              SKAction.scaleBy(thing*2 - 0.5, duration: NSTimeInterval(durations))]),
                                              SKAction.runBlock({ () -> Void in
                                                     self.particle.removeFromParent()
                                                     self.particle.removeAllChildren()
@@ -93,11 +92,12 @@ class EnergyWell {
                 lockFill += 0.01
                 
             case .FullPower:
-                lockFill += 0.05
+                lockFill += 0.07
                 
             }
             
-            if lockFill < 0 { lockFill = 0 }
+            if lockFill < 0 { lockFill = 0.00; fillMeter.alpha = 0.0 }
+            else { fillMeter.alpha = 1.0 }
             if lockFill > lockOn { lockFill = lockOn; burst() }
             
             var mod: Float = lockFill/lockOn
