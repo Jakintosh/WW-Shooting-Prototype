@@ -41,6 +41,7 @@ class GameScene: SKScene {
         // setup water
         let water = SKShapeNode(rect: CGRectMake(0, 0, frame.width, 200))
         water.fillColor = SKColor.blueColor()
+        water.strokeColor = SKColor.blueColor()
         water.zPosition = 100
         addChild(water)
         
@@ -79,11 +80,12 @@ class GameScene: SKScene {
             reticle.strokeColor = SKColor.redColor()
         } else {
             reticle.strokeColor = SKColor.clearColor()
+            for whale in whales {
+                whale.update(touchPos: nil)
+            }
         }
         
-        for whale in whales {
-            whale.update(touchPos: nil)
-        }
+        
     }
     
     func addWhale(position pos: CGPoint?) {

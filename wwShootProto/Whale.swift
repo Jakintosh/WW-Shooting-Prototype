@@ -9,6 +9,48 @@
 import Foundation
 import SpriteKit
 
+
+class EnergyParticle {
+    
+    let particle: SKSpriteNode
+    
+    init(scene: SKScene) {
+        particle = SKSpriteNode(imageNamed: "bokeh")
+        particle.zPosition = 50
+        particle.xScale = 0.1
+        particle.yScale = 0.1
+        particle.color = SKColor.greenColor()
+        particle.colorBlendFactor = 1.0
+        particle.alpha = 0.5
+        particle.blendMode = SKBlendMode.Add
+        scene.addChild(particle)
+        
+    }
+    
+    func setMovement(#start: CGPoint, end: CGPoint, duration: Float) {
+        particle.position = start
+        
+        let move = SKAction.moveTo(end, duration: NSTimeInterval(duration))
+        move.timingMode = .EaseOut
+        
+        let thing: CGFloat = CGFloat(arc4random_uniform(10))/10.0
+        let durations = thing + 4
+        
+        let rotateFade = SKAction.sequence([ SKAction.group([ SKAction.rotateByAngle(thing*4, duration: NSTimeInterval(durations)),
+                                                              SKAction.moveByX(thing*10, y: thing*10 - 30, duration: NSTimeInterval(durations)),
+                                                              SKAction.fadeOutWithDuration(NSTimeInterval(durations)),
+                                                              SKAction.scaleBy(thing - 0.5, duration: NSTimeInterval(durations))]),
+                                             SKAction.runBlock({ () -> Void in
+                                                    self.particle.removeFromParent()
+                                                    self.particle.removeAllChildren()
+                                                    self.particle.removeAllActions()
+                                                }) ])
+        
+        particle.runAction(SKAction.sequence([move,rotateFade]))
+    }
+    
+}
+
 class EnergyWell {
     
     enum EnergyWellActivation {
@@ -24,7 +66,8 @@ class EnergyWell {
     var activationLevel: EnergyWellActivation = .NoPower
     
     init() {
-        well = SKShapeNode(circleOfRadius: 20)
+        well = SKShapeNode()
+        well.path = CGPathCreateWithEllipseInRect(CGRectMake(-20, -20, 40, 40), nil)
         well.strokeColor = SKColor.orangeColor()
         well.fillColor = SKColor.clearColor()
         well.lineWidth = 6
@@ -44,10 +87,10 @@ class EnergyWell {
             switch(activationLevel) {
                 
             case .NoPower:
-                lockFill -= 0.05
+                lockFill -= 0.03
                 
             case .HalfPower:
-                lockFill += 0
+                lockFill += 0.01
                 
             case .FullPower:
                 lockFill += 0.05
@@ -83,7 +126,7 @@ class EnergyWell {
             case .HalfPower:
                 activationLevel = .HalfPower
                 well.strokeColor = SKColor.greenColor()
-                well.fillColor = SKColor.clearColor()
+                well.fillColor = SKColor(red: 0, green: 1, blue: 0, alpha: 0.5)
             case .FullPower:
                 activationLevel = .FullPower
                 well.strokeColor = SKColor.greenColor()
@@ -98,25 +141,47 @@ class EnergyWell {
     }
     
     func burst() {
-        var emitter = SKEmitterNode()
-        emitter.particleTexture = SKTexture(imageNamed: "bokeh")
-        emitter.particleColor = SKColor.greenColor()
-        emitter.particleBirthRate = 400
-        emitter.particleLifetime = 9999999
-        emitter.particleScale = 0.1
-        emitter.particleScaleSpeed = 0.2
-        emitter.particleScaleRange = 0.2
-        emitter.particleAlpha = 0.5
-        emitter.xAcceleration = -200
-        emitter.yAcceleration = -200
-        emitter.targetNode = well.scene!
-        emitter.numParticlesToEmit = 100
-        emitter.emissionAngleRange = 360
-        emitter.particleSpeed = 300
-        emitter.particleSpeedRange = 100
-        emitter.particleBlendMode = SKBlendMode.Add
-        well.addChild(emitter)
+
+//        var emitter = SKEmitterNode()
+//        
+//        emitter.particleTexture                 = SKTexture(imageNamed: "bokeh")
+//        emitter.particleColor                   = SKColor.greenColor()
+//        emitter.targetNode                      = well.scene!
+//        emitter.numParticlesToEmit              = 250
+//        
+//        emitter.particleBirthRate               = 10000
+//        emitter.particleLifetime                = 2.0
+//        
+//        emitter.emissionAngleRange              = 360
+//        
+//        emitter.particleSpeed                   = 0
+//        emitter.particleSpeedRange              = 400
+//
+//        emitter.particleScale                   = 0.1
+//        emitter.particleScaleRange              = 0.1
+//        
+//        emitter.particleRotationRange           = 0.75
+//        
+//        emitter.particleAlpha                   = 1.0
+//        emitter.particleAlphaSpeed              = -1.0
+//        
+//        emitter.particleColorBlendFactor        = 1.0
+//        emitter.particleColorBlendFactorRange   = 0.5
+//        emitter.particleBlendMode               = SKBlendMode.Add
+//        
+//        well.addChild(emitter)
         
+        for i in 0..<100 {
+            let newThing = EnergyParticle(scene: well.scene!)
+            let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
+            let distance = Float(arc4random_uniform(150))
+            let angle = Float(arc4random_uniform(360)) * Float(M_PI / 180)
+            let end = CGPointMake(CGFloat(cos(angle)*distance) + start.x, CGFloat(sin(angle)*distance) + start.y)
+            let duration = CGFloat(arc4random_uniform(2))/10.0
+            newThing.setMovement(start: start, end: end, duration: Float(duration + 0.9))
+        }
+        
+        fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
         filled = false
         activationLevel = .NoPower
         well.strokeColor = SKColor.grayColor()
@@ -135,9 +200,11 @@ class Whale : SKSpriteNode {
         
         addWeakPoint(position: CGPointMake(-20, 50))
     }
+    
     convenience override init() {
         self.init(texture: SKTexture(imageNamed: "whale"), color: SKColor.whiteColor(), size: SKTexture(imageNamed: "whale").size())
     }
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -150,7 +217,6 @@ class Whale : SKSpriteNode {
                     let a = touchInWhaleSpace.x - ws.well.position.x
                     let b = touchInWhaleSpace.y - ws.well.position.y
                     let distSq = (a*a)+(b*b)
-    //                println("input touch = \(touchPos) and converted touch = \(touchInWhaleSpace)")
                     if distSq < (20*20) {
                         ws.activate(activation: .FullPower)
                     } else if distSq < (40*40) {
@@ -161,6 +227,7 @@ class Whale : SKSpriteNode {
                 }
             }
         }
+        
         for ws in weakSpots {
             ws.updateProgress()
         }
