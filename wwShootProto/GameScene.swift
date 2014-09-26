@@ -18,7 +18,7 @@ class GameScene: SKScene {
     var whales = [Whale]()
     var touchLocation: CGPoint?
     
-    var onebutton: SKSpriteNode = SKSpriteNode(color: SKColor.grayColor(), size: CGSizeZero)
+    var onebutton: SKSpriteNode = SKSpriteNode(color: SKColor.greenColor(), size: CGSizeZero)
     var twobutton: SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeZero)
     var moveType: Int = 0
     
@@ -31,7 +31,7 @@ class GameScene: SKScene {
     
     // functions
     override func didMoveToView(view: SKView) {
-        partcleManager = ParticleManager(root: self, numParticles: 750)
+        partcleManager = ParticleManager(root: self, numParticles: 375)
         
         onebutton.size = CGSizeMake(frame.width/2, 60)
         twobutton.size = CGSizeMake(frame.width/2, 60)
@@ -98,12 +98,12 @@ class GameScene: SKScene {
         }
         for touch: AnyObject in touches {
             if onebutton.containsPoint(touch.locationInNode(self)) {
-                onebutton.color = SKColor.grayColor()
+                onebutton.color = SKColor.greenColor()
                 twobutton.color = SKColor.whiteColor()
                 moveType = 0
             } else if twobutton.containsPoint(touch.locationInNode(self)) {
                 onebutton.color = SKColor.whiteColor()
-                twobutton.color = SKColor.grayColor()
+                twobutton.color = SKColor.greenColor()
                 moveType = 1
             }
         }

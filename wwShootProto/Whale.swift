@@ -11,6 +11,9 @@ import SpriteKit
 
 class ParticleManager {
     
+    var numParticlesCollected: Int = 0
+    let particleLabel: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
+    
     var particles: [EnergyParticle] = [EnergyParticle]()
     var availableParticles: [Int] = [Int]()
     var numParticles: Int = 0
@@ -19,26 +22,30 @@ class ParticleManager {
     let outerRange: Double = 120
     let suckSpeed: Double = 0.5
     
-//    var spawners: [(queueSize: Int, spawnPos: CGPoint, particleSpawn: (()->()) )]
-    
     var queueSize: Int = 0
     var spawnPos: CGPoint = CGPointZero
     var particleSpawn: (EnergyParticle) -> () = {EnergyParticle in}
     
     let maxQueuePerTick: Int = 20
+    let spewSpeed: Double = 300
     
     init(root: SKNode, numParticles: Int) {
-//        spawners = [ (Int, CGPoint, () ) ]()
         self.numParticles = numParticles
         for i in 0..<numParticles {
             let newParticle = EnergyParticle(root: root, index: i, emitter: self)
             availableParticles += [i]
             particles += [newParticle]
         }
+        particleLabel.fontSize = 24
+        particleLabel.position = CGPointMake(root.scene!.frame.width/2, 40)
+        particleLabel.horizontalAlignmentMode = .Center
+        particleLabel.text = "\(numParticlesCollected)"
+        particleLabel.zPosition = 400
+        root.addChild(particleLabel)
+        
     }
     
     func addToQueue(position: CGPoint, completion: (EnergyParticle) -> (), num: Int = 1) {
-//        spawners.append(queueSize: num, spawnPos: position, particleSpawn: completion)
         queueSize = num
         spawnPos = position
         particleSpawn = completion
@@ -60,8 +67,8 @@ class ParticleManager {
     
     func updateSuction(#touchPos: CGPoint?, dt: CFTimeInterval) {
         if queueSize > 0 {
-            var cycles = maxQueuePerTick
-            if cycles < 0 { cycles = queueSize }
+            var cycles = Int(dt * spewSpeed)
+            if queueSize - cycles < 0 { cycles = queueSize }
             queueSize -= cycles
             for _ in 0..<cycles {
                 var particle = spawnParticle(spawnPos)
@@ -86,6 +93,7 @@ class ParticleManager {
                             strength = 1 - Double((dist - inSq) / (outSq-inSq))
                         } else if dist <= inSq {
                             removeParticle(particle.index)
+                            numParticlesCollected++
                         }
                         
                         let dx: Double = Double(pos.x - particle.particle.position.x) * leSuckSpeed * strength
@@ -98,6 +106,7 @@ class ParticleManager {
                 }
             }
         }
+        particleLabel.text = "\(numParticlesCollected)"
     }
     
 }
@@ -159,8 +168,8 @@ class EnergyParticle {
         
         let rotateFade = SKAction.sequence([ SKAction.group([ SKAction.rotateByAngle(thing*4, duration: NSTimeInterval(durations)),
                                                               SKAction.moveByX(thing*10, y: thing*10 - (120 * ((thing/2) + 0.5)), duration: NSTimeInterval(durations)),
-                                                              SKAction.sequence( [SKAction.waitForDuration(NSTimeInterval(durations - 1)), SKAction.runBlock({self.active = false}), SKAction.fadeOutWithDuration(NSTimeInterval(1))]),
-                                                              SKAction.scaleBy(thing*2 - 0.5, duration: NSTimeInterval(durations))]),
+                                                              SKAction.sequence( [SKAction.waitForDuration(NSTimeInterval(durations - thing*2 - 0.2)), SKAction.runBlock({self.active = false}), SKAction.fadeOutWithDuration(NSTimeInterval(thing*2 + 0.2))]),
+                                                              SKAction.scaleBy(thing - 0.5, duration: NSTimeInterval(durations))]),
                                              SKAction.runBlock({self.emitter.removeParticle(self.index)})])
         
         particle.runAction(SKAction.sequence([move, other, rotateFade]))
@@ -185,7 +194,7 @@ class EnergyWell {
     var fillPath: UIBezierPath = UIBezierPath()
     var activationLevel: EnergyWellActivation = .NoPower
     
-    let numParticlesInBurst: Int = 300
+    let numParticlesInBurst: Int = 150
     let maxBurstDistance: UInt32 = 175
     
     init(partMan: ParticleManager) {
@@ -268,17 +277,6 @@ class EnergyWell {
     
     func burst() {
         
-//        let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
-//        
-//        for i in 0..<numParticlesInBurst {
-//            let distance = Float(arc4random_uniform(maxBurstDistance))
-//            let angle = Float(arc4random_uniform(360)) * Float(M_PI / 180)
-//            let end = CGPointMake(CGFloat(cos(angle)*distance) + start.x, CGFloat(sin(angle)*distance) + start.y)
-//            let duration = CGFloat(arc4random_uniform(2))/10.0
-//            let newPart = particleMan.spawnParticle(start)
-//            newPart?.setMovement(start: start, end: end, duration: Float(duration + 0.9))
-//        }
-        
         let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
         let closureThing: (EnergyParticle) -> () = { (particle: EnergyParticle) -> () in
             let distance = Float(arc4random_uniform(self.maxBurstDistance))
@@ -335,9 +333,10 @@ class Whale : SKSpriteNode {
                         ws.activate(activation: .NoPower)
                     }
                 }
-                particleMan?.updateSuction(touchPos: u_touchPos, dt: dt)
             }
         }
+        
+        particleMan?.updateSuction(touchPos: touchPos, dt: dt)
         
         for ws in weakSpots {
             ws.updateProgress(dt)
