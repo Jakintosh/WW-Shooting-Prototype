@@ -10,18 +10,19 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    // Problem: The player needs to be able to shoot a whale
-    // Soultion: Create whales that jump and can be shot
-    
-    // Every so many seconds, a whale will jump out of the water
-    // When players touch the whale, the whale becomes targeted
-    // The closer to the center of the whale they are, the faster the lock on occurs
-    // When fully locked, the whale explodes
-    
     // properties
+    var lastTime: CFTimeInterval = 0
+    var deltaTime: CFTimeInterval = 0
+    
     let reticle = SKShapeNode(circleOfRadius: 20)
     var whales = [Whale]()
     var touchLocation: CGPoint?
+    
+    var onebutton: SKSpriteNode = SKSpriteNode(color: SKColor.grayColor(), size: CGSizeZero)
+    var twobutton: SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeZero)
+    var moveType: Int = 0
+    
+    var partcleManager: ParticleManager?
     
     // initializers
     required init(coder aDecoder: NSCoder) {
@@ -30,6 +31,34 @@ class GameScene: SKScene {
     
     // functions
     override func didMoveToView(view: SKView) {
+        partcleManager = ParticleManager(root: self, numParticles: 750)
+        
+        onebutton.size = CGSizeMake(frame.width/2, 60)
+        twobutton.size = CGSizeMake(frame.width/2, 60)
+        onebutton.position = CGPointMake(frame.width/4, frame.height - 30)
+        twobutton.position = CGPointMake(frame.width/4 + frame.width/2, frame.height - 30)
+        addChild(onebutton)
+        addChild(twobutton)
+        
+        let label1 = SKLabelNode(fontNamed: "HelveticaNeue")
+        label1.text = "1"
+        label1.position = CGPointMake(frame.width/2 - 110, 738)
+        label1.fontSize = 32
+        label1.fontColor = SKColor.blackColor()
+        label1.horizontalAlignmentMode = .Left
+        label1.verticalAlignmentMode = .Center
+        label1.zPosition = 200
+        addChild(label1)
+        
+        let label2 = SKLabelNode(fontNamed: "HelveticaNeue")
+        label2.text = "2"
+        label2.position = CGPointMake(frame.width/2 + 110, 738)
+        label2.fontSize = 32
+        label2.fontColor = SKColor.blackColor()
+        label2.horizontalAlignmentMode = .Left
+        label2.verticalAlignmentMode = .Center
+        label2.zPosition = 200
+        addChild(label2)
         
         // setup reticle
         reticle.fillColor = SKColor.clearColor()
@@ -39,11 +68,11 @@ class GameScene: SKScene {
         addChild(reticle)
         
         // setup water
-        let water = SKShapeNode(rect: CGRectMake(0, 0, frame.width, 200))
-        water.fillColor = SKColor.blueColor()
-        water.strokeColor = SKColor.blueColor()
-        water.zPosition = 100
-        addChild(water)
+        let left = SKShapeNode(rect: CGRectMake(0, 0, frame.width, 200))
+        left.fillColor = SKColor.blueColor()
+        left.strokeColor = SKColor.blueColor()
+        left.zPosition = 100
+        addChild(left)
         
         // run actions
         //addWhale(position: CGPointMake(frame.width/2, frame.height/2))
@@ -67,29 +96,43 @@ class GameScene: SKScene {
         for whale in whales {
             whale.disengage()
         }
+        for touch: AnyObject in touches {
+            if onebutton.containsPoint(touch.locationInNode(self)) {
+                onebutton.color = SKColor.grayColor()
+                twobutton.color = SKColor.whiteColor()
+                moveType = 0
+            } else if twobutton.containsPoint(touch.locationInNode(self)) {
+                onebutton.color = SKColor.whiteColor()
+                twobutton.color = SKColor.grayColor()
+                moveType = 1
+            }
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
+        
+        deltaTime = currentTime - lastTime
+        if deltaTime > 1.0 { deltaTime = 1.0 }
+        println(deltaTime)
+        lastTime = currentTime
         
         if let u_touchLocation = touchLocation {
             reticle.position = u_touchLocation
             reticle.position.y += 100
             for whale in whales {
-                whale.update(touchPos: reticle.position)
+                whale.update(touchPos: reticle.position, dt: deltaTime)
             }
             reticle.strokeColor = SKColor.redColor()
         } else {
             reticle.strokeColor = SKColor.clearColor()
             for whale in whales {
-                whale.update(touchPos: nil)
+                whale.update(touchPos: nil, dt: deltaTime)
             }
         }
-        
-        
     }
     
     func addWhale(position pos: CGPoint?) {
-        let newWhale = Whale()
+        let newWhale = Whale(partMan: partcleManager!)
         if let whalePos = pos {
             newWhale.position = whalePos
         } else {
@@ -97,7 +140,7 @@ class GameScene: SKScene {
             newWhale.position.y = frame.size.height/2 - 400
         }
         addChild(newWhale)
-        newWhale.move()
+        newWhale.move(moveType)
         
         whales += [newWhale]
     }

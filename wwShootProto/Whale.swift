@@ -9,43 +9,161 @@
 import Foundation
 import SpriteKit
 
+class ParticleManager {
+    
+    var particles: [EnergyParticle] = [EnergyParticle]()
+    var availableParticles: [Int] = [Int]()
+    var numParticles: Int = 0
+    
+    let innerRange: Double = 20
+    let outerRange: Double = 120
+    let suckSpeed: Double = 0.5
+    
+//    var spawners: [(queueSize: Int, spawnPos: CGPoint, particleSpawn: (()->()) )]
+    
+    var queueSize: Int = 0
+    var spawnPos: CGPoint = CGPointZero
+    var particleSpawn: (EnergyParticle) -> () = {EnergyParticle in}
+    
+    let maxQueuePerTick: Int = 20
+    
+    init(root: SKNode, numParticles: Int) {
+//        spawners = [ (Int, CGPoint, () ) ]()
+        self.numParticles = numParticles
+        for i in 0..<numParticles {
+            let newParticle = EnergyParticle(root: root, index: i, emitter: self)
+            availableParticles += [i]
+            particles += [newParticle]
+        }
+    }
+    
+    func addToQueue(position: CGPoint, completion: (EnergyParticle) -> (), num: Int = 1) {
+//        spawners.append(queueSize: num, spawnPos: position, particleSpawn: completion)
+        queueSize = num
+        spawnPos = position
+        particleSpawn = completion
+    }
+    
+    func spawnParticle(position: CGPoint) -> EnergyParticle? {
+        if availableParticles.count > 0 {
+            var selected: EnergyParticle = particles[availableParticles.removeAtIndex(0)]
+            selected.addMe(position)
+            return selected
+        }
+        return nil
+    }
+    
+    func removeParticle(index: Int) {
+        availableParticles.append(index)
+        particles[index].killMe()
+    }
+    
+    func updateSuction(#touchPos: CGPoint?, dt: CFTimeInterval) {
+        if queueSize > 0 {
+            var cycles = maxQueuePerTick
+            if cycles < 0 { cycles = queueSize }
+            queueSize -= cycles
+            for _ in 0..<cycles {
+                var particle = spawnParticle(spawnPos)
+                particleSpawn(particle!)
+            }
+        }
+        else if let pos = touchPos {
+            if numParticles > availableParticles.count {
+                let inSq = innerRange * innerRange
+                let outSq = outerRange * outerRange
+                let leSuckSpeed = suckSpeed * (dt*4)
+                for particle in particles {
+                    if particle.active {
+                        
+                        let a: Double = Double(pos.x - particle.particle.position.x)
+                        let b: Double = Double(pos.y - particle.particle.position.y)
+                        let dist = (a*a) + (b*b)
+                        
+                        var strength: Double = 0
+                        
+                        if dist > inSq && dist < outSq {
+                            strength = 1 - Double((dist - inSq) / (outSq-inSq))
+                        } else if dist <= inSq {
+                            removeParticle(particle.index)
+                        }
+                        
+                        let dx: Double = Double(pos.x - particle.particle.position.x) * leSuckSpeed * strength
+                        let dy: Double = Double(pos.y - particle.particle.position.y) * leSuckSpeed * strength
+                        
+                        particle.particle.position.x += CGFloat(dx)
+                        particle.particle.position.y += CGFloat(dy)
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+}
 
 class EnergyParticle {
     
     let particle: SKSpriteNode
+    let root: SKNode
+    var active: Bool = false
+    let index: Int
+    let emitter: ParticleManager
     
-    init(scene: SKScene) {
+    init(root: SKNode, index: Int, emitter: ParticleManager ) {
+        self.index = index
+        self.root = root
+        self.emitter = emitter
         particle = SKSpriteNode(imageNamed: "bokeh")
         particle.zPosition = 50
-        particle.xScale = 0.15
-        particle.yScale = 0.15
         particle.color = SKColor.greenColor()
         particle.colorBlendFactor = 1.0
-        particle.alpha = 0.5
         particle.blendMode = SKBlendMode.Add
-        scene.addChild(particle)
+        defaultProperties()
+    }
+    
+    func defaultProperties() {
+        particle.xScale = 0.15
+        particle.yScale = 0.15
+        particle.alpha = 0.5
+    }
+    
+    func addMe(pos: CGPoint) {
+        particle.position = pos
+        root.addChild(particle)
+        defaultProperties()
+//        active = true
+    }
+    
+    func killMe() {
+        particle.removeFromParent()
+        particle.removeAllChildren()
+        particle.removeAllActions()
+        active = false
     }
     
     func setMovement(#start: CGPoint, end: CGPoint, duration: Float) {
         particle.position = start
         
         let move = SKAction.moveTo(end, duration: NSTimeInterval(duration))
-        move.timingMode = .EaseOut
+        move.timingFunction = { (dt: Float) -> (Float) in
+            return 1 - ((1 - dt) * (1 - dt) * (1 - dt))
+        }
         
         let thing: CGFloat = CGFloat(arc4random_uniform(10))/10.0
-        let durations = thing + 4
+        let durations = thing + 6
+        
+        let other = SKAction.runBlock { () -> Void in
+            self.active = true
+        }
         
         let rotateFade = SKAction.sequence([ SKAction.group([ SKAction.rotateByAngle(thing*4, duration: NSTimeInterval(durations)),
-                                                              SKAction.moveByX(thing*10, y: thing*10 - 30, duration: NSTimeInterval(durations)),
-                                                              SKAction.fadeOutWithDuration(NSTimeInterval(durations)),
+                                                              SKAction.moveByX(thing*10, y: thing*10 - (120 * ((thing/2) + 0.5)), duration: NSTimeInterval(durations)),
+                                                              SKAction.sequence( [SKAction.waitForDuration(NSTimeInterval(durations - 1)), SKAction.runBlock({self.active = false}), SKAction.fadeOutWithDuration(NSTimeInterval(1))]),
                                                               SKAction.scaleBy(thing*2 - 0.5, duration: NSTimeInterval(durations))]),
-                                             SKAction.runBlock({ () -> Void in
-                                                    self.particle.removeFromParent()
-                                                    self.particle.removeAllChildren()
-                                                    self.particle.removeAllActions()
-                                                }) ])
+                                             SKAction.runBlock({self.emitter.removeParticle(self.index)})])
         
-        particle.runAction(SKAction.sequence([move,rotateFade]))
+        particle.runAction(SKAction.sequence([move, other, rotateFade]))
     }
     
 }
@@ -56,15 +174,21 @@ class EnergyWell {
         case NoPower, HalfPower, FullPower
     }
     
+    var particles: [EnergyParticle] = [EnergyParticle]()
+    var particleMan: ParticleManager
+    
     let well: SKShapeNode
     let fillMeter: SKShapeNode
-    let lockOn: Float = 7
+    let lockOn: Float = 2
     var filled: Bool = true
     var lockFill: Float = 0
     var fillPath: UIBezierPath = UIBezierPath()
     var activationLevel: EnergyWellActivation = .NoPower
     
-    init() {
+    let numParticlesInBurst: Int = 300
+    let maxBurstDistance: UInt32 = 175
+    
+    init(partMan: ParticleManager) {
         well = SKShapeNode()
         well.path = CGPathCreateWithEllipseInRect(CGRectMake(-20, -20, 40, 40), nil)
         well.strokeColor = SKColor.orangeColor()
@@ -77,22 +201,24 @@ class EnergyWell {
         fillMeter.lineWidth = 3
         
         fillPath.moveToPoint(CGPointMake(0, 25))
+        
+        particleMan = partMan
     }
     
-    func updateProgress() {
+    func updateProgress(dt: CFTimeInterval) {
         
         if filled {
             
             switch(activationLevel) {
                 
             case .NoPower:
-                lockFill -= 0.03
+                lockFill -= Float(dt/2.0)
                 
             case .HalfPower:
-                lockFill += 0.01
+                lockFill += Float(dt/3.0)
                 
             case .FullPower:
-                lockFill += 0.07
+                lockFill += Float(dt)
                 
             }
             
@@ -141,45 +267,27 @@ class EnergyWell {
     }
     
     func burst() {
-
-//        var emitter = SKEmitterNode()
-//        
-//        emitter.particleTexture                 = SKTexture(imageNamed: "bokeh")
-//        emitter.particleColor                   = SKColor.greenColor()
-//        emitter.targetNode                      = well.scene!
-//        emitter.numParticlesToEmit              = 250
-//        
-//        emitter.particleBirthRate               = 10000
-//        emitter.particleLifetime                = 2.0
-//        
-//        emitter.emissionAngleRange              = 360
-//        
-//        emitter.particleSpeed                   = 0
-//        emitter.particleSpeedRange              = 400
-//
-//        emitter.particleScale                   = 0.1
-//        emitter.particleScaleRange              = 0.1
-//        
-//        emitter.particleRotationRange           = 0.75
-//        
-//        emitter.particleAlpha                   = 1.0
-//        emitter.particleAlphaSpeed              = -1.0
-//        
-//        emitter.particleColorBlendFactor        = 1.0
-//        emitter.particleColorBlendFactorRange   = 0.5
-//        emitter.particleBlendMode               = SKBlendMode.Add
-//        
-//        well.addChild(emitter)
         
-        for i in 0..<100 {
-            let newThing = EnergyParticle(scene: well.scene!)
-            let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
-            let distance = Float(arc4random_uniform(150))
+//        let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
+//        
+//        for i in 0..<numParticlesInBurst {
+//            let distance = Float(arc4random_uniform(maxBurstDistance))
+//            let angle = Float(arc4random_uniform(360)) * Float(M_PI / 180)
+//            let end = CGPointMake(CGFloat(cos(angle)*distance) + start.x, CGFloat(sin(angle)*distance) + start.y)
+//            let duration = CGFloat(arc4random_uniform(2))/10.0
+//            let newPart = particleMan.spawnParticle(start)
+//            newPart?.setMovement(start: start, end: end, duration: Float(duration + 0.9))
+//        }
+        
+        let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
+        let closureThing: (EnergyParticle) -> () = { (particle: EnergyParticle) -> () in
+            let distance = Float(arc4random_uniform(self.maxBurstDistance))
             let angle = Float(arc4random_uniform(360)) * Float(M_PI / 180)
             let end = CGPointMake(CGFloat(cos(angle)*distance) + start.x, CGFloat(sin(angle)*distance) + start.y)
             let duration = CGFloat(arc4random_uniform(2))/10.0
-            newThing.setMovement(start: start, end: end, duration: Float(duration + 0.9))
+            particle.setMovement(start: start, end: end, duration: Float(duration + 0.9))
         }
+        particleMan.addToQueue(start, completion: closureThing, num: numParticlesInBurst)
         
         fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
         filled = false
@@ -195,21 +303,23 @@ class Whale : SKSpriteNode {
     var weakSpots = [EnergyWell]()
     var moveSpeed: Float = 7
     
+    var particleMan: ParticleManager?
+    
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
-        
-        addWeakPoint(position: CGPointMake(-20, 50))
-    }
-    
-    convenience override init() {
-        self.init(texture: SKTexture(imageNamed: "whale"), color: SKColor.whiteColor(), size: SKTexture(imageNamed: "whale").size())
     }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    func update(#touchPos: CGPoint?) {
+    convenience init(partMan: ParticleManager) {
+        self.init(texture: SKTexture(imageNamed: "whale"), color: SKColor.whiteColor(), size: SKTexture(imageNamed: "whale").size())
+        particleMan = partMan
+        addWeakPoint(position: CGPointMake(-20, 50))
+    }
+    
+    func update(#touchPos: CGPoint?, dt: CFTimeInterval) {
         if let theScene = scene {
             if let u_touchPos = touchPos {
                 let touchInWhaleSpace = theScene.convertPoint(u_touchPos, toNode: self)
@@ -225,16 +335,17 @@ class Whale : SKSpriteNode {
                         ws.activate(activation: .NoPower)
                     }
                 }
+                particleMan?.updateSuction(touchPos: u_touchPos, dt: dt)
             }
         }
         
         for ws in weakSpots {
-            ws.updateProgress()
+            ws.updateProgress(dt)
         }
     }
     
     func addWeakPoint(position pos: CGPoint) {
-        let newWeakPoint = EnergyWell()
+        let newWeakPoint = EnergyWell(partMan: particleMan!)
         newWeakPoint.setPosition(pos: pos)
         newWeakPoint.well.zPosition = zPosition + 1
         newWeakPoint.fillMeter.zPosition = zPosition + 1
@@ -244,23 +355,71 @@ class Whale : SKSpriteNode {
         weakSpots += [newWeakPoint]
     }
     
-    func move() {
+    func move(type: Int) {
         if let theScene = scene {
-            let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2), duration: NSTimeInterval(moveSpeed))
-            let moveX = SKAction.moveByX(theScene.size.width - 2*size.width, y: 0, duration: NSTimeInterval(moveSpeed))
-            let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
-            let moveDown = moveUp.reversedAction()
-            moveUp.timingMode = .EaseOut
-            moveDown.timingMode = .EaseIn
             
-            let die = SKAction.runBlock({ () -> Void in
-                (self.scene! as GameScene).removeWhale(whale: self)
-                self.removeFromParent()
-                self.removeAllActions()
-                self.removeAllChildren()
-            })
+            switch(type) {
             
-            runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
+            case 0:
+                let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2), duration: NSTimeInterval(moveSpeed))
+                let moveX = SKAction.moveByX(theScene.size.width - 2*size.width, y: 0, duration: NSTimeInterval(moveSpeed))
+                let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
+                let moveDown = moveUp.reversedAction()
+                moveUp.timingMode = .EaseOut
+                moveDown.timingMode = .EaseIn
+                
+                let die = SKAction.runBlock({ () -> Void in
+                    (self.scene! as GameScene).removeWhale(whale: self)
+                    self.removeFromParent()
+                    self.removeAllActions()
+                    self.removeAllChildren()
+                })
+                
+                runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
+
+                
+            case 1:
+                let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2), duration: NSTimeInterval(moveSpeed))
+                let moveX = SKAction.moveByX(theScene.size.width - 2*size.width, y: 0, duration: NSTimeInterval(moveSpeed))
+                let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
+                let moveDown = moveUp.reversedAction()
+                moveUp.timingFunction = { (dt: Float) -> (Float) in
+                    return 1 - ((1 - dt) * (1 - dt) * (1 - dt))
+                }
+                moveDown.timingFunction = { (dt: Float) -> (Float) in
+                    return (dt * dt * dt)
+                }
+                
+                let die = SKAction.runBlock({ () -> Void in
+                    (self.scene! as GameScene).removeWhale(whale: self)
+                    self.removeFromParent()
+                    self.removeAllActions()
+                    self.removeAllChildren()
+                })
+                
+                runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
+
+                
+            
+            
+            default:
+                let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2), duration: NSTimeInterval(moveSpeed))
+                let moveX = SKAction.moveByX(theScene.size.width - 2*size.width, y: 0, duration: NSTimeInterval(moveSpeed))
+                let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
+                let moveDown = moveUp.reversedAction()
+                moveUp.timingMode = .EaseOut
+                moveDown.timingMode = .EaseIn
+                
+                let die = SKAction.runBlock({ () -> Void in
+                    (self.scene! as GameScene).removeWhale(whale: self)
+                    self.removeFromParent()
+                    self.removeAllActions()
+                    self.removeAllChildren()
+                })
+                
+                runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
+                
+            }
         }
     }
     
