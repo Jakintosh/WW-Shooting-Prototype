@@ -31,7 +31,7 @@ class GameScene: SKScene {
     
     // functions
     override func didMoveToView(view: SKView) {
-        partcleManager = ParticleManager(root: self, numParticles: 375)
+        partcleManager = ParticleManager(root: self, numParticles: 750)
         
         onebutton.size = CGSizeMake(frame.width/2, 60)
         twobutton.size = CGSizeMake(frame.width/2, 60)
@@ -131,7 +131,8 @@ class GameScene: SKScene {
         
         deltaTime = currentTime - lastTime
         if deltaTime > 1.0 { deltaTime = 1.0 }
-        println(deltaTime)
+//        println(deltaTime)
+        
         lastTime = currentTime
         
         if let u_touchLocation = touchLocation {

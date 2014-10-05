@@ -27,7 +27,7 @@ class ParticleManager {
     var particleSpawn: (EnergyParticle) -> () = {EnergyParticle in}
     
     let maxQueuePerTick: Int = 20
-    let spewSpeed: Double = 300
+    let spewSpeed: Double = 1000
     
     init(root: SKNode, numParticles: Int) {
         self.numParticles = numParticles
@@ -72,7 +72,9 @@ class ParticleManager {
             queueSize -= cycles
             for _ in 0..<cycles {
                 var particle = spawnParticle(spawnPos)
-                particleSpawn(particle!)
+                if let part = particle {
+                    particleSpawn(part)
+                }
             }
         }
         else if let pos = touchPos {
@@ -194,7 +196,7 @@ class EnergyWell {
     var fillPath: UIBezierPath = UIBezierPath()
     var activationLevel: EnergyWellActivation = .NoPower
     
-    let numParticlesInBurst: Int = 150
+    let numParticlesInBurst: Int = 275
     let maxBurstDistance: UInt32 = 175
     
     init(partMan: ParticleManager) {
@@ -233,7 +235,7 @@ class EnergyWell {
             
             if lockFill < 0 { lockFill = 0.00; fillMeter.alpha = 0.0 }
             else { fillMeter.alpha = 1.0 }
-            if lockFill > lockOn { lockFill = lockOn; burst() }
+            if lockFill > lockOn { lockFill = lockOn; /*burst()*/ whatTheFuck() }
             
             var mod: Float = lockFill/lockOn
             mod *= Float(2*M_PI)
@@ -277,6 +279,16 @@ class EnergyWell {
     
     func burst() {
         
+        whatTheFuck()
+        
+        fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
+        filled = false
+        activationLevel = .NoPower
+        well.strokeColor = SKColor.grayColor()
+        well.fillColor = SKColor.clearColor()
+    }
+    
+    func whatTheFuck() {
         let start = well.parent!.convertPoint(well.position, toNode: well.scene!)
         let closureThing: (EnergyParticle) -> () = { (particle: EnergyParticle) -> () in
             let distance = Float(arc4random_uniform(self.maxBurstDistance))
@@ -285,13 +297,7 @@ class EnergyWell {
             let duration = CGFloat(arc4random_uniform(2))/10.0
             particle.setMovement(start: start, end: end, duration: Float(duration + 0.9))
         }
-        particleMan.addToQueue(start, completion: closureThing, num: numParticlesInBurst)
-        
-        fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
-        filled = false
-        activationLevel = .NoPower
-        well.strokeColor = SKColor.grayColor()
-        well.fillColor = SKColor.clearColor()
+        particleMan.addToQueue(start, completion: closureThing, num: 2)
     }
     
 }
