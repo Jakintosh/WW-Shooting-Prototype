@@ -72,7 +72,25 @@ class GameScene: SKScene {
         left.fillColor = SKColor.blueColor()
         left.strokeColor = SKColor.blueColor()
         left.zPosition = 100
-        addChild(left)
+        //addChild(left)
+        
+        let water1 = SKSpriteNode(imageNamed: "wave")
+        water1.anchorPoint = CGPointMake(0, 0)
+        water1.position = CGPointMake(0, 0)
+        water1.zPosition = 100
+        addChild(water1)
+        
+        let water2 = SKSpriteNode(imageNamed: "wave")
+        water2.anchorPoint = CGPointMake(0, 0)
+        water2.position = CGPointMake(350, 0)
+        water2.zPosition = 100
+        addChild(water2)
+        
+        let water3 = SKSpriteNode(imageNamed: "wave")
+        water3.anchorPoint = CGPointMake(0, 0)
+        water3.position = CGPointMake(700, 0)
+        water3.zPosition = 100
+        addChild(water3)
         
         // run actions
         //addWhale(position: CGPointMake(frame.width/2, frame.height/2))
