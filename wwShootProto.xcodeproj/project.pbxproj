@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2102C70419E1CF9F008E830A /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70319E1CF9F008E830A /* CameraController.swift */; };
+		2102C70619E1D222008E830A /* Utilities2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70519E1D222008E830A /* Utilities2D.swift */; };
 		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
 		21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */; };
 		21B5AF7819CF8D17004B00C9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF7719CF8D17004B00C9 /* GameScene.sks */; };
@@ -31,6 +33,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2102C70319E1CF9F008E830A /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		2102C70519E1D222008E830A /* Utilities2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities2D.swift; sourceTree = "<group>"; };
 		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
 		21B5AF7019CF8D17004B00C9 /* wwShootProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwShootProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B5AF7419CF8D17004B00C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +70,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2102C6EB19E1CF25008E830A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2102C70319E1CF9F008E830A /* CameraController.swift */,
+				2102C70519E1D222008E830A /* Utilities2D.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		2181E16C19D10E93009FE3FB /* Particles */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +149,7 @@
 		21B5AF9B19CF92E9004B00C9 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				2102C6EB19E1CF25008E830A /* Utilities */,
 				21B5AF9D19CF9322004B00C9 /* Entities */,
 				21B5AF9C19CF92F4004B00C9 /* Scenes */,
 				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
@@ -263,7 +277,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2102C70619E1D222008E830A /* Utilities2D.swift in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
+				2102C70419E1CF9F008E830A /* CameraController.swift in Sources */,
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
 				21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */,
@@ -389,8 +405,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: iMac Server (3SEV2ZNFFV)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jak Tiano (A845JA3URG)";
 				INFOPLIST_FILE = wwShootProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -402,8 +418,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: iMac Server (3SEV2ZNFFV)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jak Tiano (A845JA3URG)";
 				INFOPLIST_FILE = wwShootProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

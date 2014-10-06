@@ -17,100 +17,136 @@ class GameScene: SKScene {
     let reticle = SKShapeNode(circleOfRadius: 20)
     var whales = [Whale]()
     var touchLocation: CGPoint?
+    var touch: UITouch?
+    var char: SKSpriteNode
     
-    var onebutton: SKSpriteNode = SKSpriteNode(color: SKColor.greenColor(), size: CGSizeZero)
-    var twobutton: SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeZero)
-    var moveType: Int = 0
+    var onebutton: SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeZero)
+    var twobutton: SKSpriteNode = SKSpriteNode(color: SKColor.greenColor(), size: CGSizeZero)
+    var moveType: Int = 1
     
     var partcleManager: ParticleManager?
     
+    let camCon: CameraController = CameraController()
+    
+    let areaWidth: Float = 700
+    var areaPos: Float = 0
+    
     // initializers
     required init(coder aDecoder: NSCoder) {
+        char = SKSpriteNode(imageNamed: "idle01")
         super.init(coder: aDecoder)
     }
     
     // functions
     override func didMoveToView(view: SKView) {
-        partcleManager = ParticleManager(root: self, numParticles: 750)
         
-        onebutton.size = CGSizeMake(frame.width/2, 60)
-        twobutton.size = CGSizeMake(frame.width/2, 60)
-        onebutton.position = CGPointMake(frame.width/4, frame.height - 30)
-        twobutton.position = CGPointMake(frame.width/4 + frame.width/2, frame.height - 30)
-        addChild(onebutton)
-        addChild(twobutton)
+        self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        let label1 = SKLabelNode(fontNamed: "HelveticaNeue")
-        label1.text = "1"
-        label1.position = CGPointMake(frame.width/2 - 110, 738)
-        label1.fontSize = 32
-        label1.fontColor = SKColor.blackColor()
-        label1.horizontalAlignmentMode = .Left
-        label1.verticalAlignmentMode = .Center
-        label1.zPosition = 200
-        addChild(label1)
+        areaPos = areaWidth/2
         
-        let label2 = SKLabelNode(fontNamed: "HelveticaNeue")
-        label2.text = "2"
-        label2.position = CGPointMake(frame.width/2 + 110, 738)
-        label2.fontSize = 32
-        label2.fontColor = SKColor.blackColor()
-        label2.horizontalAlignmentMode = .Left
-        label2.verticalAlignmentMode = .Center
-        label2.zPosition = 200
-        addChild(label2)
+        camCon.zPosition = 0.0
+        camCon.setCameraStartingPosition(CGPointMake(CGFloat(areaPos), frame.height/2))
+        camCon.disableDebug()
+        camCon.connectGestureRecognizers(view)
+        self.addChild(camCon)
+        
+        partcleManager = ParticleManager(cc: camCon, numParticles: 750)
+        
+//        onebutton.size = CGSizeMake(frame.width/2, 60)
+//        twobutton.size = CGSizeMake(frame.width/2, 60)
+//        onebutton.position = CGPointMake(-frame.width/4, frame.height/2 - 30)
+//        twobutton.position = CGPointMake(frame.width/4, frame.height/2 - 30)
+//        onebutton.alpha = 0.25
+//        twobutton.alpha = 0.25
+//        camCon.addHUDChild(onebutton, withZ: 0)
+//        camCon.addHUDChild(twobutton, withZ: 0)
+//        
+//        let label1 = SKLabelNode(fontNamed: "HelveticaNeue")
+//        label1.text = "debug"
+//        label1.position = CGPointMake(-frame.width/4, frame.height/2 - 30)
+//        label1.fontSize = 18
+//        label1.fontColor = SKColor.blackColor()
+//        label1.horizontalAlignmentMode = .Center
+//        label1.verticalAlignmentMode = .Center
+//        camCon.addHUDChild(label1, withZ: 200)
+//        
+//        let label2 = SKLabelNode(fontNamed: "HelveticaNeue")
+//        label2.text = "game"
+//        label2.position = CGPointMake(frame.width/4, frame.height/2 - 30)
+//        label2.fontSize = 18
+//        label2.fontColor = SKColor.blackColor()
+//        label2.horizontalAlignmentMode = .Center
+//        label2.verticalAlignmentMode = .Center
+//        camCon.addHUDChild(label2, withZ: 200)
         
         // setup reticle
         reticle.fillColor = SKColor.clearColor()
         reticle.strokeColor = SKColor.clearColor()
         reticle.lineWidth = 3
-        reticle.zPosition = 200
-        addChild(reticle)
+        camCon.addCameraChild(reticle, withZ: 200)
         
-        // setup water
-        let left = SKShapeNode(rect: CGRectMake(0, 0, frame.width, 200))
-        left.fillColor = SKColor.blueColor()
-        left.strokeColor = SKColor.blueColor()
-        left.zPosition = 100
-        //addChild(left)
+//        let bg = SKSpriteNode(imageNamed: "bg")
+//        camCon.addHUDChild(bg, withZ: -2000)
         
         let water1 = SKSpriteNode(imageNamed: "wave")
         water1.anchorPoint = CGPointMake(0, 0)
-        water1.position = CGPointMake(0, 0)
-        water1.zPosition = 100
-        addChild(water1)
-        
+        water1.position = CGPointMake(0, 30)
+        camCon.addCameraChild(water1, withZ: 100)
         let water2 = SKSpriteNode(imageNamed: "wave")
         water2.anchorPoint = CGPointMake(0, 0)
-        water2.position = CGPointMake(350, 0)
-        water2.zPosition = 100
-        addChild(water2)
-        
-        let water3 = SKSpriteNode(imageNamed: "wave")
-        water3.anchorPoint = CGPointMake(0, 0)
-        water3.position = CGPointMake(700, 0)
-        water3.zPosition = 100
-        addChild(water3)
+        water2.position = CGPointMake(350, 30)
+        camCon.addCameraChild(water2, withZ: 100)
+//        let water3 = SKSpriteNode(imageNamed: "wave")
+//        water3.anchorPoint = CGPointMake(0, 0)
+//        water3.position = CGPointMake(700, 30)
+//        camCon.addCameraChild(water3, withZ: 100)
+        let railing = SKSpriteNode(imageNamed: "rail")
+        railing.anchorPoint = CGPointMake(0.5, 0)
+        railing.position = CGPoint(x: 0, y: -frame.height/2)
+        railing.name = "rail"
+        camCon.addHUDChild(railing, withZ: 0)
+        char.anchorPoint = CGPoint(x: 0.5, y: 0)
+        char.xScale = 2.0
+        char.yScale = 2.0
+        char.position = CGPoint(x: 0, y: -frame.height/2 - 10)
+        camCon.addHUDChild(char, withZ: 1)
         
         // run actions
-        //addWhale(position: CGPointMake(frame.width/2, frame.height/2))
-        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: nil)}), SKAction.waitForDuration(7)])))
+        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: nil)}), SKAction.waitForDuration(10)])))
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
-            touchLocation = touch.locationInNode(self)
+            touchLocation = touch.locationInNode(camCon.rootNode)
+            self.touch = touch as? UITouch
         }
     }
     
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
-            touchLocation = touch.locationInNode(self)
+            
+//            if self.childNodeWithName("//rail")!.containsPoint(touch.locationInNode(camCon.hudNode)) {
+//                let newTouch = touch.locationInNode(camCon.rootNode)
+//                let dX: Float = Float(newTouch.x - touchLocation!.x)
+//                areaPos += dX
+//            }
+            
+            touchLocation = touch.locationInNode(camCon.rootNode)
+            self.touch = touch as? UITouch
+            
+//            let sceneX = touch.locationInNode(scene).x
+//            if sceneX > frame.width/4 {
+//                areaPos += 1
+//            } else if sceneX < -frame.width/4 {
+//                areaPos -= 1
+//            }
+            
         }
     }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         touchLocation = nil
+        touch = nil
         for whale in whales {
             whale.disengage()
         }
@@ -118,11 +154,11 @@ class GameScene: SKScene {
             if onebutton.containsPoint(touch.locationInNode(self)) {
                 onebutton.color = SKColor.greenColor()
                 twobutton.color = SKColor.whiteColor()
-                moveType = 0
+                camCon.enableDebug()
             } else if twobutton.containsPoint(touch.locationInNode(self)) {
                 onebutton.color = SKColor.whiteColor()
                 twobutton.color = SKColor.greenColor()
-                moveType = 1
+                camCon.disableDebug()
             }
         }
     }
@@ -135,9 +171,40 @@ class GameScene: SKScene {
         
         lastTime = currentTime
         
+        if let fucktouch = touch {
+            touchLocation = fucktouch.locationInNode(camCon.rootNode)
+            
+            let sceneX = fucktouch.locationInNode(scene).x
+            let limit = frame.width/4
+            if sceneX > limit {
+                let mod: Float = Float((sceneX-limit)/limit) * Float((sceneX-limit)/limit) + 1
+                areaPos += mod
+            } else if sceneX < -limit {
+                let mod: Float = Float((sceneX+limit)/limit) * Float((sceneX+limit)/limit) + 1
+                areaPos -= mod
+            }
+        }
+        
+//        let thing: Double = sin(currentTime/4) * (Double(areaWidth/2) - Double(frame.width/2))
+//        camCon.setCameraPosition(CGPoint(x: thing + Double(areaWidth/2), y: Double(frame.height/2)))
+        
+        if areaPos > areaWidth - Float(frame.width/2) {
+            areaPos = areaWidth - Float(frame.width/2)
+        }
+        if areaPos < Float(frame.width/2) {
+            areaPos = Float(frame.width/2)
+        }
+        
+        camCon.setCameraPosition(CGPoint(x: Double(areaPos), y: Double(frame.height/2)))
+        
+        
+        
+        var retPos: CGPoint? = nil
+        
         if let u_touchLocation = touchLocation {
             reticle.position = u_touchLocation
             reticle.position.y += 100
+            retPos = reticle.position
             for whale in whales {
                 whale.update(touchPos: reticle.position, dt: deltaTime)
             }
@@ -148,20 +215,29 @@ class GameScene: SKScene {
                 whale.update(touchPos: nil, dt: deltaTime)
             }
         }
+        
+        partcleManager?.updateSuction(touchPos: retPos, dt: deltaTime)
+        
+        camCon.update(deltaTime)
     }
     
     func addWhale(position pos: CGPoint?) {
         let newWhale = Whale(partMan: partcleManager!)
+        camCon.addCameraChild(newWhale, withZ: 0)
+        whales += [newWhale]
+        
         if let whalePos = pos {
             newWhale.position = whalePos
         } else {
-            newWhale.position.x = newWhale.size.width
             newWhale.position.y = frame.size.height/2 - 400
+            if arc4random_uniform(2) != 0 {
+                newWhale.position.x = CGFloat(areaWidth/2 - 200)
+                newWhale.move(moveType, direction: 1)
+            } else {
+                newWhale.position.x = CGFloat(areaWidth/2 + 200)
+                newWhale.move(moveType, direction: -1)
+            }
         }
-        addChild(newWhale)
-        newWhale.move(moveType)
-        
-        whales += [newWhale]
     }
     
     func removeWhale(#whale: Whale) {
