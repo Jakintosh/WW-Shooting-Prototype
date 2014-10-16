@@ -11,7 +11,7 @@
 		2102C70619E1D222008E830A /* Utilities2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70519E1D222008E830A /* Utilities2D.swift */; };
 		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
 		21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */; };
-		21B5AF7819CF8D17004B00C9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF7719CF8D17004B00C9 /* GameScene.sks */; };
+		21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF7719CF8D17004B00C9 /* HomeScene.sks */; };
 		21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF7919CF8D17004B00C9 /* GameScene.swift */; };
 		21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */; };
 		21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF7D19CF8D17004B00C9 /* Main.storyboard */; };
@@ -20,6 +20,12 @@
 		21B5AF9019CF8D17004B00C9 /* wwShootProtoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF8F19CF8D17004B00C9 /* wwShootProtoTests.swift */; };
 		21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF9919CF8D80004B00C9 /* textures.atlas */; };
 		21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF9E19CF9336004B00C9 /* Whale.swift */; };
+		21B7A46A19EB1E020023EAE9 /* HomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B7A46919EB1E020023EAE9 /* HomeScene.swift */; };
+		21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B7A46E19F058470023EAE9 /* LoadingScene.swift */; };
+		21B7A47119F05DDA0023EAE9 /* daughter_room.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47019F05DDA0023EAE9 /* daughter_room.png */; };
+		21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47219F061430023EAE9 /* daughter_room@2x.png */; };
+		21B7A47619F061430023EAE9 /* main.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47319F061430023EAE9 /* main.png */; };
+		21B7A47719F061430023EAE9 /* main@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47419F061430023EAE9 /* main@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +45,7 @@
 		21B5AF7019CF8D17004B00C9 /* wwShootProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wwShootProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21B5AF7419CF8D17004B00C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		21B5AF7719CF8D17004B00C9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		21B5AF7719CF8D17004B00C9 /* HomeScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HomeScene.sks; sourceTree = "<group>"; };
 		21B5AF7919CF8D17004B00C9 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		21B5AF7E19CF8D17004B00C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -50,6 +56,12 @@
 		21B5AF8F19CF8D17004B00C9 /* wwShootProtoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wwShootProtoTests.swift; sourceTree = "<group>"; };
 		21B5AF9919CF8D80004B00C9 /* textures.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = textures.atlas; path = resources/textures.atlas; sourceTree = SOURCE_ROOT; };
 		21B5AF9E19CF9336004B00C9 /* Whale.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Whale.swift; sourceTree = "<group>"; };
+		21B7A46919EB1E020023EAE9 /* HomeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScene.swift; sourceTree = "<group>"; };
+		21B7A46E19F058470023EAE9 /* LoadingScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingScene.swift; sourceTree = "<group>"; };
+		21B7A47019F05DDA0023EAE9 /* daughter_room.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = daughter_room.png; path = resources/daughter_room.png; sourceTree = SOURCE_ROOT; };
+		21B7A47219F061430023EAE9 /* daughter_room@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "daughter_room@2x.png"; path = "resources/daughter_room@2x.png"; sourceTree = SOURCE_ROOT; };
+		21B7A47319F061430023EAE9 /* main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = main.png; path = resources/main.png; sourceTree = SOURCE_ROOT; };
+		21B7A47419F061430023EAE9 /* main@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "main@2x.png"; path = "resources/main@2x.png"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,8 +129,9 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21B7A46B19F0516E0023EAE9 /* additional images */,
 				21B5AF7419CF8D17004B00C9 /* Info.plist */,
-				21B5AF7719CF8D17004B00C9 /* GameScene.sks */,
+				21B5AF7719CF8D17004B00C9 /* HomeScene.sks */,
 				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
 				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
 				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
@@ -161,6 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				21B5AF7919CF8D17004B00C9 /* GameScene.swift */,
+				21B7A46919EB1E020023EAE9 /* HomeScene.swift */,
+				21B7A46E19F058470023EAE9 /* LoadingScene.swift */,
 			);
 			name = Scenes;
 			sourceTree = "<group>";
@@ -171,6 +186,17 @@
 				21B5AF9E19CF9336004B00C9 /* Whale.swift */,
 			);
 			name = Entities;
+			sourceTree = "<group>";
+		};
+		21B7A46B19F0516E0023EAE9 /* additional images */ = {
+			isa = PBXGroup;
+			children = (
+				21B7A47219F061430023EAE9 /* daughter_room@2x.png */,
+				21B7A47319F061430023EAE9 /* main.png */,
+				21B7A47419F061430023EAE9 /* main@2x.png */,
+				21B7A47019F05DDA0023EAE9 /* daughter_room.png */,
+			);
+			name = "additional images";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,10 +281,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */,
+				21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */,
+				21B7A47619F061430023EAE9 /* main.png in Resources */,
+				21B7A47719F061430023EAE9 /* main@2x.png in Resources */,
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
-				21B5AF7819CF8D17004B00C9 /* GameScene.sks in Resources */,
+				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
+				21B7A47119F05DDA0023EAE9 /* daughter_room.png in Resources */,
 				21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,8 +308,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2102C70619E1D222008E830A /* Utilities2D.swift in Sources */,
+				21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
 				2102C70419E1CF9F008E830A /* CameraController.swift in Sources */,
+				21B7A46A19EB1E020023EAE9 /* HomeScene.swift in Sources */,
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
 				21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */,

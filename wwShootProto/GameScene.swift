@@ -10,37 +10,64 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    // MARK: - properties
+    
     // properties
     var lastTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
     
+    // components?
     let reticle = SKShapeNode(circleOfRadius: 20)
+    let bg: SKSpriteNode
     var whales = [Whale]()
     var touchLocation: CGPoint?
     var touch: UITouch?
     var char: SKSpriteNode
     
+    // garbage
     var onebutton: SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeZero)
     var twobutton: SKSpriteNode = SKSpriteNode(color: SKColor.greenColor(), size: CGSizeZero)
     var moveType: Int = 1
     
+    // systems
     var partcleManager: ParticleManager?
-    
     let camCon: CameraController = CameraController()
+    let swipeUpGesture: UISwipeGestureRecognizer?
     
+    // scene vars
     let areaWidth: Float = 700
     var areaPos: Float = 0
+    var currentTimeOfDay: Double = 0
+    let totalDayTime: Double = 120
     
-    // initializers
+    // MARK: - initializers
     required init(coder aDecoder: NSCoder) {
         char = SKSpriteNode(imageNamed: "idle01")
+        bg = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 1000, height: 1000))
         super.init(coder: aDecoder)
+        
+        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+        swipeUpGesture?.numberOfTouchesRequired = 3
+        swipeUpGesture?.direction = .Up
+        swipeUpGesture?.cancelsTouchesInView = false
     }
     
-    // functions
+    override init(size: CGSize) {
+        char = SKSpriteNode(imageNamed: "idle01")
+        bg = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 1000, height: 1000))
+        super.init(size: size)
+        
+        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+        swipeUpGesture?.numberOfTouchesRequired = 3
+        swipeUpGesture?.direction = .Up
+        swipeUpGesture?.cancelsTouchesInView = false
+    }
+    
+    // MARK: - UIKit
     override func didMoveToView(view: SKView) {
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        view.addGestureRecognizer(swipeUpGesture!)
         
         areaPos = areaWidth/2
         
@@ -49,6 +76,17 @@ class GameScene: SKScene {
         camCon.disableDebug()
         camCon.connectGestureRecognizers(view)
         self.addChild(camCon)
+        
+        bg.color = SKColor(hue: 0.03, saturation: 0.6, brightness: 0.8, alpha: 1.00)
+        camCon.addHUDChild(bg, withZ: -5000)
+        
+//        bg.color = SKColor(hue: 0.5, saturation: 0.5, brightness: 0.9, alpha: 1.00)
+        bg.runAction(SKAction.sequence([
+            SKAction.colorizeWithColor(SKColor(hue: 0.5, saturation: 0.6, brightness: 0.9, alpha: 1.00), colorBlendFactor: 1.0, duration: totalDayTime/5.0),
+            SKAction.waitForDuration((totalDayTime/5.0)*3.0),
+            SKAction.colorizeWithColor(SKColor(hue: 0.045, saturation: 0.8, brightness: 1.0, alpha: 1.00), colorBlendFactor: 1.0, duration: totalDayTime/5.0),
+            SKAction.colorizeWithColor(SKColor(hue: 0.7, saturation: 0.6, brightness: 0.2, alpha: 1.00), colorBlendFactor: 1.0, duration: (totalDayTime/5.0) * 2)
+        ]))
         
         partcleManager = ParticleManager(cc: camCon, numParticles: 750)
         
@@ -115,6 +153,12 @@ class GameScene: SKScene {
         runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: nil)}), SKAction.waitForDuration(10)])))
     }
     
+    override func willMoveFromView(view: SKView) {
+        view.removeGestureRecognizer(swipeUpGesture!)
+    }
+    
+    
+    // MARK: - Touch
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
             touchLocation = touch.locationInNode(camCon.rootNode)
@@ -124,29 +168,15 @@ class GameScene: SKScene {
     
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
-            
-//            if self.childNodeWithName("//rail")!.containsPoint(touch.locationInNode(camCon.hudNode)) {
-//                let newTouch = touch.locationInNode(camCon.rootNode)
-//                let dX: Float = Float(newTouch.x - touchLocation!.x)
-//                areaPos += dX
-//            }
-            
             touchLocation = touch.locationInNode(camCon.rootNode)
             self.touch = touch as? UITouch
-            
-//            let sceneX = touch.locationInNode(scene).x
-//            if sceneX > frame.width/4 {
-//                areaPos += 1
-//            } else if sceneX < -frame.width/4 {
-//                areaPos -= 1
-//            }
-            
         }
     }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         touchLocation = nil
         touch = nil
+        
         for whale in whales {
             whale.disengage()
         }
@@ -163,6 +193,7 @@ class GameScene: SKScene {
         }
     }
     
+    // MARK: - Logic
     override func update(currentTime: CFTimeInterval) {
         
         deltaTime = currentTime - lastTime
@@ -170,6 +201,8 @@ class GameScene: SKScene {
 //        println(deltaTime)
         
         lastTime = currentTime
+        
+        currentTimeOfDay += deltaTime
         
         if let fucktouch = touch {
             touchLocation = fucktouch.locationInNode(camCon.rootNode)
@@ -196,8 +229,6 @@ class GameScene: SKScene {
         }
         
         camCon.setCameraPosition(CGPoint(x: Double(areaPos), y: Double(frame.height/2)))
-        
-        
         
         var retPos: CGPoint? = nil
         
@@ -247,5 +278,15 @@ class GameScene: SKScene {
                 return
             }
         }
+    }
+    
+    func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
+        let transitionDuration = 1.0
+        var transition: SKTransition = SKTransition.fadeWithDuration(transitionDuration)
+        transition.pausesIncomingScene = false
+        transition.pausesOutgoingScene = false
+        let homeScene = HomeScene(size: CGSize(width: frame.height, height: frame.width))
+        view?.presentScene(homeScene, transition: transition)
+        homeScene.runAction(SKAction.sequence([SKAction.waitForDuration(transitionDuration/2.0), SKAction.runBlock({ NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil) })]))
     }
 }
