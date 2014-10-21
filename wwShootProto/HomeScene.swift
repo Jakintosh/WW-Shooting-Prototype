@@ -9,38 +9,100 @@
 import Foundation
 import SpriteKit
 
-class HomeScene : SKScene {
+class SKFuckScene : SKScene {/* why even */}
+
+class HomeScene : SKFuckScene {
     
     let camCon: CameraController = CameraController()
+    let house: House = House()
     
-    let d_room: SKSpriteNode = SKSpriteNode(imageNamed: "daughter_room")
-    let dad: SKSpriteNode = SKSpriteNode(imageNamed: "main")
+    var lastTime: CFTimeInterval = 0
+    var deltaTime: CFTimeInterval = 0
     
-    // initializers
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
+    let dad: Dad
+    
+    var debug: Bool = false
+    let tripleTap: UITapGestureRecognizer? = nil
     
     override init(size: CGSize) {
+        dad = Dad(startingRoom: house.startingRoom)
         super.init(size: size)
+        
+        tripleTap = UITapGestureRecognizer(target: self, action: "handleTap:")
+        tripleTap!.numberOfTouchesRequired = 3
+        tripleTap!.numberOfTapsRequired = 1
     }
     
     override func didMoveToView(view: SKView) {
+        
+        view.addGestureRecognizer(tripleTap!)
+        
+        // set up scene
         anchorPoint = CGPointMake(0.5, 0.5)
         backgroundColor = SKColor.blackColor()
+        
+        // set up camera
+        camCon.connectGestureRecognizers(view)
+        camCon.disableDebug()
         addChild(camCon)
         
-        // set up daughter's room
-        camCon.addCameraChild(d_room, withZ: 0)
-        
         // set up dad
-        dad.anchorPoint = CGPoint(x: 0.5, y: 0.1)
-        dad.position = CGPoint(x: 0, y: -120)
+        var posStartLoc = house.getStartingLocation()
+        if let startLoc = posStartLoc {
+                dad.position = startLoc
+        } else {
+            dad.position = CGPointZero
+            println("tried to set dad location with nil position")
+        }
+        dad.xScale = 0.85
+        dad.yScale = 0.85
+        
+        camCon.addCameraChild(house, withZ: 0)
         camCon.addCameraChild(dad, withZ: 1)
+        camCon.setCameraStartingPosition(x: 0, y: 0)
+    }
+    
+    override func willMoveFromView(view: SKView) {
+        view.removeGestureRecognizer(tripleTap!)
+        camCon.disconnectGestureRecognizers(view)
     }
     
     override func update(currentTime: NSTimeInterval) {
-
+        // update time
+        updateTime(currentTime)
+        
+        dad.update(deltaTime)
+        
+        // update camera
+        if !debug {
+            camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: dad.sprite.size.height/2)))
+            camCon.setScale(1.0)
+        }
+        camCon.update(deltaTime)
     }
     
+    func updateTime(currentTime:NSTimeInterval) {
+        deltaTime = currentTime - lastTime
+        if deltaTime > 1.0 { deltaTime = 1.0 }
+        lastTime = currentTime
+    }
+    
+    // MARK: - Touches
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        let touch: UITouch = touches.anyObject() as UITouch
+        let location = touch.locationInNode(camCon.rootNode)
+
+//        dad.handleTouches(touches)
+        
+        if let targetPoint = house.newPositionForPoint(location, fromRoom: dad.currentRoom) {
+            dad.moveToPoint(targetPoint)
+        }
+    }
+    
+    func handleTap(gestureRecognizer: UITapGestureRecognizer) {
+        house.toggleDebug()
+        debug = !debug
+        camCon.enableDebug()
+    }
 }

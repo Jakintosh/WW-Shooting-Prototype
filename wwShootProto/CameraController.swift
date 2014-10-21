@@ -12,8 +12,9 @@ import SpriteKit
 class CameraController : SKNode, UIGestureRecognizerDelegate {
     
     // camera properties
-    var camera: CGPoint
-    var lerpSpeed: Float = 0.1 // 0 - doesn't move, 1 - locked to target
+    var camera: CGPoint = CGPointZero   // starts at (0,0)
+    var camScale: CGFloat = 1.0            // standard zoom as default
+    var lerpSpeed: CGFloat = 0.1        // 0 - doesn't move, 1 - locked to target
     
     // camera components
     let zoomNode: SKNode
@@ -31,7 +32,6 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     // MARK: - CameraController
     
     override init() {
-        camera = CGPointZero
         zoomNode = SKNode()
         rootNode = SKNode()
         hudNode = SKNode()
@@ -39,9 +39,9 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
         debugMode = false
         super.init()
         
-        zoomNode.name = "Zoom Node"
-        rootNode.name = "Root Node"
-        hudNode.name  = "HUD Node"
+        zoomNode.name = "Zoom_Node"
+        rootNode.name = "Root_Node"
+        hudNode.name  = "HUD_Node"
         
         zoomNode.zPosition = 0.0
         rootNode.zPosition = 0.0
@@ -70,7 +70,11 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     }
     
     func update(dt: NSTimeInterval) {
-        rootNode.position = Utilities2D.lerpFromPoint(rootNode.position, toPoint: CGPointMake(-camera.x, -camera.y), atPosition: CGFloat(lerpSpeed))
+        rootNode.position = Utilities2D.lerpFromPoint(rootNode.position, toPoint: CGPointMake(-camera.x, -camera.y), atPosition: lerpSpeed)
+        
+        let newScale = Utilities2D.lerpFrom(zoomNode.xScale, toNum: camScale, atPosition: lerpSpeed)
+        zoomNode.xScale = newScale
+        zoomNode.yScale = newScale
     }
     
     func addCameraChild(inNode: SKNode, withZ z: Float) {
@@ -113,21 +117,34 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
 //    MARK: - Getters/Setters
     
     func setCameraStartingPosition(position: CGPoint) {
-        camera = position
+        setCameraPosition(position)
         rootNode.position = CGPointMake(-position.x, -position.y)
+    }
+    
+    func setCameraStartingPosition(#x: CGFloat, y: CGFloat) {
+        setCameraStartingPosition(CGPoint(x: x, y: y))
     }
     
     func setCameraPosition(target: CGPoint) {
         camera = target
     }
     
-    func setRootScale(scale: Float) {
-        zoomNode.xScale = CGFloat(scale)
-        zoomNode.yScale = CGFloat(scale)
+    func setCameraPosition(#x: CGFloat, y: CGFloat) {
+        setCameraPosition(CGPoint(x: x, y: y))
     }
     
-    func getRootScale() -> Float {
-        return Float(zoomNode.xScale)
+    override func setScale(scale: CGFloat) {
+//        zoomNode.xScale = CGFloat(scale)
+//        zoomNode.yScale = CGFloat(scale)
+        camScale = scale
+    }
+    
+    func getScale() -> CGFloat {
+        return camScale
+    }
+    
+    func getRootScale() -> CGFloat {
+        return zoomNode.xScale
     }
     
     func enableDebug() {
@@ -165,11 +182,9 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     func handlePinch(gestureRecognizer: UIPinchGestureRecognizer) {
         if debugMode {
             if gestureRecognizer.state == .Began {
-                gestureRecognizer.scale = self.zoomNode.xScale
+                gestureRecognizer.scale = getScale()
             }
-            let scale: CGFloat = gestureRecognizer.scale
-            zoomNode.xScale = scale
-            zoomNode.yScale = scale
+            setScale( gestureRecognizer.scale )
         }
     }
     
