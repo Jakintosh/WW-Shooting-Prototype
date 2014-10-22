@@ -41,7 +41,7 @@ class GameScene: SKScene {
     let totalDayTime: Double = 120
     
     // MARK: - initializers
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         char = SKSpriteNode(imageNamed: "idle01")
         bg = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 1000, height: 1000))
         super.init(coder: aDecoder)

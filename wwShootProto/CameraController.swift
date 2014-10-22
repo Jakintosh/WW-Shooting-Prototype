@@ -59,7 +59,7 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
         zoomNode.addChild(rootNode)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         camera = CGPointZero
         zoomNode = SKNode()
         rootNode = SKNode()

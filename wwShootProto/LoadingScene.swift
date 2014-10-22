@@ -23,9 +23,10 @@ class LoadingScene : SKScene {
         backgroundColor = SKColor.blackColor()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+
     
     override func didMoveToView(view: SKView) {
         NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)

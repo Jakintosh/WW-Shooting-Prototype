@@ -32,7 +32,7 @@ class Character : SKFuckNode {
     }
     
     // MARK: - Methods
-    func moveToPoint(target: CGPoint) {
+    func moveToPoint(target: CGPoint, visible: Bool = true) {
         let xDistance = target.x - self.position.x
         let distance = Utilities2D.distanceFromPoint(target, toPoint: self.position)
         
@@ -43,10 +43,13 @@ class Character : SKFuckNode {
         }
         
         let moveDuration = Float(distance)/movementSpeed
+        var disappearAction: SKAction
+        if visible { disappearAction = SKAction.runBlock({}) }
+        else { disappearAction = SKAction.runBlock({ self.sprite.hidden = !self.sprite.hidden }) }
         let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
         moveAction.timingMode = .EaseOut
         removeActionForKey("move")
-        runAction(moveAction, withKey: "move")
+        runAction(SKAction.sequence([ disappearAction, moveAction, disappearAction]), withKey: "move")
     }
     
     func setOrientation(newOrientation: CharacterOrientation) {
@@ -161,7 +164,7 @@ class Dad : Character {
             return
         }
         
-        moveToPoint(targetPoint)
+        moveToPoint(targetPoint, visible: false)
         
         if let stairs = staircase {
             if let destination = stairs.destination {

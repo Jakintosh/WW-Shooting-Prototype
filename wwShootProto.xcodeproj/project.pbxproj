@@ -31,6 +31,7 @@
 		21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47219F061430023EAE9 /* daughter_room@2x.png */; };
 		21B7A47619F061430023EAE9 /* main.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47319F061430023EAE9 /* main.png */; };
 		21B7A47719F061430023EAE9 /* main@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47419F061430023EAE9 /* main@2x.png */; };
+		21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		21B7A47219F061430023EAE9 /* daughter_room@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "daughter_room@2x.png"; path = "resources/daughter_room@2x.png"; sourceTree = SOURCE_ROOT; };
 		21B7A47319F061430023EAE9 /* main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = main.png; path = resources/main.png; sourceTree = SOURCE_ROOT; };
 		21B7A47419F061430023EAE9 /* main@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "main@2x.png"; path = "resources/main@2x.png"; sourceTree = SOURCE_ROOT; };
+		21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 				21B7A46B19F0516E0023EAE9 /* additional images */,
 				21B5AF7419CF8D17004B00C9 /* Info.plist */,
 				21B5AF7719CF8D17004B00C9 /* HomeScene.sks */,
+				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
 				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
 				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
 				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
@@ -197,10 +200,10 @@
 		21B5AF9B19CF92E9004B00C9 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				21EFBB6C19F70C810081C1C5 /* Systems */,
 				2102C6EB19E1CF25008E830A /* Utilities */,
 				21B5AF9D19CF9322004B00C9 /* Entities */,
 				21B5AF9C19CF92F4004B00C9 /* Scenes */,
-				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -236,6 +239,14 @@
 				21B7A47019F05DDA0023EAE9 /* daughter_room.png */,
 			);
 			name = "additional images";
+			sourceTree = "<group>";
+		};
+		21EFBB6C19F70C810081C1C5 /* Systems */ = {
+			isa = PBXGroup;
+			children = (
+				21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */,
+			);
+			name = Systems;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,6 +365,7 @@
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
 				2102C70419E1CF9F008E830A /* CameraController.swift in Sources */,
 				21B7A46A19EB1E020023EAE9 /* HomeScene.swift in Sources */,
+				21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */,
 				21B2E7BF19F5A17000000E70 /* Button.swift in Sources */,
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B2E7BC19F46C5E00000E70 /* Character.swift in Sources */,

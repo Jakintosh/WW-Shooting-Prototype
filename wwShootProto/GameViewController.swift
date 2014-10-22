@@ -75,16 +75,16 @@ class GameViewController: UIViewController {
     override func supportedInterfaceOrientations() -> Int {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             if gameOrientation == .Portrait {
-                return Int(UIInterfaceOrientationMask.Portrait.toRaw())
+                return Int(UIInterfaceOrientationMask.Portrait.rawValue)
             }
             else if gameOrientation == .Landscape {
-                return Int(UIInterfaceOrientationMask.Landscape.toRaw())
+                return Int(UIInterfaceOrientationMask.Landscape.rawValue)
             }
             else {
-                return Int(UIInterfaceOrientationMask.AllButUpsideDown.toRaw())
+                return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
             }
         } else {
-            return Int(UIInterfaceOrientationMask.All.toRaw())
+            return Int(UIInterfaceOrientationMask.All.rawValue)
         }
     }
 

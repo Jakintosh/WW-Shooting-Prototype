@@ -176,7 +176,7 @@ class HouseRoom {
     
     // bounds
     var roomFrame: CGRect         = CGRectZero
-    var visualFrame: SKShapeNode  = SKShapeNode.node()
+    var visualFrame: SKShapeNode  = SKShapeNode()
     
     // MARK:   Initializers
     init(frame: CGRect, onFloor floor: HouseFloor, withPath path: HousePath) {
@@ -217,7 +217,7 @@ class HousePath {
     
     var stairs: [HousePathStaircase] = [HousePathStaircase]()
     
-    let visualPath: SKShapeNode = SKShapeNode.node()
+    let visualPath: SKShapeNode = SKShapeNode()
     
     // MARK:   Initializers
     init(left: CGFloat, right: CGFloat, y: CGFloat) {
@@ -265,7 +265,7 @@ class HousePathStaircase {
     let direction: HousePathStaircaseDirection
     let useRadius: CGFloat = 50
     
-    let visualCircle: SKShapeNode = SKShapeNode.node()
+    let visualCircle: SKShapeNode = SKShapeNode()
     let room: HouseRoom
     let path: HousePath
     
