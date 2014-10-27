@@ -31,6 +31,19 @@
 		21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47219F061430023EAE9 /* daughter_room@2x.png */; };
 		21B7A47619F061430023EAE9 /* main.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47319F061430023EAE9 /* main.png */; };
 		21B7A47719F061430023EAE9 /* main@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47419F061430023EAE9 /* main@2x.png */; };
+		21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229419FDEE5200A1E612 /* testDayOne.plist */; };
+		21EA229C19FDEFA000A1E612 /* main.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229B19FDEFA000A1E612 /* main.json */; };
+		21EA22A019FDF00C00A1E612 /* main.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229F19FDF00C00A1E612 /* main.atlas */; };
+		21EA22A319FEB34F00A1E612 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22A219FEB34F00A1E612 /* Game.swift */; };
+		21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22A419FEC78200A1E612 /* AnimationManager.swift */; };
+		21EA22AD19FED98600A1E612 /* home_characters.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EA22AC19FED98600A1E612 /* home_characters.plist */; };
+		21EA22D919FF001900A1E612 /* SGG_SkinSlot.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22CB19FF001900A1E612 /* SGG_SkinSlot.m */; };
+		21EA22DA19FF001900A1E612 /* SGG_SkinSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22CD19FF001900A1E612 /* SGG_SkinSprite.m */; };
+		21EA22DB19FF001900A1E612 /* SGG_Spine.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22CF19FF001900A1E612 /* SGG_Spine.m */; };
+		21EA22DC19FF001900A1E612 /* SGG_SpineBone.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D119FF001900A1E612 /* SGG_SpineBone.m */; };
+		21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D319FF001900A1E612 /* SGG_SpineBoneAction.m */; };
+		21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D519FF001900A1E612 /* SGG_SpineJSONTools.m */; };
+		21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */; };
 		21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +60,7 @@
 /* Begin PBXFileReference section */
 		2102C70319E1CF9F008E830A /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		2102C70519E1D222008E830A /* Utilities2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities2D.swift; sourceTree = "<group>"; };
+		2136D43019FDD31400DB07BD /* wwShootProto-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wwShootProto-Bridging-Header.h"; sourceTree = "<group>"; };
 		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
 		21B2E7B019F1B33600000E70 /* house.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = house.png; path = resources/house.png; sourceTree = SOURCE_ROOT; };
 		21B2E7B119F1B33600000E70 /* house@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "house@2x.png"; path = "resources/house@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -73,6 +87,27 @@
 		21B7A47219F061430023EAE9 /* daughter_room@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "daughter_room@2x.png"; path = "resources/daughter_room@2x.png"; sourceTree = SOURCE_ROOT; };
 		21B7A47319F061430023EAE9 /* main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = main.png; path = resources/main.png; sourceTree = SOURCE_ROOT; };
 		21B7A47419F061430023EAE9 /* main@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "main@2x.png"; path = "resources/main@2x.png"; sourceTree = SOURCE_ROOT; };
+		21EA229419FDEE5200A1E612 /* testDayOne.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = testDayOne.plist; sourceTree = "<group>"; };
+		21EA229B19FDEFA000A1E612 /* main.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = main.json; sourceTree = "<group>"; };
+		21EA229F19FDF00C00A1E612 /* main.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = main.atlas; sourceTree = "<group>"; };
+		21EA22A219FEB34F00A1E612 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		21EA22A419FEC78200A1E612 /* AnimationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
+		21EA22AC19FED98600A1E612 /* home_characters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = home_characters.plist; path = loaders/home_characters.plist; sourceTree = "<group>"; };
+		21EA22CA19FF001900A1E612 /* SGG_SkinSlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SkinSlot.h; sourceTree = "<group>"; };
+		21EA22CB19FF001900A1E612 /* SGG_SkinSlot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SkinSlot.m; sourceTree = "<group>"; };
+		21EA22CC19FF001900A1E612 /* SGG_SkinSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SkinSprite.h; sourceTree = "<group>"; };
+		21EA22CD19FF001900A1E612 /* SGG_SkinSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SkinSprite.m; sourceTree = "<group>"; };
+		21EA22CE19FF001900A1E612 /* SGG_Spine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_Spine.h; sourceTree = "<group>"; };
+		21EA22CF19FF001900A1E612 /* SGG_Spine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_Spine.m; sourceTree = "<group>"; };
+		21EA22D019FF001900A1E612 /* SGG_SpineBone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SpineBone.h; sourceTree = "<group>"; };
+		21EA22D119FF001900A1E612 /* SGG_SpineBone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineBone.m; sourceTree = "<group>"; };
+		21EA22D219FF001900A1E612 /* SGG_SpineBoneAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SpineBoneAction.h; sourceTree = "<group>"; };
+		21EA22D319FF001900A1E612 /* SGG_SpineBoneAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineBoneAction.m; sourceTree = "<group>"; };
+		21EA22D419FF001900A1E612 /* SGG_SpineJSONTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SpineJSONTools.h; sourceTree = "<group>"; };
+		21EA22D519FF001900A1E612 /* SGG_SpineJSONTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineJSONTools.m; sourceTree = "<group>"; };
+		21EA22D619FF001900A1E612 /* SGG_SpineSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SpineSkin.h; sourceTree = "<group>"; };
+		21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineSkin.m; sourceTree = "<group>"; };
+		21EA22D819FF001900A1E612 /* SpineImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpineImport.h; sourceTree = "<group>"; };
 		21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,16 +201,12 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				21B7A46B19F0516E0023EAE9 /* additional images */,
-				21B5AF7419CF8D17004B00C9 /* Info.plist */,
-				21B5AF7719CF8D17004B00C9 /* HomeScene.sks */,
-				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
-				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
-				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
-				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
-				21B5AF8019CF8D17004B00C9 /* Images.xcassets */,
-				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
+				21EA22A119FDFBB300A1E612 /* Project Files */,
+				21EA229019FDEE5200A1E612 /* data */,
 				2181E16C19D10E93009FE3FB /* Particles */,
+				21B7A46B19F0516E0023EAE9 /* additional images */,
+				21EA229F19FDF00C00A1E612 /* main.atlas */,
+				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -241,9 +272,91 @@
 			name = "additional images";
 			sourceTree = "<group>";
 		};
+		21EA229019FDEE5200A1E612 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				21EA229119FDEE5200A1E612 /* animations */,
+				21EA229319FDEE5200A1E612 /* interactions */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		21EA229119FDEE5200A1E612 /* animations */ = {
+			isa = PBXGroup;
+			children = (
+				21EA22A719FED84B00A1E612 /* loaders */,
+				21EA22A619FED83E00A1E612 /* sources */,
+			);
+			path = animations;
+			sourceTree = "<group>";
+		};
+		21EA229319FDEE5200A1E612 /* interactions */ = {
+			isa = PBXGroup;
+			children = (
+				21EA229419FDEE5200A1E612 /* testDayOne.plist */,
+			);
+			path = interactions;
+			sourceTree = "<group>";
+		};
+		21EA22A119FDFBB300A1E612 /* Project Files */ = {
+			isa = PBXGroup;
+			children = (
+				21B5AF7419CF8D17004B00C9 /* Info.plist */,
+				21B5AF7719CF8D17004B00C9 /* HomeScene.sks */,
+				2136D43019FDD31400DB07BD /* wwShootProto-Bridging-Header.h */,
+				21B5AF7B19CF8D17004B00C9 /* GameViewController.swift */,
+				21B5AF7519CF8D17004B00C9 /* AppDelegate.swift */,
+				21B5AF7D19CF8D17004B00C9 /* Main.storyboard */,
+				21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */,
+				21B5AF8019CF8D17004B00C9 /* Images.xcassets */,
+			);
+			name = "Project Files";
+			sourceTree = "<group>";
+		};
+		21EA22A619FED83E00A1E612 /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				21EA229B19FDEFA000A1E612 /* main.json */,
+			);
+			name = sources;
+			sourceTree = "<group>";
+		};
+		21EA22A719FED84B00A1E612 /* loaders */ = {
+			isa = PBXGroup;
+			children = (
+				21EA22AC19FED98600A1E612 /* home_characters.plist */,
+			);
+			name = loaders;
+			sourceTree = "<group>";
+		};
+		21EA22C919FF001900A1E612 /* SpineImporter */ = {
+			isa = PBXGroup;
+			children = (
+				21EA22CA19FF001900A1E612 /* SGG_SkinSlot.h */,
+				21EA22CB19FF001900A1E612 /* SGG_SkinSlot.m */,
+				21EA22CC19FF001900A1E612 /* SGG_SkinSprite.h */,
+				21EA22CD19FF001900A1E612 /* SGG_SkinSprite.m */,
+				21EA22CE19FF001900A1E612 /* SGG_Spine.h */,
+				21EA22CF19FF001900A1E612 /* SGG_Spine.m */,
+				21EA22D019FF001900A1E612 /* SGG_SpineBone.h */,
+				21EA22D119FF001900A1E612 /* SGG_SpineBone.m */,
+				21EA22D219FF001900A1E612 /* SGG_SpineBoneAction.h */,
+				21EA22D319FF001900A1E612 /* SGG_SpineBoneAction.m */,
+				21EA22D419FF001900A1E612 /* SGG_SpineJSONTools.h */,
+				21EA22D519FF001900A1E612 /* SGG_SpineJSONTools.m */,
+				21EA22D619FF001900A1E612 /* SGG_SpineSkin.h */,
+				21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */,
+				21EA22D819FF001900A1E612 /* SpineImport.h */,
+			);
+			path = SpineImporter;
+			sourceTree = "<group>";
+		};
 		21EFBB6C19F70C810081C1C5 /* Systems */ = {
 			isa = PBXGroup;
 			children = (
+				21EA22C919FF001900A1E612 /* SpineImporter */,
+				21EA22A219FEB34F00A1E612 /* Game.swift */,
+				21EA22A419FEC78200A1E612 /* AnimationManager.swift */,
 				21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */,
 			);
 			name = Systems;
@@ -337,10 +450,14 @@
 				21B7A47719F061430023EAE9 /* main@2x.png in Resources */,
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
+				21EA22A019FDF00C00A1E612 /* main.atlas in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
 				21B2E7B319F1B33600000E70 /* house@2x.png in Resources */,
+				21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */,
 				21B7A47119F05DDA0023EAE9 /* daughter_room.png in Resources */,
+				21EA22AD19FED98600A1E612 /* home_characters.plist in Resources */,
+				21EA229C19FDEFA000A1E612 /* main.json in Resources */,
 				21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,17 +477,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				2102C70619E1D222008E830A /* Utilities2D.swift in Sources */,
+				21EA22D919FF001900A1E612 /* SGG_SkinSlot.m in Sources */,
 				21B2E7B819F1E20200000E70 /* House.swift in Sources */,
 				21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */,
+				21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
+				21EA22DB19FF001900A1E612 /* SGG_Spine.m in Sources */,
 				2102C70419E1CF9F008E830A /* CameraController.swift in Sources */,
+				21EA22A319FEB34F00A1E612 /* Game.swift in Sources */,
+				21EA22DA19FF001900A1E612 /* SGG_SkinSprite.m in Sources */,
 				21B7A46A19EB1E020023EAE9 /* HomeScene.swift in Sources */,
 				21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */,
 				21B2E7BF19F5A17000000E70 /* Button.swift in Sources */,
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B2E7BC19F46C5E00000E70 /* Character.swift in Sources */,
+				21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
+				21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */,
+				21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */,
 				21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */,
+				21EA22DC19FF001900A1E612 /* SGG_SpineBone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +625,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jak/Documents/Xcode Projects/Projects/NAHCS/WW-Shooting-Prototype/wwShootProto/wwShootProto-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -512,6 +639,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jak/Documents/Xcode Projects/Projects/NAHCS/WW-Shooting-Prototype/wwShootProto/wwShootProto-Bridging-Header.h";
 			};
 			name = Release;
 		};

@@ -175,7 +175,20 @@ class InteractionManager {
     private var interactionData: [String:InteractionData] = [String:InteractionData]()
     
     // MARK: Initializers
-    init(fileName: String) {
+//    init(fileName: String) {
+//        if let filepath = NSBundle.mainBundle().pathForResource(fileName, ofType: "plist") {
+//            if let fileURL = NSURL(fileURLWithPath: filepath) {
+//                if let contentsOfFile = NSDictionary(contentsOfURL: fileURL) {
+//                    for (name, data) in contentsOfFile {
+//                        let newData = InteractionData(data: data as NSDictionary)
+//                        interactionData[name as String] = newData
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    func loadData(fileName: String) {
         if let filepath = NSBundle.mainBundle().pathForResource(fileName, ofType: "plist") {
             if let fileURL = NSURL(fileURLWithPath: filepath) {
                 if let contentsOfFile = NSDictionary(contentsOfURL: fileURL) {

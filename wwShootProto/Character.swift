@@ -19,28 +19,25 @@ class Character : SKFuckNode {
     var orientation: CharacterOrientation = .Right
     var movementSpeed: Float = 100 // pixels per second
     
-//    var sprite: SKSpriteNode
-    var spine: SGG_Spine = SGG_Spine()
+    let entityKey: String
+    var animationEntity: AnimatableEntity
+    let animationNode: SKNode = SKNode()
     
     // MARK: - Initalizers
-//    init(imgName: String) {
-//        sprite = SKSpriteNode(imageNamed: imgName)
-//        
-//        super.init()
-//        
-//        sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-//        addChild(sprite)
-//    }
-    
-    init(spineFile: String, atlas: String) {
+    init(animationEntityKey: String) {
+        entityKey = animationEntityKey
+        animationEntity = game.animationManager.registerEntity(entityKey)
         
-        spine.skeletonFromFileNamed(spineFile, andAtlasNamed: atlas, andUseSkinNamed: nil)
         super.init()
         
-        addChild(spine)
+        addChild(animationNode)
     }
     
     // MARK: - Methods
+    func update(dt: NSTimeInterval) {
+        animationEntity.update(dt)
+    }
+    
     func moveToPoint(target: CGPoint, visible: Bool = true) {
         let xDistance = target.x - self.position.x
         let distance = Utilities2D.distanceFromPoint(target, toPoint: self.position)
@@ -53,33 +50,33 @@ class Character : SKFuckNode {
         
         let moveDuration = Float(distance)/movementSpeed
         var disappearAction: SKAction
-        if visible { disappearAction = SKAction.runBlock({}) }
-        else { disappearAction = SKAction.runBlock({ self.spine.hidden = !self.spine.hidden }) }
+//        if visible { disappearAction = SKAction.runBlock({}) }
+//        else { disappearAction = SKAction.runBlock({ self.animationEntity.animationSpine?.hidden = !self.animationEntity.animationSpine?.hidden }) }
         let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
         moveAction.timingMode = .EaseOut
         removeActionForKey("move")
-        runAction(SKAction.sequence([ disappearAction, moveAction, disappearAction]), withKey: "move")
+        runAction(SKAction.sequence([ /*disappearAction,*/ moveAction, /*disappearAction*/]), withKey: "move")
     }
     
     func setOrientation(newOrientation: CharacterOrientation) {
-        if orientation != newOrientation {
-            switch(newOrientation) {
-                case .Left:
-                    spine.xScale = -1
-                    
-                default:
-                    spine.xScale = 1
-            }
-            orientation = newOrientation
-        }
+//        if orientation != newOrientation {
+//            switch(newOrientation) {
+//                case .Left:
+//                    spine.xScale = -1
+//                
+//                default:
+//                    spine.xScale = 1
+//            }
+//            orientation = newOrientation
+//        }
     }
     
 }
 
 // MARK: -
-
 class Dad : Character {
     
+    // MARK: - GARBAGE
     var currentFloor: HouseFloor
     var currentRoom: HouseRoom
     var currentPath: HousePath
@@ -96,26 +93,22 @@ class Dad : Character {
         currentRoom.setActive()
         currentPath.setActive()
         
-//        super.init(imgName: "main")
-        super.init(spineFile: "main", atlas: "main")
-        spine.queuedAnimation = "walk"
-        spine.queueIntro = 0.1
-        spine.runAnimation("walk", andCount: 0, withIntroPeriodOf: 0.1, andUseQueue: true)
-        spine.position = CGPoint(x: 0, y: -15)
-//        spine.xScale = 0.5
-//        spine.yScale = 0.5
+        super.init(animationEntityKey: "entity_dad")
+        
+        // additional spine setup
+        animationNode.position = CGPoint(x: 0, y: -15)
+        setSpine("spine_dad_home_default")
+
         button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
         button!.position = CGPoint(x: 110, y: 180)
         button!.hidden = true
         addChild(button!)
     }
     
-    func update(dt: NSTimeInterval) {
-        
-        spine.activateAnimations()
+    // update garbage
+    override func update(dt: NSTimeInterval) {
         
         if actionForKey("move") != nil {
-            
             var isNearStairs = false
             for stair in currentPath.stairs {
                 if stair.pointIsInRange(position) {
@@ -123,6 +116,7 @@ class Dad : Character {
                     break
                 }
             }
+            
             if canUseStairs && !isNearStairs {
                 canUseStairs = false
                 dismissStairBox()
@@ -136,10 +130,10 @@ class Dad : Character {
                     updateCurrentLocation(room)
                 }
             }
-            
         }
+        
+        super.update(dt)
     }
-    
     func updateCurrentLocation(room: HouseRoom) {
         if currentRoom !== room {
             currentRoom.setInactive()
@@ -154,14 +148,27 @@ class Dad : Character {
         }
     }
     
-    func presentStairBox() {
-        button!.hidden = false
+    // MARK: Animation
+    func setSpine(spineKey: String) {
+        animationNode.removeAllChildren()
+        
+        game.animationManager.setSpineForEntity(spineKey, entityKey: entityKey)
+        animationEntity.setupSpine("idle", introPeriod: 0.1)
+        
+        if let spineNode = animationEntity.animationSpine {
+            animationNode.addChild(spineNode)
+        }
     }
     
     func walk() {
-        spine.runAnimation("idle", andCount: 0, withIntroPeriodOf: 0.1, andUseQueue: true)
+        animationEntity.playAnimation("walk", introPeriod: 0.1)
     }
     
+    
+    // deal with later
+    func presentStairBox() {
+        button!.hidden = false
+    }
     func useStairs() {
         
         var staircase: HousePathStaircase? = nil
@@ -195,7 +202,6 @@ class Dad : Character {
         
         dismissStairBox()
     }
-    
     func dismissStairBox() {
         button!.hidden = true
     }

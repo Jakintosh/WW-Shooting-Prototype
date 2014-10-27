@@ -15,7 +15,6 @@ class HomeScene : SKFuckScene {
     
     let camCon: CameraController = CameraController()
     let house: House = House()
-    let interactionManager: InteractionManager = InteractionManager(fileName: "testDayOne")
     
     var lastTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
@@ -55,8 +54,6 @@ class HomeScene : SKFuckScene {
             dad.position = CGPointZero
             println("tried to set dad location with nil position")
         }
-        dad.xScale = 0.85
-        dad.yScale = 0.85
         
         camCon.addCameraChild(house, withZ: 0)
         camCon.addCameraChild(dad, withZ: 1)

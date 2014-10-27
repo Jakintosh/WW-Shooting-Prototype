@@ -29,6 +29,11 @@ class LoadingScene : SKScene {
     
     
     override func didMoveToView(view: SKView) {
+        
+        game.interactionManager.loadData("testDayOne")
+        game.animationManager.loadAnimations("home", dataFile: "home_characters")
+        
+        
 //        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)
         NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
         
