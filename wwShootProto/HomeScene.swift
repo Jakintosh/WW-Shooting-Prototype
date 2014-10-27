@@ -15,6 +15,7 @@ class HomeScene : SKFuckScene {
     
     let camCon: CameraController = CameraController()
     let house: House = House()
+    let interactionManager: InteractionManager = InteractionManager(fileName: "testDayOne")
     
     var lastTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
@@ -75,7 +76,7 @@ class HomeScene : SKFuckScene {
         
         // update camera
         if !debug {
-            camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: dad.sprite.size.height/2)))
+            camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: 100)))
             camCon.setScale(1.0)
         }
         camCon.update(deltaTime)
@@ -94,6 +95,7 @@ class HomeScene : SKFuckScene {
         let location = touch.locationInNode(camCon.rootNode)
 
 //        dad.handleTouches(touches)
+        dad.walk()
         
         if let targetPoint = house.newPositionForPoint(location, fromRoom: dad.currentRoom) {
             dad.moveToPoint(targetPoint)

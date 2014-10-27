@@ -19,16 +19,25 @@ class Character : SKFuckNode {
     var orientation: CharacterOrientation = .Right
     var movementSpeed: Float = 100 // pixels per second
     
-    var sprite: SKSpriteNode
+//    var sprite: SKSpriteNode
+    var spine: SGG_Spine = SGG_Spine()
     
     // MARK: - Initalizers
-    init(imgName: String) {
-        sprite = SKSpriteNode(imageNamed: imgName)
+//    init(imgName: String) {
+//        sprite = SKSpriteNode(imageNamed: imgName)
+//        
+//        super.init()
+//        
+//        sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+//        addChild(sprite)
+//    }
+    
+    init(spineFile: String, atlas: String) {
         
+        spine.skeletonFromFileNamed(spineFile, andAtlasNamed: atlas, andUseSkinNamed: nil)
         super.init()
         
-        sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-        addChild(sprite)
+        addChild(spine)
     }
     
     // MARK: - Methods
@@ -45,7 +54,7 @@ class Character : SKFuckNode {
         let moveDuration = Float(distance)/movementSpeed
         var disappearAction: SKAction
         if visible { disappearAction = SKAction.runBlock({}) }
-        else { disappearAction = SKAction.runBlock({ self.sprite.hidden = !self.sprite.hidden }) }
+        else { disappearAction = SKAction.runBlock({ self.spine.hidden = !self.spine.hidden }) }
         let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
         moveAction.timingMode = .EaseOut
         removeActionForKey("move")
@@ -56,10 +65,10 @@ class Character : SKFuckNode {
         if orientation != newOrientation {
             switch(newOrientation) {
                 case .Left:
-                    sprite.xScale = -1
+                    spine.xScale = -1
                     
                 default:
-                    sprite.xScale = 1
+                    spine.xScale = 1
             }
             orientation = newOrientation
         }
@@ -87,8 +96,14 @@ class Dad : Character {
         currentRoom.setActive()
         currentPath.setActive()
         
-        super.init(imgName: "main")
-        sprite.position = CGPoint(x: 0, y: -15)
+//        super.init(imgName: "main")
+        super.init(spineFile: "main", atlas: "main")
+        spine.queuedAnimation = "walk"
+        spine.queueIntro = 0.1
+        spine.runAnimation("walk", andCount: 0, withIntroPeriodOf: 0.1, andUseQueue: true)
+        spine.position = CGPoint(x: 0, y: -15)
+//        spine.xScale = 0.5
+//        spine.yScale = 0.5
         button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
         button!.position = CGPoint(x: 110, y: 180)
         button!.hidden = true
@@ -96,6 +111,8 @@ class Dad : Character {
     }
     
     func update(dt: NSTimeInterval) {
+        
+        spine.activateAnimations()
         
         if actionForKey("move") != nil {
             
@@ -139,6 +156,10 @@ class Dad : Character {
     
     func presentStairBox() {
         button!.hidden = false
+    }
+    
+    func walk() {
+        spine.runAnimation("idle", andCount: 0, withIntroPeriodOf: 0.1, andUseQueue: true)
     }
     
     func useStairs() {

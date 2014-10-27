@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>interaction1</key>
+	<dict>
+		<key>startingMomentKey</key>
+		<string>moment1</string>
+		<key>moments</key>
+		<dict>
+			<key>moment1</key>
+			<dict>
+				<key>activeEntityKey</key>
+				<string></string>
+				<key>textInfo</key>
+				<dict>
+					<key>firstPart</key>
+					<dict>
+						<key>type</key>
+						<string>passive</string>
+						<key>text</key>
+						<string>I&apos;ll kill you gooby</string>
+					</dict>
+				</dict>
+				<key>startAnimationKey</key>
+				<string></string>
+				<key>endAnimationKey</key>
+				<string></string>
+				<key>cameraActionKey</key>
+				<string></string>
+				<key>nextMomentKey</key>
+				<string></string>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

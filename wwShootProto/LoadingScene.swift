@@ -26,10 +26,11 @@ class LoadingScene : SKScene {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
+    
     
     override func didMoveToView(view: SKView) {
-        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)
+//        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
         
         runAction(SKAction.sequence([SKAction.waitForDuration(1.0), SKAction.runBlock({
                 // set up transition
@@ -38,8 +39,9 @@ class LoadingScene : SKScene {
                 transition.pausesOutgoingScene = false
                 
                 // set up scene
-                let nextScene = HomeScene(size: CGSize(width: self.screen.long, height: self.screen.short))
-                
+                let nextScene = GameScene(size: CGSize(width: self.screen.short, height: self.screen.long))
+//                let nextScene = HomeScene(size: CGSize(width: self.screen.long, height: self.screen.short))
+            
                 // present scene
                 view.presentScene(nextScene, transition: transition)
             })
