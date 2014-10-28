@@ -80,6 +80,8 @@ class HomeScene : SKFuckScene {
     }
     
     func updateTime(currentTime:NSTimeInterval) {
+        game.timeManager.update(deltaTime)
+        //println(game.timeManager.currentTimeString())
         deltaTime = currentTime - lastTime
         if deltaTime > 1.0 { deltaTime = 1.0 }
         lastTime = currentTime
@@ -94,7 +96,7 @@ class HomeScene : SKFuckScene {
 //        dad.handleTouches(touches)
         dad.walk()
         
-        if let targetPoint = house.newPositionForPoint(location, fromRoom: dad.currentRoom) {
+        if let targetPoint = house.getNewLocation(location, fromRoom: dad.currentRoom) {
             dad.moveToPoint(targetPoint)
         }
     }

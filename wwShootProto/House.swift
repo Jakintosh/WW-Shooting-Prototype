@@ -96,7 +96,7 @@ class House : SKFuckNode {
     }
     
     // MARK:   Methods
-    func newPositionForPoint(point: CGPoint, fromRoom room: HouseRoom) -> CGPoint? {
+    func getNewLocation(point: CGPoint, fromRoom room: HouseRoom) -> CGPoint? {
         let xPos: CGFloat = Utilities2D.clamp(point.x, min: room.associatedPath.leftEndpoint, max: room.associatedPath.rightEndpoint)
         let yPos: CGFloat = room.associatedFloor.floorY + room.associatedFloor.yPosition
         let newPosition = CGPoint(x: xPos, y: yPos)
@@ -104,7 +104,7 @@ class House : SKFuckNode {
     }
     
     func getStartingLocation() -> CGPoint? {
-        if let startLoc = newPositionForPoint( CGPoint(x: CGRectGetMidX(startingRoom.roomFrame), y: CGRectGetMidY(startingRoom.roomFrame)), fromRoom: startingRoom) {
+        if let startLoc = getNewLocation( CGPoint(x: CGRectGetMidX(startingRoom.roomFrame), y: CGRectGetMidY(startingRoom.roomFrame)), fromRoom: startingRoom) {
             return startLoc
         } else {
             println("could not find a starting point inside designated starting room")
@@ -112,10 +112,15 @@ class House : SKFuckNode {
         }
     }
     
-    func findRoomWithName(name: String) {
+    func findRoomWithName(name: String) -> HouseRoom? {
         for floor in floors {
-            
+            for (_name, room) in floor.rooms {
+                if name == _name {
+                    return room
+                }
+            }
         }
+        return nil
     }
     
     func toggleDebug() {

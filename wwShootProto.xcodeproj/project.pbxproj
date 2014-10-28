@@ -44,6 +44,7 @@
 		21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D319FF001900A1E612 /* SGG_SpineBoneAction.m */; };
 		21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D519FF001900A1E612 /* SGG_SpineJSONTools.m */; };
 		21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */; };
+		21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22E019FF1FAE00A1E612 /* TimeManager.swift */; };
 		21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +109,7 @@
 		21EA22D619FF001900A1E612 /* SGG_SpineSkin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGG_SpineSkin.h; sourceTree = "<group>"; };
 		21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineSkin.m; sourceTree = "<group>"; };
 		21EA22D819FF001900A1E612 /* SpineImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpineImport.h; sourceTree = "<group>"; };
+		21EA22E019FF1FAE00A1E612 /* TimeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeManager.swift; path = wwShootProto/TimeManager.swift; sourceTree = SOURCE_ROOT; };
 		21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -358,6 +360,7 @@
 				21EA22A219FEB34F00A1E612 /* Game.swift */,
 				21EA22A419FEC78200A1E612 /* AnimationManager.swift */,
 				21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */,
+				21EA22E019FF1FAE00A1E612 /* TimeManager.swift */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B2E7BC19F46C5E00000E70 /* Character.swift in Sources */,
 				21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */,
+				21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
 				21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */,
 				21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */,

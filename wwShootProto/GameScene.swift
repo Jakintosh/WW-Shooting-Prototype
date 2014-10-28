@@ -202,6 +202,7 @@ class GameScene: SKScene {
         
         lastTime = currentTime
         
+        game.timeManager.update(deltaTime)
         currentTimeOfDay += deltaTime
         
         if let fucktouch = touch {
@@ -248,6 +249,7 @@ class GameScene: SKScene {
         }
         
         partcleManager?.updateSuction(touchPos: retPos, dt: deltaTime)
+        
         
         camCon.update(deltaTime)
     }

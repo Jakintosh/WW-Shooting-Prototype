@@ -10,6 +10,65 @@ import Foundation
 import SpriteKit
 
 // MARK: -
+class InteractionManager {
+    
+    // MARK: Data
+    private var entities: [String:InteractiveEntity] = [String:InteractiveEntity]()
+    private var interactionData: [String:InteractionData] = [String:InteractionData]()
+    
+    // MARK: File I/O
+    func loadData(fileName: String) {
+        if let filepath = NSBundle.mainBundle().pathForResource(fileName, ofType: "plist") {
+            if let fileURL = NSURL(fileURLWithPath: filepath) {
+                if let contentsOfFile = NSDictionary(contentsOfURL: fileURL) {
+                    for (name, data) in contentsOfFile {
+                        let newData = InteractionData(data: data as NSDictionary)
+                        interactionData[name as String] = newData
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: Methods
+    func registerEntity(name: String) -> InteractiveEntity {
+        let newEntity = InteractiveEntity()
+        entities[name] = newEntity
+        return newEntity
+    }
+    
+    func getEntityNamed(name: String) -> InteractiveEntity? {
+        return entities[name]
+    }
+    
+}
+
+// MARK: -
+class InteractiveEntity {
+    
+    // MARK: Properties
+    let displayNode: SKNode = SKNode()
+    
+    var loadedTextInfo: NSDictionary? = nil
+    
+    // MARK: Initializers
+    
+    
+    // MARK: Methods
+    func loadTextInfo(textInfo: NSDictionary) {
+        loadedTextInfo = textInfo
+    }
+    
+}
+
+// MARK: -
+class InteractiveDisplayNode : SKFuckNode {
+    
+    // MARK: Properties
+    
+}
+
+// MARK: -
 // InteractionData
 //
 // Interaction Data stores all relevent information for a full interaction sequence. This
@@ -86,11 +145,11 @@ struct InteractionData {
             return nil
         }
     }
-    func getCameraActionKey()   -> String? {
+    func getCameraActionKey()   -> NSDictionary? {
         if let moment = currentMoment {
-            return moment.cameraActionKey
+            return moment.cameraAction
         } else {
-            println("Tried to retrieve camera action key with nil currentMoment")
+            println("Tried to retrieve camera action info with nil currentMoment")
             return nil
         }
     }
@@ -145,99 +204,21 @@ struct InteractionMoment {
 
     // MARK: Properties
     let activeEntityKey: String
+    let interactiveEntityKey: String
     let textInfo: NSDictionary
     let startAnimationKey: String?
     let endAnimationKey: String?
-    let cameraActionKey: String
+    let cameraAction: NSDictionary
     let nextMomentKey: String?
     
     init(data: NSDictionary) {
-        activeEntityKey     = data["activeEntityKey"] as String
-        textInfo            = data["textInfo"] as NSDictionary
-        startAnimationKey   = data["startAnimationKey"] as String?
-        endAnimationKey     = data["endAnimationKey"] as String?
-        cameraActionKey     = data["cameraActionKey"] as String
-        nextMomentKey       = data["nextMomentKey"] as String?
+        activeEntityKey      = data["activeEntityKey"] as String
+        interactiveEntityKey = data["interactionEntityKey"] as String
+        textInfo             = data["textInfo"] as NSDictionary
+        startAnimationKey    = data["startAnimationKey"] as String?
+        endAnimationKey      = data["endAnimationKey"] as String?
+        cameraAction         = data["cameraAction"] as NSDictionary
+        nextMomentKey        = data["nextMomentKey"] as String?
     }
-    
-}
-
-// MARK: -
-class InteractionManager {
-    
-    // MARK: Data
-    private var dialogue: [String:String] = [String:String]()
-    private var animations: [String:Int] = [String:Int]()
-    private var cameraMoments: [String:InteractionCamera] = [String:InteractionCamera]()
-    
-    // MARK: Properties
-    private var entities: [String:InteractiveEntity] = [String:InteractiveEntity]()
-    private var interactionData: [String:InteractionData] = [String:InteractionData]()
-    
-    // MARK: Initializers
-//    init(fileName: String) {
-//        if let filepath = NSBundle.mainBundle().pathForResource(fileName, ofType: "plist") {
-//            if let fileURL = NSURL(fileURLWithPath: filepath) {
-//                if let contentsOfFile = NSDictionary(contentsOfURL: fileURL) {
-//                    for (name, data) in contentsOfFile {
-//                        let newData = InteractionData(data: data as NSDictionary)
-//                        interactionData[name as String] = newData
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-    func loadData(fileName: String) {
-        if let filepath = NSBundle.mainBundle().pathForResource(fileName, ofType: "plist") {
-            if let fileURL = NSURL(fileURLWithPath: filepath) {
-                if let contentsOfFile = NSDictionary(contentsOfURL: fileURL) {
-                    for (name, data) in contentsOfFile {
-                        let newData = InteractionData(data: data as NSDictionary)
-                        interactionData[name as String] = newData
-                    }
-                }
-            }
-        }
-    }
-    
-    // MARK: Methods
-    func createNewEntity(#name: String, ownerNode: SKNode) -> InteractiveEntity {
-        let newEntity = InteractiveEntity(ownerNode: ownerNode)
-        if entities.indexForKey(name) != nil { entities[name] = newEntity }
-        return newEntity
-    }
-    
-    func getEntityNamed(name: String) -> InteractiveEntity? {
-        return entities[name]
-    }
-    
-}
-
-// MARK: -
-class InteractiveEntity {
-    
-    // MARK: Properties
-    let ownerNode: SKNode
-    let displayNode: SKNode = SKNode()
-    
-    var loadedTextInfo: NSDictionary? = nil
-    
-    // MARK: Initializers
-    init(ownerNode: SKNode) {
-        self.ownerNode = ownerNode
-    }
-    
-    // MARK: Methods
-    func loadTextInfo(textInfo: NSDictionary) {
-        loadedTextInfo = textInfo
-    }
-    
-}
-
-// MARK: -
-class InteractiveDisplayNode : SKFuckNode {
-    
-    // MARK: Properties
     
 }

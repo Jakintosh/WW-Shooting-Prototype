@@ -12,6 +12,8 @@
 			<dict>
 				<key>activeEntityKey</key>
 				<string></string>
+				<key>interactionEntityKey</key>
+				<string></string>
 				<key>textInfo</key>
 				<dict>
 					<key>firstPart</key>
@@ -26,8 +28,8 @@
 				<string></string>
 				<key>endAnimationKey</key>
 				<string></string>
-				<key>cameraActionKey</key>
-				<string></string>
+				<key>cameraAction</key>
+				<dict/>
 				<key>nextMomentKey</key>
 				<string></string>
 			</dict>

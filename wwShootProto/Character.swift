@@ -19,14 +19,24 @@ class Character : SKFuckNode {
     var orientation: CharacterOrientation = .Right
     var movementSpeed: Float = 100 // pixels per second
     
-    let entityKey: String
-    var animationEntity: AnimatableEntity
+    // subsystem comonents
+    let animatorKey: String
+    var animator: AnimatableEntity
+    
+    let interactorKey: String
+    var interactor: InteractiveEntity
+    
+    // subsystem nodes
     let animationNode: SKNode = SKNode()
+    let interactionNode: SKNode = SKNode()
     
     // MARK: - Initalizers
-    init(animationEntityKey: String) {
-        entityKey = animationEntityKey
-        animationEntity = game.animationManager.registerEntity(entityKey)
+    init(animatorKey: String, interactorKey: String) {
+        self.animatorKey = animatorKey
+        self.interactorKey = interactorKey
+        
+        animator = game.animationManager.registerEntity(animatorKey)
+        interactor = game.interactionManager.registerEntity(interactorKey)
         
         super.init()
         
@@ -35,7 +45,7 @@ class Character : SKFuckNode {
     
     // MARK: - Methods
     func update(dt: NSTimeInterval) {
-        animationEntity.update(dt)
+        animator.update(dt)
     }
     
     func moveToPoint(target: CGPoint, visible: Bool = true) {
@@ -51,7 +61,7 @@ class Character : SKFuckNode {
         let moveDuration = Float(distance)/movementSpeed
         var disappearAction: SKAction
 //        if visible { disappearAction = SKAction.runBlock({}) }
-//        else { disappearAction = SKAction.runBlock({ self.animationEntity.animationSpine?.hidden = !self.animationEntity.animationSpine?.hidden }) }
+//        else { disappearAction = SKAction.runBlock({ self.animator.animationSpine?.hidden = !self.animator.animationSpine?.hidden }) }
         let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
         moveAction.timingMode = .EaseOut
         removeActionForKey("move")
@@ -93,7 +103,7 @@ class Dad : Character {
         currentRoom.setActive()
         currentPath.setActive()
         
-        super.init(animationEntityKey: "entity_dad")
+        super.init(animatorKey: "entity_dad", interactorKey: "entity_dad")
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
@@ -152,16 +162,16 @@ class Dad : Character {
     func setSpine(spineKey: String) {
         animationNode.removeAllChildren()
         
-        game.animationManager.setSpineForEntity(spineKey, entityKey: entityKey)
-        animationEntity.setupSpine("idle", introPeriod: 0.1)
+        game.animationManager.setSpineForEntity(spineKey, entityKey: animatorKey)
+        animator.setupSpine("idle", introPeriod: 0.1)
         
-        if let spineNode = animationEntity.animationSpine {
+        if let spineNode = animator.animationSpine {
             animationNode.addChild(spineNode)
         }
     }
     
     func walk() {
-        animationEntity.playAnimation("walk", introPeriod: 0.1)
+        animator.playAnimation("walk", introPeriod: 0.1)
     }
     
     
