@@ -580,6 +580,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "wwShootProto/wwShootProto-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -615,6 +616,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "wwShootProto/wwShootProto-Bridging-Header.h";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -629,7 +631,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jak/Documents/Xcode Projects/Projects/NAHCS/WW-Shooting-Prototype/wwShootProto/wwShootProto-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "wwShootProto/wwShootProto-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -643,7 +645,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jak/Documents/Xcode Projects/Projects/NAHCS/WW-Shooting-Prototype/wwShootProto/wwShootProto-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "wwShootProto/wwShootProto-Bridging-Header.h";
 			};
 			name = Release;
 		};
