@@ -9,7 +9,11 @@
 import Foundation
 import SpriteKit
 
-class SKFuckNode : SKNode {/* this is the fucking worst*/}
+class SKFuckNode : SKNode {
+    func getScenePosition() -> CGPoint {
+        return scene!.convertPoint(position, fromNode: self)
+    }
+}
 
 // MARK: -
 class House : SKFuckNode {

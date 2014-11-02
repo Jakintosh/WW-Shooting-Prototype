@@ -30,7 +30,7 @@ class LoadingScene : SKScene {
     
     override func didMoveToView(view: SKView) {
         
-        game.interactionManager.loadData("testDayOne")
+        game.interactionManager.loadInteractions("home", dataFile: "testDayOne")
         game.animationManager.loadAnimations("home", dataFile: "home_characters")
         
         

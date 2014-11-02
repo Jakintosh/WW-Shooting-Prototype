@@ -70,15 +70,15 @@ class AnimationManager {
     }
     
     // MARK: Entity Management
-    func registerEntity(name: String) -> AnimatableEntity {
+    func registerEntity(key: String) -> AnimatableEntity {
         let newAnimatableEntity = AnimatableEntity()
-        animatableEntities[name] = newAnimatableEntity
+        animatableEntities[key] = newAnimatableEntity
         return newAnimatableEntity
     }
-    func removeEntity(name: String) {
-        if let entity = animatableEntities[name] {
+    func removeEntity(key: String) {
+        if let entity = animatableEntities[key] {
             entity.animationSpine?.removeFromParent()
-            animatableEntities[name] = nil
+            animatableEntities[key] = nil
         }
     }
     func setSpineForEntity(spineKey: String, entityKey: String) {

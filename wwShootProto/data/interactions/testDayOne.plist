@@ -4,34 +4,82 @@
 <dict>
 	<key>interaction1</key>
 	<dict>
+		<key>triggerEntity</key>
+		<string></string>
+		<key>timeOpen</key>
+		<dict>
+			<key>hour</key>
+			<integer>18</integer>
+			<key>minute</key>
+			<integer>0</integer>
+		</dict>
+		<key>timeClose</key>
+		<dict>
+			<key>hour</key>
+			<integer>19</integer>
+			<key>minute</key>
+			<integer>0</integer>
+		</dict>
+		<key>boundingBox</key>
+		<dict>
+			<key>x</key>
+			<integer>0</integer>
+			<key>y</key>
+			<integer>0</integer>
+			<key>width</key>
+			<integer>500</integer>
+			<key>height</key>
+			<integer>200</integer>
+		</dict>
 		<key>startingMomentKey</key>
 		<string>moment1</string>
 		<key>moments</key>
 		<dict>
 			<key>moment1</key>
 			<dict>
-				<key>activeEntityKey</key>
-				<string></string>
-				<key>interactionEntityKey</key>
-				<string></string>
-				<key>textInfo</key>
+				<key>decisionLength</key>
+				<integer>0</integer>
+				<key>activeEntity</key>
 				<dict>
-					<key>firstPart</key>
-					<dict>
-						<key>type</key>
-						<string>passive</string>
-						<key>text</key>
-						<string>I&apos;ll kill you gooby</string>
-					</dict>
+					<key>key</key>
+					<string>entity_dad</string>
+					<key>choices</key>
+					<array>
+						<dict>
+							<key>animation</key>
+							<string>idle</string>
+							<key>nextMomentKey</key>
+							<string>moment2</string>
+							<key>text</key>
+							<string>what</string>
+						</dict>
+						<dict>
+							<key>animation</key>
+							<string>idle</string>
+							<key>nextMomentKey</key>
+							<string>moment3</string>
+							<key>text</key>
+							<string>no</string>
+						</dict>
+						<dict>
+							<key>animation</key>
+							<string>idle</string>
+							<key>nextMomentKey</key>
+							<string>moment4</string>
+							<key>text</key>
+							<string>ok</string>
+						</dict>
+					</array>
 				</dict>
-				<key>startAnimationKey</key>
-				<string></string>
-				<key>endAnimationKey</key>
-				<string></string>
-				<key>cameraAction</key>
-				<dict/>
-				<key>nextMomentKey</key>
-				<string></string>
+				<key>interactionEntity</key>
+				<dict>
+					<key>key</key>
+					<string>entity_daughter</string>
+					<key>response</key>
+					<string>hey dad</string>
+					<key>camera</key>
+					<string>no</string>
+				</dict>
 			</dict>
 		</dict>
 	</dict>
