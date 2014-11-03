@@ -13,18 +13,19 @@ enum CharacterOrientation {
     case Left, Right, Forward, Backward
 }
 
-class Character : SKFuckNode {
+class Character : NHCNode {
     
     // MARK: - Properties
     var orientation: CharacterOrientation = .Right
     var movementSpeed: Float = 100 // pixels per second
+    var canMove: Bool = true
     
     // subsystem comonents
     let animatorKey: String
-    var animator: AnimatableEntity
+    var animator: AnimatableEntity!
     
     let interactorKey: String
-    var interactor: InteractiveEntity
+    var interactor: InteractiveEntity!
     
     // subsystem nodes
     let animationNode: SKNode = SKNode()
@@ -35,12 +36,16 @@ class Character : SKFuckNode {
         self.animatorKey = animatorKey
         self.interactorKey = interactorKey
         
-        animator = game.animationManager.registerEntity(animatorKey)
-        interactor = game.interactionManager.registerEntity(interactorKey)
-        
         super.init()
         
+        animator = game.animationManager.registerEntity(animatorKey, owner: self)
+        interactor = game.interactionManager.registerEntity(interactorKey, owner: self)
+        
+        interactionNode.position = CGPoint(x: 0, y: 150)
+        interactionNode.addChild(interactor.displayNode)
+        
         addChild(animationNode)
+        addChild(interactionNode)
     }
     
     // MARK: - Methods
@@ -49,36 +54,50 @@ class Character : SKFuckNode {
     }
     
     func moveToPoint(target: CGPoint, visible: Bool = true) {
-        let xDistance = target.x - self.position.x
-        let distance = Utilities2D.distanceFromPoint(target, toPoint: self.position)
-        
-        if xDistance > 0 {
-            setOrientation(.Right)
-        } else {
-            setOrientation(.Left)
+        if canMove {
+            let xDistance = target.x - self.position.x
+            let distance = Utilities2D.distanceFromPoint(target, toPoint: self.position)
+            
+            if xDistance > 0 {
+                setOrientation(.Right)
+            } else {
+                setOrientation(.Left)
+            }
+            
+            let moveDuration = Float(distance)/movementSpeed
+            var disappearAction: SKAction
+            if visible { disappearAction = SKAction.runBlock({}) }
+            else { disappearAction = SKAction.runBlock({ self.animationNode.hidden = !self.animationNode.hidden }) }
+            let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
+            moveAction.timingMode = .EaseOut
+            removeActionForKey("move")
+            runAction(SKAction.sequence([ /*disappearAction,*/ moveAction, /*disappearAction*/]), withKey: "move")
         }
-        
-        let moveDuration = Float(distance)/movementSpeed
-        var disappearAction: SKAction
-//        if visible { disappearAction = SKAction.runBlock({}) }
-//        else { disappearAction = SKAction.runBlock({ self.animator.animationSpine?.hidden = !self.animator.animationSpine?.hidden }) }
-        let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
-        moveAction.timingMode = .EaseOut
-        removeActionForKey("move")
-        runAction(SKAction.sequence([ /*disappearAction,*/ moveAction, /*disappearAction*/]), withKey: "move")
     }
     
     func setOrientation(newOrientation: CharacterOrientation) {
-//        if orientation != newOrientation {
-//            switch(newOrientation) {
-//                case .Left:
-//                    spine.xScale = -1
-//                
-//                default:
-//                    spine.xScale = 1
-//            }
-//            orientation = newOrientation
-//        }
+        if orientation != newOrientation {
+            switch(newOrientation) {
+                case .Left:
+                    animationNode.xScale = -1
+                
+                default:
+                    animationNode.xScale = 1
+            }
+            orientation = newOrientation
+        }
+    }
+    
+    // MARK: Animation
+    func setSpine(spineKey: String) {
+        animationNode.removeAllChildren()
+        
+        game.animationManager.setSpineForEntity(spineKey, entityKey: animatorKey)
+        animator.setupSpine("idle", introPeriod: 0.1)
+        
+        if let spineNode = animator.animationSpine {
+            animationNode.addChild(spineNode)
+        }
     }
     
 }
@@ -107,6 +126,8 @@ class Dad : Character {
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
+        animationNode.xScale = 0.85
+        animationNode.yScale = 0.85
         setSpine("spine_dad_home_default")
 
         button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
@@ -158,17 +179,7 @@ class Dad : Character {
         }
     }
     
-    // MARK: Animation
-    func setSpine(spineKey: String) {
-        animationNode.removeAllChildren()
-        
-        game.animationManager.setSpineForEntity(spineKey, entityKey: animatorKey)
-        animator.setupSpine("idle", introPeriod: 0.1)
-        
-        if let spineNode = animator.animationSpine {
-            animationNode.addChild(spineNode)
-        }
-    }
+
     
     func walk() {
         animator.playAnimation("walk", introPeriod: 0.1)

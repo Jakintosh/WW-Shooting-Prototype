@@ -20,8 +20,10 @@ class HomeScene : SKFuckScene {
     var deltaTime: CFTimeInterval = 0
     
     let dad: Dad
+    let daughter: NHCNode = NHCNode()
     
     var debug: Bool = false
+    let timeText: SKLabelNode = SKLabelNode()
     let tripleTap: UITapGestureRecognizer? = nil
     
     override init(size: CGSize) {
@@ -36,28 +38,14 @@ class HomeScene : SKFuckScene {
     override func didMoveToView(view: SKView) {
         
         view.addGestureRecognizer(tripleTap!)
+        camCon.connectGestureRecognizers(view)
         
         // set up scene
         anchorPoint = CGPointMake(0.5, 0.5)
         backgroundColor = SKColor.blackColor()
+
+        setup()
         
-        // set up camera
-        camCon.connectGestureRecognizers(view)
-        camCon.disableDebug()
-        addChild(camCon)
-        
-        // set up dad
-        var posStartLoc = house.getStartingLocation()
-        if let startLoc = posStartLoc {
-                dad.position = startLoc
-        } else {
-            dad.position = CGPointZero
-            println("tried to set dad location with nil position")
-        }
-        
-        camCon.addCameraChild(house, withZ: 0)
-        camCon.addCameraChild(dad, withZ: 1)
-        camCon.setCameraStartingPosition(x: 0, y: 0)
     }
     
     override func willMoveFromView(view: SKView) {
@@ -65,16 +53,57 @@ class HomeScene : SKFuckScene {
         camCon.disconnectGestureRecognizers(view)
     }
     
+    func setup() {
+        
+        game.interactionManager.setActiveEntity("entity_dad")
+        
+        // set up camera
+        camCon.disableDebug()
+        addChild(camCon)
+        
+        // time hud
+        timeText.position = CGPoint(x: -frame.size.width/2 + 20, y: frame.size.height/2 - 20)
+        timeText.horizontalAlignmentMode = .Left
+        timeText.verticalAlignmentMode = .Top
+        timeText.fontSize = 16.0
+        
+        // set up dad
+        var posStartLoc = house.getStartingLocation()
+        if let startLoc = posStartLoc {
+            dad.position = startLoc
+        } else {
+            dad.position = CGPointZero
+            println("tried to set dad location with nil position")
+        }
+        
+        // set up "daughter"
+        daughter.position = CGPoint(x: 670, y: 970)
+        let d_int = game.interactionManager.registerEntity("entity_daughter", owner: daughter)
+        daughter.addChild(d_int.displayNode)
+        
+        // camera stuff
+        camCon.addHUDChild(timeText, withZ: 0)
+        camCon.addCameraChild(house, withZ: 0)
+        camCon.addCameraChild(dad, withZ: 2)
+        camCon.addCameraChild(daughter, withZ: 1)
+        camCon.setCameraStartingPosition(x: 0, y: 0)
+    }
+    
     override func update(currentTime: NSTimeInterval) {
         // update time
         updateTime(currentTime)
         
         dad.update(deltaTime)
+        game.interactionManager.update(deltaTime)
+        
+        timeText.text = game.timeManager.currentTimeString()
         
         // update camera
         if !debug {
-            camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: 100)))
-            camCon.setScale(1.0)
+            if dad.canMove {
+                camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: 100)))
+                camCon.setScale(1.0)
+            }
         }
         camCon.update(deltaTime)
     }

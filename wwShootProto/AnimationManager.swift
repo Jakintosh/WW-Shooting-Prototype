@@ -70,8 +70,8 @@ class AnimationManager {
     }
     
     // MARK: Entity Management
-    func registerEntity(key: String) -> AnimatableEntity {
-        let newAnimatableEntity = AnimatableEntity()
+    func registerEntity(key: String, owner: NHCNode) -> AnimatableEntity {
+        let newAnimatableEntity = AnimatableEntity(owner: owner)
         animatableEntities[key] = newAnimatableEntity
         return newAnimatableEntity
     }
@@ -104,6 +104,11 @@ class AnimatableEntity {
     
     // MARK: Properties
     var animationSpine: SGG_Spine? = nil
+    var owner: NHCNode? = nil
+    
+    init(owner: NHCNode) {
+        self.owner = owner
+    }
     
     // MARK: Methods
     func update(dt: NSTimeInterval) {

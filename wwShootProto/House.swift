@@ -9,14 +9,16 @@
 import Foundation
 import SpriteKit
 
-class SKFuckNode : SKNode {
+class NHCNode : SKNode {
     func getScenePosition() -> CGPoint {
-        return scene!.convertPoint(position, fromNode: self)
+        // TODO: Figure out whats up here
+//        return Utilities2D.dividePoint(scene!.childNodeWithName("/CamCon/Zoom_Node/Root_Node")!.convertPoint(position, fromNode: self), byNumber: 2.0)
+        return scene!.childNodeWithName("/CamCon/Zoom_Node/Root_Node")!.convertPoint(position, fromNode: self)
     }
 }
 
 // MARK: -
-class House : SKFuckNode {
+class House : NHCNode {
     
     // MARK:   Properties
     var startingRoom: HouseRoom
@@ -74,7 +76,7 @@ class House : SKFuckNode {
         stair4_1.setDestination(stair3_1)
         
         // set starting locations
-        startingRoom = room2_1
+        startingRoom = room4_1
         
         // set up the house sprite
         houseSprite.zPosition = -1
@@ -91,6 +93,7 @@ class House : SKFuckNode {
         addChild(floor3)
         addChild(floor4)
         addChild(houseSprite)
+        addChild(game.interactionManager.debugLayer)
         
         floor1.hidden = true
         floor2.hidden = true

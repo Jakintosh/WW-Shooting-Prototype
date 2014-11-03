@@ -58,7 +58,7 @@ class TimeManager {
     }
     
     func currentHour() -> Int {
-        return Int(floor(currentTimeOfDaySeconds / 3600.0))
+        return Int(floor(currentTimeOfDaySeconds / 3600.0)) % 24
     }
     
     func currentMinute() -> Int {

@@ -39,6 +39,7 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
         debugMode = false
         super.init()
         
+        self.name = "CamCon"
         zoomNode.name = "Zoom_Node"
         rootNode.name = "Root_Node"
         hudNode.name  = "HUD_Node"

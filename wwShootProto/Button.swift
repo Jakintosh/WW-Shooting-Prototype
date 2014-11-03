@@ -9,12 +9,12 @@
 import Foundation
 import SpriteKit
 
-class Button : SKFuckNode {
+class Button : NHCNode {
     
     // MARK: - Properties
     let activeState: SKSpriteNode
     let defaultState: SKSpriteNode
-    let completionAction: () -> Void
+    var completionAction: () -> Void
     
     // MARK: - Initializers
     init(activeImageName: String, defaultImageName: String, action: () -> Void) {

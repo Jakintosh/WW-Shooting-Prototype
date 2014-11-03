@@ -4,82 +4,117 @@
 <dict>
 	<key>interaction1</key>
 	<dict>
-		<key>triggerEntity</key>
-		<string></string>
-		<key>timeOpen</key>
-		<dict>
-			<key>hour</key>
-			<integer>18</integer>
-			<key>minute</key>
-			<integer>0</integer>
-		</dict>
-		<key>timeClose</key>
-		<dict>
-			<key>hour</key>
-			<integer>19</integer>
-			<key>minute</key>
-			<integer>0</integer>
-		</dict>
-		<key>boundingBox</key>
-		<dict>
-			<key>x</key>
-			<integer>0</integer>
-			<key>y</key>
-			<integer>0</integer>
-			<key>width</key>
-			<integer>500</integer>
-			<key>height</key>
-			<integer>200</integer>
-		</dict>
+		<key>interactionID</key>
+		<string>int_day1_daughter</string>
 		<key>startingMomentKey</key>
 		<string>moment1</string>
+		<key>activeEntityKey</key>
+		<string>entity_dad</string>
+		<key>otherEntityKey</key>
+		<string>entity_daughter</string>
+		<key>hourOpen</key>
+		<integer>0</integer>
+		<key>hourClose</key>
+		<integer>24</integer>
+		<key>centerX</key>
+		<integer>860</integer>
+		<key>centerY</key>
+		<integer>865</integer>
+		<key>radius</key>
+		<integer>100</integer>
 		<key>moments</key>
 		<dict>
 			<key>moment1</key>
 			<dict>
+				<key>cameraInfo</key>
+				<dict>
+					<key>zoom</key>
+					<real>1.2</real>
+					<key>position</key>
+					<dict>
+						<key>x</key>
+						<integer>820</integer>
+						<key>y</key>
+						<integer>1000</integer>
+					</dict>
+				</dict>
 				<key>decisionLength</key>
-				<integer>0</integer>
-				<key>activeEntity</key>
+				<integer>10</integer>
+				<key>responseText</key>
+				<string>hey dad</string>
+				<key>choices</key>
+				<array>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>moment2</string>
+						<key>text</key>
+						<string>what</string>
+					</dict>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>end</string>
+						<key>text</key>
+						<string>no</string>
+					</dict>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>moment2</string>
+						<key>text</key>
+						<string>hmm?</string>
+					</dict>
+				</array>
+			</dict>
+			<key>moment2</key>
+			<dict>
+				<key>cameraInfo</key>
 				<dict>
-					<key>key</key>
-					<string>entity_dad</string>
-					<key>choices</key>
-					<array>
-						<dict>
-							<key>animation</key>
-							<string>idle</string>
-							<key>nextMomentKey</key>
-							<string>moment2</string>
-							<key>text</key>
-							<string>what</string>
-						</dict>
-						<dict>
-							<key>animation</key>
-							<string>idle</string>
-							<key>nextMomentKey</key>
-							<string>moment3</string>
-							<key>text</key>
-							<string>no</string>
-						</dict>
-						<dict>
-							<key>animation</key>
-							<string>idle</string>
-							<key>nextMomentKey</key>
-							<string>moment4</string>
-							<key>text</key>
-							<string>ok</string>
-						</dict>
-					</array>
+					<key>zoom</key>
+					<real>1.2</real>
+					<key>position</key>
+					<dict>
+						<key>x</key>
+						<real>835</real>
+						<key>y</key>
+						<integer>990</integer>
+					</dict>
 				</dict>
-				<key>interactionEntity</key>
-				<dict>
-					<key>key</key>
-					<string>entity_daughter</string>
-					<key>response</key>
-					<string>hey dad</string>
-					<key>camera</key>
-					<string>no</string>
-				</dict>
+				<key>decisionLength</key>
+				<integer>10</integer>
+				<key>responseText</key>
+				<string>you&apos;re cool :)</string>
+				<key>choices</key>
+				<array>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>end</string>
+						<key>text</key>
+						<string>im rick james</string>
+					</dict>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>end</string>
+						<key>text</key>
+						<string>thanks beb</string>
+					</dict>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>end</string>
+						<key>text</key>
+						<string>i guess</string>
+					</dict>
+				</array>
 			</dict>
 		</dict>
 	</dict>

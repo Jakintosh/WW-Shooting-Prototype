@@ -44,6 +44,18 @@ struct Utilities2D {
     static func subPoint( p1: CGPoint, fromPoint p2: CGPoint) -> CGPoint {
         return CGPointMake(p2.x - p1.x, p2.y - p1.y);
     }
+    static func multiplyPoint( p1: CGPoint, byPoint p2: CGPoint) -> CGPoint {
+        return CGPointMake(p1.x * p2.x, p1.y * p2.y);
+    }
+    static func dividePoint( p1: CGPoint, byPoint p2: CGPoint) -> CGPoint {
+        return CGPointMake(p1.x / p2.x, p1.y / p2.y);
+    }
+    static func multiplyPoint( p: CGPoint, byNumber n: CGFloat) -> CGPoint {
+        return CGPointMake(p.x * n, p.y * n);
+    }
+    static func dividePoint( p: CGPoint, byNumber n: CGFloat) -> CGPoint {
+        return CGPointMake(p.x / n, p.y / n);
+    }
     static func distanceSquaredFromPoint(p1: CGPoint, toPoint p2: CGPoint) -> CGFloat {
         return ((p2.x - p1.x) * (p2.x - p1.x)) + ((p2.y - p1.y) * (p2.y - p1.y))
     }

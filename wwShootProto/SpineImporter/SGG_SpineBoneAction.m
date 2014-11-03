@@ -679,7 +679,7 @@
 	NSArray* roots = [self solveCubicEquationWithA:a andB:b andC:c andD:d];
 	
 
-	double closest;
+	double closest = 1;
 
 	for (int i = 0; i < roots.count; i++) {
 		double root = [roots[i] doubleValue];
