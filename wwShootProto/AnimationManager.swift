@@ -81,6 +81,9 @@ class AnimationManager {
             animatableEntities[key] = nil
         }
     }
+    func getEntity(key: String) -> AnimatableEntity? {
+            return animatableEntities[key]
+    }
     func setSpineForEntity(spineKey: String, entityKey: String) {
         if let spine = loadedAnimations[spineKey] {
             if let entity = animatableEntities[entityKey] {
@@ -140,6 +143,14 @@ class AnimatableEntity {
     func playAnimation(name: String, introPeriod: CGFloat) {
         if let spine = animationSpine {
             spine.runAnimation(name, andCount: 0, withIntroPeriodOf: introPeriod, andUseQueue: true)
+        }
+    }
+    func setQueuedAnimation(name: String, introPeriod: CGFloat = -1) {
+        if let spine = animationSpine {
+            spine.queuedAnimation = name
+            if introPeriod != -1 {
+                spine.queueIntro = introPeriod
+            }
         }
     }
 }

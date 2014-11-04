@@ -17,12 +17,14 @@ import SpriteKit
 
 class InteractionManager {
     
+    let ANIM_INTRO_CONSTANT_BAD_KILL_ME: CGFloat = 0.1
+    
     // MARK: Properties
+    var isInteracting: Bool                         = false
+    var activeInteraction: InteractionData?         = nil
     var activeInteractiveEntity: InteractiveEntity? = nil
-    var hoverTrigger: InteractionTrigger? = nil
-    var isInteracting: Bool = false
-    var activeInteraction: InteractionData?
-    var debugLayer: NHCNode = NHCNode()
+    var hoverTrigger: InteractionTrigger?           = nil
+    var debugLayer: NHCNode                         = NHCNode()
     
     // MARK: Data
     private var loadedInteractionGroups: [String : [String]]      = [String : [String]]()
@@ -117,9 +119,19 @@ class InteractionManager {
             isInteracting = true
             
             // player cant move
-            (activeInteractiveEntity?.owner as Character).canMove = false
+            (activeInteractiveEntity?.owner as Dad).interact()
+            (activeInteractiveEntity?.owner as Dad).facePoint(getEntity(thisInteraction.otherEntityKey)!.displayNode.position)
             
             presentMoment(thisInteraction.startingMomentKey)
+        }
+    }
+    func executeMomentTransition(#animKey: String, animQueueKey: String, nextMomentKey: String) {
+        if let interaction = activeInteraction {
+            if let animEntity: AnimatableEntity = game.animationManager.getEntity(interaction.activeEntityKey) {
+                animEntity.setQueuedAnimation(animQueueKey)
+                animEntity.playAnimation(animKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
+            }
+            presentMoment(nextMomentKey)
         }
     }
     func presentMoment(momentKey: String) {
@@ -137,16 +149,22 @@ class InteractionManager {
                 
                 // set camera target
                 let camera = activeInteractiveEntity!.displayNode.scene!.childNodeWithName("CamCon") as CameraController
-//                let newPoint = Utilities2D.lerpFromPoint(otherEntity.displayNode.getScenePosition(), toPoint: activeEntity.displayNode.getScenePosition(), atPosition: 0.75)
                 camera.setCameraPosition(thisMoment.cameraAction.position)
                 camera.setScale(thisMoment.cameraAction.zoom)
                 
                 // display infos
                 for choice in thisMoment.activeEntityChoices {
-                    activeEntity.displayOption(choice.text, completion: { self.presentMoment(choice.nextMomentKey) } )
+                    activeEntity.displayOption(choice.text, completion: { self.executeMomentTransition(animKey: choice.animationKey, animQueueKey: choice.animationQueueKey, nextMomentKey: choice.nextMomentKey) } )
                 }
-                
                 otherEntity.displayOption(thisMoment.otherResponseText, completion: {} )
+                
+                // run initial animations
+                for (entityKey, info) in thisMoment.startAnimations {
+                    if let animEnt: AnimatableEntity = game.animationManager.getEntity(entityKey as String) {
+                        animEnt.setQueuedAnimation(info["queue"] as String)
+                        animEnt.playAnimation( info["key"] as String, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME )
+                    }
+                }
             }
         } else {
             endInteraction()
@@ -163,7 +181,7 @@ class InteractionManager {
         otherEntity.dismissOption(0)
         activeEntity.dismissOption(0)
         
-        (activeInteractiveEntity!.owner as Character).canMove = true
+        (activeInteractiveEntity!.owner as Dad).stopInteracting()
         
         isInteracting = false
         activeInteraction = nil
@@ -494,6 +512,7 @@ struct InteractionMoment {
     let activeEntityChoices: [InteractionChoice] = [InteractionChoice]()
     let otherResponseText: String
     let cameraAction: InteractionCamera
+    let startAnimations: NSDictionary
     
     init(data: NSDictionary) {
         
@@ -505,6 +524,7 @@ struct InteractionMoment {
         }
         
         // load in remaining data
+        startAnimations = data["startAnimations"] as NSDictionary
         decisionLength = data["decisionLength"] as CGFloat
         otherResponseText = data["responseText"] as String
         cameraAction = InteractionCamera(data: data["cameraInfo"] as NSDictionary )
@@ -516,11 +536,13 @@ struct InteractionChoice {
     
     // MARK: Properties
     let animationKey: String
+    let animationQueueKey: String
     let nextMomentKey: String
     let text: String
     
     init(data: NSDictionary) {
         animationKey = data["animation"] as String
+        animationQueueKey = data["animationQueue"] as String
         nextMomentKey = data["nextMomentKey"] as String
         text = data["text"] as String
     }

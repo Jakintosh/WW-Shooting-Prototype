@@ -10,14 +10,19 @@ import Foundation
 import SpriteKit
 
 enum CharacterOrientation {
-    case Left, Right, Forward, Backward
+    case Left, Right
+}
+
+enum CharacterState {
+    case Idling, Walking, Interacting
 }
 
 class Character : NHCNode {
     
     // MARK: - Properties
+    var state: CharacterState = .Idling
     var orientation: CharacterOrientation = .Right
-    var movementSpeed: Float = 100 // pixels per second
+    var movementSpeed: CGFloat = 100 // pixels per second
     var canMove: Bool = true
     
     // subsystem comonents
@@ -64,7 +69,7 @@ class Character : NHCNode {
                 setOrientation(.Left)
             }
             
-            let moveDuration = Float(distance)/movementSpeed
+            let moveDuration = CGFloat(distance)/movementSpeed
             var disappearAction: SKAction
             if visible { disappearAction = SKAction.runBlock({}) }
             else { disappearAction = SKAction.runBlock({ self.animationNode.hidden = !self.animationNode.hidden }) }
@@ -75,14 +80,22 @@ class Character : NHCNode {
         }
     }
     
+    func facePoint(point: CGPoint) {
+        if point.x > position.x {
+            setOrientation(.Right)
+        } else {
+            setOrientation(.Left)
+        }
+    }
+    
     func setOrientation(newOrientation: CharacterOrientation) {
         if orientation != newOrientation {
             switch(newOrientation) {
                 case .Left:
-                    animationNode.xScale = -1
+                    animationNode.xScale = -0.7
                 
-                default:
-                    animationNode.xScale = 1
+                case .Right:
+                    animationNode.xScale = 0.7
             }
             orientation = newOrientation
         }
@@ -105,7 +118,7 @@ class Character : NHCNode {
 // MARK: -
 class Dad : Character {
     
-    // MARK: - GARBAGE
+    // MARK: - GARBAGE MAKE A REUSABLE ENTITY
     var currentFloor: HouseFloor
     var currentRoom: HouseRoom
     var currentPath: HousePath
@@ -126,8 +139,8 @@ class Dad : Character {
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
-        animationNode.xScale = 0.85
-        animationNode.yScale = 0.85
+        animationNode.xScale = 0.7
+        animationNode.yScale = 0.7
         setSpine("spine_dad_home_default")
 
         button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
@@ -139,28 +152,45 @@ class Dad : Character {
     // update garbage
     override func update(dt: NSTimeInterval) {
         
-        if actionForKey("move") != nil {
-            var isNearStairs = false
-            for stair in currentPath.stairs {
-                if stair.pointIsInRange(position) {
-                    isNearStairs = true
-                    break
+        switch (state)
+        {
+            case .Idling:
+                break
+                
+            case .Walking:
+                // update movement
+                var moveDistance = movementSpeed * CGFloat(dt)
+                if orientation == .Left { moveDistance *= -1 }
+                
+                let moveData = currentPath.getNewX(position.x, movement: moveDistance)
+                position.x = moveData.newX
+                if moveData.atEnd {
+                    idle()
                 }
-            }
-            
-            if canUseStairs && !isNearStairs {
-                canUseStairs = false
-                dismissStairBox()
-            } else if !canUseStairs && isNearStairs {
-                canUseStairs = true
-                presentStairBox()
-            }
-            
-            for (_,room) in currentFloor.rooms {
-                if room.roomFrame.contains(position) {
-                    updateCurrentLocation(room)
+                
+                // update house awareness
+                var isNearStairs = false
+                for stair in currentPath.stairs {
+                    if stair.pointIsInRange(position) {
+                        isNearStairs = true
+                        break
+                    }
                 }
-            }
+                if canUseStairs && !isNearStairs {
+                    canUseStairs = false
+                    dismissStairBox()
+                } else if !canUseStairs && isNearStairs {
+                    canUseStairs = true
+                    presentStairBox()
+                }
+                for (_,room) in currentFloor.rooms {
+                    if room.roomFrame.contains(position) {
+                        updateCurrentLocation(room)
+                    }
+                }
+                
+            case .Interacting:
+                break
         }
         
         super.update(dt)
@@ -178,13 +208,31 @@ class Dad : Character {
             currentPath.setActive()
         }
     }
-    
 
     
     func walk() {
-        animator.playAnimation("walk", introPeriod: 0.1)
+        if state == .Idling {
+            state = .Walking
+            animator.setQueuedAnimation("walk", introPeriod: 0.1)
+            animator.playAnimation("walk", introPeriod: 0.25)
+        }
     }
     
+    func idle() {
+        if state != .Interacting {
+            state = .Idling
+            animator.setQueuedAnimation("idle", introPeriod: 0.1)
+            animator.playAnimation("idle", introPeriod: 0.25)
+        }
+    }
+    
+    func interact() {
+        state = .Interacting
+    }
+    
+    func stopInteracting() {
+        state = .Idling
+    }
     
     // deal with later
     func presentStairBox() {

@@ -100,7 +100,7 @@ class HomeScene : SKFuckScene {
         
         // update camera
         if !debug {
-            if dad.canMove {
+            if dad.state != .Interacting {
                 camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: 100)))
                 camCon.setScale(1.0)
             }
@@ -118,16 +118,47 @@ class HomeScene : SKFuckScene {
     
     // MARK: - Touches
     
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        let touch: UITouch = touches.anyObject() as UITouch
+        let locationWorld = touch.locationInNode(camCon.rootNode)
+        let locationScreen = touch.locationInNode(scene)
+        
+        if dad.state != .Interacting {
+            if locationScreen.x > 0 {
+                dad.setOrientation(.Right)
+            } else {
+                dad.setOrientation(.Left)
+            }
+        }
+
+        dad.walk()
+    }
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        let touch: UITouch = touches.anyObject() as UITouch
+        let locationWorld = touch.locationInNode(camCon.rootNode)
+        let locationScreen = touch.locationInNode(scene)
+        if dad.state != .Interacting {
+            if locationScreen.x > 0 {
+                dad.setOrientation(.Right)
+            } else {
+                dad.setOrientation(.Left)
+            }
+        }
+    }
+    
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         let touch: UITouch = touches.anyObject() as UITouch
         let location = touch.locationInNode(camCon.rootNode)
 
-//        dad.handleTouches(touches)
-        dad.walk()
+        dad.idle()
+    }
+    
+    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+        let touch: UITouch = touches.anyObject() as UITouch
+        let location = touch.locationInNode(camCon.rootNode)
         
-        if let targetPoint = house.getNewLocation(location, fromRoom: dad.currentRoom) {
-            dad.moveToPoint(targetPoint)
-        }
+        dad.idle()
     }
     
     func handleTap(gestureRecognizer: UITapGestureRecognizer) {

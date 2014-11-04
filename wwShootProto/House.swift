@@ -254,6 +254,15 @@ class HousePath {
         return newStairs
     }
     
+    func getNewX(currentX: CGFloat, movement: CGFloat) -> ( newX: CGFloat , atEnd: Bool ) {
+        let newX = Utilities2D.clamp(currentX + movement, min: leftEndpoint, max: rightEndpoint)
+        var atEnd = false
+        if newX == leftEndpoint || newX == rightEndpoint {
+            atEnd = true
+        }
+        return (newX, atEnd)
+    }
+    
     func setActive() {
         visualPath.strokeColor = SKColor.greenColor()
     }

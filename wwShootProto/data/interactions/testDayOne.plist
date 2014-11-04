@@ -40,12 +40,24 @@
 				</dict>
 				<key>decisionLength</key>
 				<integer>10</integer>
+				<key>startAnimations</key>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>idle</string>
+						<key>queue</key>
+						<string>idle</string>
+					</dict>
+				</dict>
 				<key>responseText</key>
 				<string>hey dad</string>
 				<key>choices</key>
 				<array>
 					<dict>
 						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>moment2</string>
@@ -55,6 +67,8 @@
 					<dict>
 						<key>animation</key>
 						<string>idle</string>
+						<key>animationQueue</key>
+						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
@@ -62,6 +76,8 @@
 					</dict>
 					<dict>
 						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>moment2</string>
@@ -86,20 +102,26 @@
 				</dict>
 				<key>decisionLength</key>
 				<integer>10</integer>
+				<key>startAnimations</key>
+				<dict/>
 				<key>responseText</key>
 				<string>you&apos;re cool :)</string>
 				<key>choices</key>
 				<array>
 					<dict>
 						<key>animation</key>
+						<string>walk</string>
+						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
-						<string>im rick james</string>
+						<string>RIP MJ</string>
 					</dict>
 					<dict>
 						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
@@ -108,6 +130,8 @@
 					</dict>
 					<dict>
 						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
