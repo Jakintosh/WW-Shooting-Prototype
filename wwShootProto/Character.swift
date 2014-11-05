@@ -46,7 +46,7 @@ class Character : NHCNode {
         animator = game.animationManager.registerEntity(animatorKey, owner: self)
         interactor = game.interactionManager.registerEntity(interactorKey, owner: self)
         
-        interactionNode.position = CGPoint(x: 0, y: 150)
+        interactionNode.position = CGPoint(x: 0, y: 115)
         interactionNode.addChild(interactor.displayNode)
         
         addChild(animationNode)

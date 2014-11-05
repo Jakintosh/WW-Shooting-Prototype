@@ -45,6 +45,8 @@
 		21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D519FF001900A1E612 /* SGG_SpineJSONTools.m */; };
 		21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */; };
 		21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22E019FF1FAE00A1E612 /* TimeManager.swift */; };
+		21EB81871A0983C600C7525D /* house_foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81851A0983C600C7525D /* house_foreground.png */; };
+		21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81861A0983C600C7525D /* house_foreground@2x.png */; };
 		21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -110,6 +112,8 @@
 		21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineSkin.m; sourceTree = "<group>"; };
 		21EA22D819FF001900A1E612 /* SpineImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpineImport.h; sourceTree = "<group>"; };
 		21EA22E019FF1FAE00A1E612 /* TimeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeManager.swift; path = wwShootProto/TimeManager.swift; sourceTree = SOURCE_ROOT; };
+		21EB81851A0983C600C7525D /* house_foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = house_foreground.png; path = resources/house_foreground.png; sourceTree = SOURCE_ROOT; };
+		21EB81861A0983C600C7525D /* house_foreground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "house_foreground@2x.png"; path = "resources/house_foreground@2x.png"; sourceTree = SOURCE_ROOT; };
 		21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -264,6 +268,8 @@
 		21B7A46B19F0516E0023EAE9 /* additional images */ = {
 			isa = PBXGroup;
 			children = (
+				21EB81851A0983C600C7525D /* house_foreground.png */,
+				21EB81861A0983C600C7525D /* house_foreground@2x.png */,
 				21B2E7B019F1B33600000E70 /* house.png */,
 				21B2E7B119F1B33600000E70 /* house@2x.png */,
 				21B7A47219F061430023EAE9 /* daughter_room@2x.png */,
@@ -452,6 +458,7 @@
 				21B7A47619F061430023EAE9 /* main.png in Resources */,
 				21B7A47719F061430023EAE9 /* main@2x.png in Resources */,
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
+				21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
 				21EA22A019FDF00C00A1E612 /* main.atlas in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
@@ -459,6 +466,7 @@
 				21B2E7B319F1B33600000E70 /* house@2x.png in Resources */,
 				21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */,
 				21B7A47119F05DDA0023EAE9 /* daughter_room.png in Resources */,
+				21EB81871A0983C600C7525D /* house_foreground.png in Resources */,
 				21EA22AD19FED98600A1E612 /* home_characters.plist in Resources */,
 				21EA229C19FDEFA000A1E612 /* main.json in Resources */,
 				21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */,

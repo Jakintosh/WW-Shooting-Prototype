@@ -24,6 +24,7 @@ class House : NHCNode {
     var startingRoom: HouseRoom
     
     var houseSprite: SKSpriteNode = SKSpriteNode(imageNamed: "house")
+    var houseFore: SKSpriteNode = SKSpriteNode(imageNamed: "house_foreground")
     
     // MARK:   Components
     var floors: [HouseFloor] = [HouseFloor]()
@@ -32,7 +33,7 @@ class House : NHCNode {
     override init() {
         
         // initialize first floor
-        let floor1      = HouseFloor(height: 290, floorY: 40, yPosition: 0)
+        let floor1      = HouseFloor(height: 300, floorY: 70, yPosition: 0)
         let path1_1     = floor1.addPath(left: 180, right: 1575)
         let room1_1     = floor1.addRoom(name: "bathroom", xPos: 0,    width: 285,  path: path1_1)
         let room1_2     = floor1.addRoom(name: "kitchen",  xPos: 285,  width: 1070, path: path1_1)
@@ -41,7 +42,7 @@ class House : NHCNode {
         floors.append(floor1)
         
         // initialize second floor
-        let floor2      = HouseFloor(height: 275, floorY: 30, yPosition: 295)
+        let floor2      = HouseFloor(height: 270, floorY: 40, yPosition: 300)
         let path2_1     = floor2.addPath(left: 70, right: 1380)
         let room2_1     = floor2.addRoom(name: "office",     xPos: 0,   width: 520, path: path2_1)
         let room2_2     = floor2.addRoom(name: "livingroom", xPos: 520, width: 925, path: path2_1)
@@ -50,7 +51,7 @@ class House : NHCNode {
         floors.append(floor2)
         
         // initialize third floor
-        let floor3      = HouseFloor(height: 255, floorY: 30, yPosition: 575)
+        let floor3      = HouseFloor(height: 295, floorY: 35, yPosition: 570)
         let path3_1     = floor3.addPath(left: 840, right: 1370)
         let room3_1     = floor3.addRoom(name: "bedroom", xPos: 520,  width: 520, path: path3_1)
         let room3_2     = floor3.addRoom(name: "hallway", xPos: 1040, width: 410, path: path3_1)
@@ -59,7 +60,7 @@ class House : NHCNode {
         floors.append(floor3)
         
         // initialize fourth floor
-        let floor4      = HouseFloor(height: 300, floorY: 30, yPosition: 835)
+        let floor4      = HouseFloor(height: 300, floorY: 30, yPosition: 865)
         let path4_1     = floor4.addPath(left: 575, right: 1225)
         let room4_1     = floor4.addRoom(name: "daughter", xPos: 520,  width: 815, path: path4_1)
         let stair4_1    = path4_1.addStaircase(1225, room: room4_1, dir: .Down)
@@ -85,6 +86,13 @@ class House : NHCNode {
         houseSprite.xScale = 4.0
         houseSprite.yScale = 4.0
         
+        houseFore.zPosition = 3
+        houseFore.anchorPoint = CGPoint(x: 0, y: 0)
+        houseFore.position = CGPoint(x: -80, y: 0)
+        houseFore.xScale = 4.0
+        houseFore.yScale = 4.0
+        
+        
         super.init()
         
         // add children
@@ -93,6 +101,7 @@ class House : NHCNode {
         addChild(floor3)
         addChild(floor4)
         addChild(houseSprite)
+//        addChild(houseFore)
         addChild(game.interactionManager.debugLayer)
         
         floor1.hidden = true

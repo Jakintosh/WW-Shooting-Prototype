@@ -262,9 +262,14 @@ class InteractiveEntity {
         slot3.addChild(slot3Text)
         slot4.addChild(slot4Text)
         
-        slot1.position = CGPoint(x:  80, y:  60)
+        slot1Text.position.x = 6.5
+        slot2Text.position.x = 6.5
+        slot3Text.position.x = 6.5
+        slot4Text.position.x = 6.5
+        
+        slot1.position = CGPoint(x:  90, y:  60)
         slot2.position = CGPoint(x: 120, y:   0)
-        slot3.position = CGPoint(x: 100, y: -60)
+        slot3.position = CGPoint(x: 110, y: -60)
         slot4.position = CGPoint(x: -99, y:  25)
         
         displayNode.addChild(slot1)
