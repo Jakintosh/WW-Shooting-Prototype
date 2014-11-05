@@ -33,7 +33,6 @@
 		21B7A47719F061430023EAE9 /* main@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47419F061430023EAE9 /* main@2x.png */; };
 		21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229419FDEE5200A1E612 /* testDayOne.plist */; };
 		21EA229C19FDEFA000A1E612 /* main.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229B19FDEFA000A1E612 /* main.json */; };
-		21EA22A019FDF00C00A1E612 /* main.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229F19FDF00C00A1E612 /* main.atlas */; };
 		21EA22A319FEB34F00A1E612 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22A219FEB34F00A1E612 /* Game.swift */; };
 		21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22A419FEC78200A1E612 /* AnimationManager.swift */; };
 		21EA22AD19FED98600A1E612 /* home_characters.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EA22AC19FED98600A1E612 /* home_characters.plist */; };
@@ -47,6 +46,10 @@
 		21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22E019FF1FAE00A1E612 /* TimeManager.swift */; };
 		21EB81871A0983C600C7525D /* house_foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81851A0983C600C7525D /* house_foreground.png */; };
 		21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81861A0983C600C7525D /* house_foreground@2x.png */; };
+		21EB818B1A0A5FC100C7525D /* dad.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81891A0A5FC100C7525D /* dad.atlas */; };
+		21EB818C1A0A5FC100C7525D /* dad.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EB818A1A0A5FC100C7525D /* dad.json */; };
+		21EB818F1A0A5FCB00C7525D /* daughter.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21EB818D1A0A5FCB00C7525D /* daughter.atlas */; };
+		21EB81901A0A5FCB00C7525D /* daughter.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EB818E1A0A5FCB00C7525D /* daughter.json */; };
 		21EFBB6E19F70E310081C1C5 /* InteractionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,7 +95,6 @@
 		21B7A47419F061430023EAE9 /* main@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "main@2x.png"; path = "resources/main@2x.png"; sourceTree = SOURCE_ROOT; };
 		21EA229419FDEE5200A1E612 /* testDayOne.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = testDayOne.plist; sourceTree = "<group>"; };
 		21EA229B19FDEFA000A1E612 /* main.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = main.json; sourceTree = "<group>"; };
-		21EA229F19FDF00C00A1E612 /* main.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = main.atlas; sourceTree = "<group>"; };
 		21EA22A219FEB34F00A1E612 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		21EA22A419FEC78200A1E612 /* AnimationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
 		21EA22AC19FED98600A1E612 /* home_characters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = home_characters.plist; path = loaders/home_characters.plist; sourceTree = "<group>"; };
@@ -114,6 +116,10 @@
 		21EA22E019FF1FAE00A1E612 /* TimeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeManager.swift; path = wwShootProto/TimeManager.swift; sourceTree = SOURCE_ROOT; };
 		21EB81851A0983C600C7525D /* house_foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = house_foreground.png; path = resources/house_foreground.png; sourceTree = SOURCE_ROOT; };
 		21EB81861A0983C600C7525D /* house_foreground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "house_foreground@2x.png"; path = "resources/house_foreground@2x.png"; sourceTree = SOURCE_ROOT; };
+		21EB81891A0A5FC100C7525D /* dad.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = dad.atlas; path = resources/dad/dad.atlas; sourceTree = SOURCE_ROOT; };
+		21EB818A1A0A5FC100C7525D /* dad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dad.json; path = resources/dad/dad.json; sourceTree = SOURCE_ROOT; };
+		21EB818D1A0A5FCB00C7525D /* daughter.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = daughter.atlas; path = resources/daughter/daughter.atlas; sourceTree = SOURCE_ROOT; };
+		21EB818E1A0A5FCB00C7525D /* daughter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = daughter.json; path = resources/daughter/daughter.json; sourceTree = SOURCE_ROOT; };
 		21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -207,11 +213,12 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
+				21EB81891A0A5FC100C7525D /* dad.atlas */,
 				21EA22A119FDFBB300A1E612 /* Project Files */,
 				21EA229019FDEE5200A1E612 /* data */,
 				2181E16C19D10E93009FE3FB /* Particles */,
 				21B7A46B19F0516E0023EAE9 /* additional images */,
-				21EA229F19FDF00C00A1E612 /* main.atlas */,
 				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
 			);
 			name = "Supporting Files";
@@ -324,6 +331,8 @@
 		21EA22A619FED83E00A1E612 /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				21EB818E1A0A5FCB00C7525D /* daughter.json */,
+				21EB818A1A0A5FC100C7525D /* dad.json */,
 				21EA229B19FDEFA000A1E612 /* main.json */,
 			);
 			name = sources;
@@ -453,14 +462,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				21B2E7B219F1B33600000E70 /* house.png in Resources */,
+				21EB818F1A0A5FCB00C7525D /* daughter.atlas in Resources */,
 				21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */,
 				21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */,
 				21B7A47619F061430023EAE9 /* main.png in Resources */,
 				21B7A47719F061430023EAE9 /* main@2x.png in Resources */,
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
+				21EB81901A0A5FCB00C7525D /* daughter.json in Resources */,
 				21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */,
+				21EB818B1A0A5FC100C7525D /* dad.atlas in Resources */,
+				21EB818C1A0A5FC100C7525D /* dad.json in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
-				21EA22A019FDF00C00A1E612 /* main.atlas in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
 				21B2E7B319F1B33600000E70 /* house@2x.png in Resources */,

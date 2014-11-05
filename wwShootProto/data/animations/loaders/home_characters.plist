@@ -6,9 +6,17 @@
 		<key>name</key>
 		<string>spine_dad_home_default</string>
 		<key>json</key>
-		<string>main</string>
+		<string>dad</string>
 		<key>atlas</key>
-		<string>main</string>
+		<string>dad</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_daughter_home_default</string>
+		<key>json</key>
+		<string>daughter</string>
+		<key>atlas</key>
+		<string>daughter</string>
 	</dict>
 </array>
 </plist>

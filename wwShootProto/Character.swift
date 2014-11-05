@@ -139,8 +139,8 @@ class Dad : Character {
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
-        animationNode.xScale = 0.7
-        animationNode.yScale = 0.7
+        animationNode.xScale = 1.0
+        animationNode.yScale = 1.0
         setSpine("spine_dad_home_default")
 
         button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
