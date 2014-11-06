@@ -33,7 +33,7 @@ class InteractionManager {
     private var interactionEntities: [String:InteractiveEntity] = [String:InteractiveEntity]()
     
     init() {
-        
+        debugLayer.hidden = true
     }
     
     // MARK: File I/O

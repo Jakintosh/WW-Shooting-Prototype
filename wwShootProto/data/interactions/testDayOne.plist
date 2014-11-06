@@ -51,38 +51,38 @@
 					</dict>
 				</dict>
 				<key>responseText</key>
-				<string>hey dad</string>
+				<string>sup homie?</string>
 				<key>choices</key>
 				<array>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>int1_oneshot</string>
+						<key>animationQueue</key>
+						<string>int1_idle</string>
+						<key>nextMomentKey</key>
+						<string>moment2</string>
+						<key>text</key>
+						<string>I aint no homie</string>
+					</dict>
+					<dict>
+						<key>animation</key>
+						<string>int2_oneshot</string>
 						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>moment2</string>
 						<key>text</key>
-						<string>what</string>
+						<string></string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>int3_idle</string>
 						<key>animationQueue</key>
-						<string>idle</string>
-						<key>nextMomentKey</key>
-						<string>end</string>
-						<key>text</key>
-						<string>no</string>
-					</dict>
-					<dict>
-						<key>animation</key>
-						<string>idle</string>
-						<key>animationQueue</key>
-						<string>idle</string>
+						<string>int3_idle</string>
 						<key>nextMomentKey</key>
 						<string>moment2</string>
 						<key>text</key>
-						<string>hmm?</string>
+						<string>nothin... teehee</string>
 					</dict>
 				</array>
 			</dict>
@@ -103,40 +103,48 @@
 				<key>decisionLength</key>
 				<integer>10</integer>
 				<key>startAnimations</key>
-				<dict/>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>int_all</string>
+						<key>queue</key>
+						<string>int_all</string>
+					</dict>
+				</dict>
 				<key>responseText</key>
-				<string>you&apos;re cool :)</string>
+				<string>let&apos;s jam?</string>
 				<key>choices</key>
 				<array>
 					<dict>
 						<key>animation</key>
-						<string>walk</string>
+						<string>int1_oneshot</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>int1_idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
-						<string>RIP MJ</string>
+						<string>let&apos;s blow up the moon</string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>int2_idle</string>
 						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
-						<string>thanks beb</string>
+						<string>duh</string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>int3_idle</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>int3_idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
-						<string>i guess</string>
+						<string>im scared of the dark</string>
 					</dict>
 				</array>
 			</dict>

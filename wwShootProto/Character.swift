@@ -92,10 +92,10 @@ class Character : NHCNode {
         if orientation != newOrientation {
             switch(newOrientation) {
                 case .Left:
-                    animationNode.xScale = -0.7
+                    animationNode.xScale = -0.37
                 
                 case .Right:
-                    animationNode.xScale = 0.7
+                    animationNode.xScale = 0.37
             }
             orientation = newOrientation
         }
@@ -113,6 +113,23 @@ class Character : NHCNode {
         }
     }
     
+}
+
+// MARK: -
+class Daughter : Character {
+    init() {
+        super.init(animatorKey: "entity_daughter", interactorKey: "entity_daughter")
+        
+        // additional spine setup
+        animationNode.position = CGPoint(x: 0, y: -15)
+        animationNode.xScale = 0.37
+        animationNode.yScale = 0.37
+        setSpine("spine_daughter_home_default")
+    }
+    
+    override func update(dt: NSTimeInterval) {
+        super.update(dt)
+    }
 }
 
 // MARK: -
@@ -139,8 +156,8 @@ class Dad : Character {
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
-        animationNode.xScale = 1.0
-        animationNode.yScale = 1.0
+        animationNode.xScale = 0.37
+        animationNode.yScale = 0.37
         setSpine("spine_dad_home_default")
 
         button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })

@@ -20,7 +20,7 @@ class HomeScene : SKFuckScene {
     var deltaTime: CFTimeInterval = 0
     
     let dad: Dad
-    let daughter: NHCNode = NHCNode()
+    let daughter: Daughter = Daughter()
     
     var debug: Bool = false
     let timeText: SKLabelNode = SKLabelNode()
@@ -77,9 +77,7 @@ class HomeScene : SKFuckScene {
         }
         
         // set up "daughter"
-        daughter.position = CGPoint(x: 670, y: 970)
-        let d_int = game.interactionManager.registerEntity("entity_daughter", owner: daughter)
-        daughter.addChild(d_int.displayNode)
+        daughter.position = CGPoint(x: 660, y: 890)
         
         // camera stuff
         camCon.addHUDChild(timeText, withZ: 0)
@@ -94,6 +92,7 @@ class HomeScene : SKFuckScene {
         updateTime(currentTime)
         
         dad.update(deltaTime)
+        daughter.update(deltaTime)
         game.interactionManager.update(deltaTime)
         
         timeText.text = game.timeManager.currentTimeString()
