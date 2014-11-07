@@ -25,6 +25,8 @@ class Character : NHCNode {
     var movementSpeed: CGFloat = 100 // pixels per second
     var canMove: Bool = true
     
+    let defaultAnimationKey: String = "idle" // BAD
+    
     // subsystem comonents
     let animatorKey: String
     var animator: AnimatableEntity!
@@ -117,6 +119,7 @@ class Character : NHCNode {
 
 // MARK: -
 class Daughter : Character {
+    
     init() {
         super.init(animatorKey: "entity_daughter", interactorKey: "entity_daughter")
         
@@ -249,6 +252,7 @@ class Dad : Character {
     
     func stopInteracting() {
         state = .Idling
+        animator.setQueuedAnimation("idle", introPeriod: 0.25)
     }
     
     // deal with later

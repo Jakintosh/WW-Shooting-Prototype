@@ -1,6 +1,6 @@
 {
 "skeleton": {
-	"hash": "4H7HHgBqkPXs5hDL9FL2yFJr+7Q",
+	"hash": "yx6Y0y5M3nrsj4QELIRXO/TZthU",
 	"spine": "2.0.23",
 	"width": 207,
 	"height": 601,
@@ -69,7 +69,7 @@
 	{ "name": "rBicep", "bone": "rBicep", "attachment": "rBicep" },
 	{ "name": "rHand", "bone": "rHand", "attachment": "rHand" },
 	{ "name": "rForearm", "bone": "rForearm", "attachment": "rForearm" },
-	{ "name": "floor", "bone": "root", "attachment": "floor" }
+	{ "name": "floor", "bone": "root" }
 ],
 "skins": {
 	"default": {
@@ -93,9 +93,6 @@
 		},
 		"face": {
 			"face": { "x": 13.79, "y": -13, "rotation": -69.18, "width": 49, "height": 61 }
-		},
-		"floor": {
-			"floor": { "x": 23.04, "y": -291.2, "width": 600, "height": 5 }
 		},
 		"hair": {
 			"hair": { "x": 19.59, "y": -0.66, "rotation": 16.31, "width": 42, "height": 26 }
@@ -682,7 +679,7 @@
 			}
 		}
 	},
-	"int2_idle": {
+	"int2_oneshot": {
 		"bones": {
 			"root": {
 				"rotate": [

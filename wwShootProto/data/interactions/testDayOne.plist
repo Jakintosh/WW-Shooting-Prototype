@@ -50,8 +50,21 @@
 						<string>idle</string>
 					</dict>
 				</dict>
+				<key>endAnimations</key>
+				<dict/>
 				<key>responseText</key>
 				<string>sup homie?</string>
+				<key>timeOut</key>
+				<dict>
+					<key>animation</key>
+					<string>int1_oneshot</string>
+					<key>animationQueue</key>
+					<string>int1_idle</string>
+					<key>nextMomentKey</key>
+					<string>end</string>
+					<key>text</key>
+					<string>I aint no homie</string>
+				</dict>
 				<key>choices</key>
 				<array>
 					<dict>
@@ -112,8 +125,29 @@
 						<string>int_all</string>
 					</dict>
 				</dict>
+				<key>endAnimations</key>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>idle</string>
+						<key>queue</key>
+						<string>idle</string>
+					</dict>
+				</dict>
 				<key>responseText</key>
 				<string>let&apos;s jam?</string>
+				<key>timeOut</key>
+				<dict>
+					<key>animation</key>
+					<string>int1_oneshot</string>
+					<key>animationQueue</key>
+					<string>int1_idle</string>
+					<key>nextMomentKey</key>
+					<string>end</string>
+					<key>text</key>
+					<string>I aint no homie</string>
+				</dict>
 				<key>choices</key>
 				<array>
 					<dict>

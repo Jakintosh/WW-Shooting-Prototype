@@ -17,7 +17,7 @@ import SpriteKit
 
 class InteractionManager {
     
-    let ANIM_INTRO_CONSTANT_BAD_KILL_ME: CGFloat = 0.1
+    let ANIM_INTRO_CONSTANT_BAD_KILL_ME: CGFloat = 0.25
     
     // MARK: Properties
     var isInteracting: Bool                         = false
@@ -26,11 +26,13 @@ class InteractionManager {
     var hoverTrigger: InteractionTrigger?           = nil
     var debugLayer: NHCNode                         = NHCNode()
     
+    var timeLeftInMoment: NSTimeInterval            = 0.0
+    
     // MARK: Data
     private var loadedInteractionGroups: [String : [String]]      = [String : [String]]()
     private var loadedInteractionData: [String : InteractionData] = [String : InteractionData]()
-    private var interactionTriggers: [InteractionTrigger]       = [InteractionTrigger]()
-    private var interactionEntities: [String:InteractiveEntity] = [String:InteractiveEntity]()
+    private var interactionTriggers: [InteractionTrigger]         = [InteractionTrigger]()
+    private var interactionEntities: [String:InteractiveEntity]   = [String:InteractiveEntity]()
     
     init() {
         debugLayer.hidden = true
@@ -44,12 +46,7 @@ class InteractionManager {
                     for (name, data) in contentsOfFile {
                         let newData = InteractionData(data: data as NSDictionary)
                         loadedInteractionData[newData.interactionID] = newData
-                    }
-                }
-            }
-        }
-//        let newInteraction = InteractionData()
-//        loadedInteractionData[newInteraction.interactionID] = newInteraction
+        }   }   }   }
     }
     func releaseInteractions(groupKey: String?) {
         // if a valid group key is given, only remove that group
@@ -97,7 +94,14 @@ class InteractionManager {
                 }
             }
         } else {
-            
+            timeLeftInMoment -= dt
+            if timeLeftInMoment <= 0 {
+                if let thisMoment = activeInteraction?.currentMoment {
+                    let timeOut = thisMoment.timeOutChoice
+                    executeMomentTransition(animKey: timeOut.animationKey, animQueueKey: timeOut.animationQueueKey, nextMomentKey: timeOut.nextMomentKey)
+                }
+            }
+            println("\(timeLeftInMoment)")
         }
     }
     
@@ -147,6 +151,9 @@ class InteractionManager {
                 otherEntity.dismissOption(0)
                 activeEntity.dismissOption(0)
                 
+                // set timer
+                timeLeftInMoment = NSTimeInterval(thisMoment.decisionLength)
+                
                 // set camera target
                 let camera = activeInteractiveEntity!.displayNode.scene!.childNodeWithName("CamCon") as CameraController
                 camera.setCameraPosition(thisMoment.cameraAction.position)
@@ -180,6 +187,10 @@ class InteractionManager {
         
         otherEntity.dismissOption(0)
         activeEntity.dismissOption(0)
+        
+        let otherChar = (otherEntity.owner as Character)
+        otherChar.animator.setQueuedAnimation(otherChar.defaultAnimationKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
+        otherChar.animator.playAnimation(otherChar.defaultAnimationKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
         
         (activeInteractiveEntity!.owner as Dad).stopInteracting()
         
@@ -228,11 +239,20 @@ class InteractiveEntity {
     let slot3: Button = Button(activeImageName: "button_default", defaultImageName: "button_default", action:  {} )
     let slot4: Button = Button(activeImageName: "button_default", defaultImageName: "button_default", action:  {} )
     
+    let slot1Target: CGPoint = CGPoint(x:  90, y:  60)
+    let slot2Target: CGPoint = CGPoint(x: 120, y:   0)
+    let slot3Target: CGPoint = CGPoint(x: 110, y: -60)
+    let slot4Target: CGPoint = CGPoint(x: -99, y:  25)
+    
     let slot1Text: SKLabelNode = SKLabelNode()
     let slot2Text: SKLabelNode = SKLabelNode()
     let slot3Text: SKLabelNode = SKLabelNode()
     let slot4Text: SKLabelNode = SKLabelNode()
     
+    let slot1Active: Bool = false
+    let slot2Active: Bool = false
+    let slot3Active: Bool = false
+    let slot4Active: Bool = false
     
     // MARK: Initializers
     init(owner: NHCNode) {
@@ -267,10 +287,18 @@ class InteractiveEntity {
         slot3Text.position.x = 6.5
         slot4Text.position.x = 6.5
         
-        slot1.position = CGPoint(x:  90, y:  60)
-        slot2.position = CGPoint(x: 120, y:   0)
-        slot3.position = CGPoint(x: 110, y: -60)
-        slot4.position = CGPoint(x: -99, y:  25)
+        slot1.position = CGPoint(x:  0, y:  0)
+        slot2.position = CGPoint(x:  0, y:  0)
+        slot3.position = CGPoint(x:  0, y:  0)
+        slot4.position = CGPoint(x:  0, y:  0)
+        slot1.xScale = 0.05
+        slot1.yScale = 0.05
+        slot2.xScale = 0.05
+        slot2.yScale = 0.05
+        slot3.xScale = 0.05
+        slot3.yScale = 0.05
+        slot4.xScale = 0.05
+        slot4.yScale = 0.05
         
         displayNode.addChild(slot1)
         displayNode.addChild(slot2)
@@ -290,18 +318,22 @@ class InteractiveEntity {
             slot1.hidden = false
             slot1Text.text = text
             slot1.completionAction = completion
+            slot1.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot1Target, duration: 0.5) ] ))
         } else if slot2.hidden {
             slot2.hidden = false
             slot2Text.text = text
             slot2.completionAction = completion
+            slot2.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot2Target, duration: 0.5) ] ))
         } else if slot3.hidden {
             slot3.hidden = false
             slot3Text.text = text
             slot3.completionAction = completion
+            slot3.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot3Target, duration: 0.5) ] ))
         } else if slot4.hidden {
             slot4.hidden = false
             slot4Text.text = text
             slot4.completionAction = completion
+            slot4.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot4Target, duration: 0.5) ] ))
         }
         
     }
@@ -309,38 +341,47 @@ class InteractiveEntity {
     func dismissOption(index: Int) {
         switch (index) {
         case 0:
-            slot1.hidden = true
+//            slot1.hidden = true
             slot1Text.text = ""
             slot1.completionAction = {}
-            slot2.hidden = true
+//            slot2.hidden = true
             slot2Text.text = ""
             slot2.completionAction = {}
-            slot3.hidden = true
+//            slot3.hidden = true
             slot3Text.text = ""
             slot3.completionAction = {}
-            slot4.hidden = true
+//            slot4.hidden = true
             slot4Text.text = ""
             slot4.completionAction = {}
+            
+//            slot1.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot1.hidden = true })]) ] ))
+//            slot2.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot2.hidden = true })]) ] ))
+//            slot3.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot3.hidden = true })]) ] ))
+//            slot4.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot4.hidden = true })]) ] ))
             
         case 1:
-            slot1.hidden = true
+//            slot1.hidden = true
             slot1Text.text = ""
             slot1.completionAction = {}
+            slot1.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot1.hidden = true })]) ] ))
             
         case 2:
-            slot2.hidden = true
+//            slot2.hidden = true
             slot2Text.text = ""
             slot2.completionAction = {}
+            slot2.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot2.hidden = true })]) ] ))
             
         case 3:
-            slot3.hidden = true
+//            slot3.hidden = true
             slot3Text.text = ""
             slot3.completionAction = {}
+            slot3.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot3.hidden = true })]) ] ))
             
         case 4:
-            slot4.hidden = true
+//            slot4.hidden = true
             slot4Text.text = ""
             slot4.completionAction = {}
+            slot4.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot4.hidden = true })]) ] ))
             
         default:
             break
@@ -364,12 +405,6 @@ struct InteractionData {
     let activeEntityKey: String
     let otherEntityKey: String
     var currentMoment: InteractionMoment?
-    
-    // trigger information
-//    let hourOpen: Int
-//    let hourClose: Int
-//    let center: CGPoint
-//    let radius: CGFloat
     
     // MARK: Data
     private var moments: [String: InteractionMoment] = [String: InteractionMoment]()
@@ -515,13 +550,16 @@ struct InteractionMoment {
     // MARK: Properties
     let decisionLength: CGFloat
     let activeEntityChoices: [InteractionChoice] = [InteractionChoice]()
+    let timeOutChoice: InteractionChoice
     let otherResponseText: String
     let cameraAction: InteractionCamera
     let startAnimations: NSDictionary
+    let endAnimations: NSDictionary
     
     init(data: NSDictionary) {
         
         // load in choices from data
+        timeOutChoice = InteractionChoice( data: data["timeOut"] as NSDictionary )
         let choices = data["choices"] as NSArray
         for choice in choices {
             let newChoice = InteractionChoice(data: choice as NSDictionary)
@@ -530,6 +568,7 @@ struct InteractionMoment {
         
         // load in remaining data
         startAnimations = data["startAnimations"] as NSDictionary
+        endAnimations = data["endAnimations"] as NSDictionary
         decisionLength = data["decisionLength"] as CGFloat
         otherResponseText = data["responseText"] as String
         cameraAction = InteractionCamera(data: data["cameraInfo"] as NSDictionary )
