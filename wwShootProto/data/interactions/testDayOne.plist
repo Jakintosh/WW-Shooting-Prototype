@@ -21,7 +21,7 @@
 		<key>centerY</key>
 		<integer>895</integer>
 		<key>radius</key>
-		<integer>100</integer>
+		<integer>40</integer>
 		<key>moments</key>
 		<dict>
 			<key>moment1</key>
@@ -85,7 +85,7 @@
 						<key>nextMomentKey</key>
 						<string>moment2</string>
 						<key>text</key>
-						<string></string>
+						<string>heh</string>
 					</dict>
 					<dict>
 						<key>animation</key>
@@ -162,7 +162,7 @@
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>int2_idle</string>
+						<string>int2_oneshot</string>
 						<key>animationQueue</key>
 						<string>idle</string>
 						<key>nextMomentKey</key>

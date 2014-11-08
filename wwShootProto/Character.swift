@@ -48,8 +48,10 @@ class Character : NHCNode {
         animator = game.animationManager.registerEntity(animatorKey, owner: self)
         interactor = game.interactionManager.registerEntity(interactorKey, owner: self)
         
-        interactionNode.position = CGPoint(x: 0, y: 115)
+        interactionNode.position = CGPoint(x: 0, y: 125)
         interactionNode.addChild(interactor.displayNode)
+        
+        interactor.setMirrored(false)
         
         addChild(animationNode)
         addChild(interactionNode)
@@ -95,9 +97,11 @@ class Character : NHCNode {
             switch(newOrientation) {
                 case .Left:
                     animationNode.xScale = -0.37
+                    interactor.setMirrored(true)
                 
                 case .Right:
                     animationNode.xScale = 0.37
+                    interactor.setMirrored(false)
             }
             orientation = newOrientation
         }

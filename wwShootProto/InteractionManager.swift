@@ -35,7 +35,6 @@ class InteractionManager {
     private var interactionEntities: [String:InteractiveEntity]   = [String:InteractiveEntity]()
     
     init() {
-        debugLayer.hidden = true
     }
     
     // MARK: File I/O
@@ -107,7 +106,7 @@ class InteractionManager {
     
     // interaction mnagement
     func presentHoverForTrigger(trigger: InteractionTrigger) {
-        activeInteractiveEntity?.displayOption(trigger.linkedInteractionKey, { self.beginInteraction(trigger.linkedInteractionKey) } )
+        activeInteractiveEntity?.displayOption(trigger.linkedInteractionKey, completion: { self.beginInteraction(trigger.linkedInteractionKey) } )
     }
     func dismissHoverForTrigger(trigger: InteractionTrigger) {
         activeInteractiveEntity?.dismissOption(1)
@@ -148,7 +147,8 @@ class InteractionManager {
                 let activeEntity = getEntity(activeInteraction!.activeEntityKey)!
                 
                 // discard old info
-                otherEntity.dismissOption(0)
+                otherEntity.dismissSpeech()
+                activeEntity.dismissSpeech()
                 activeEntity.dismissOption(0)
                 
                 // set timer
@@ -160,10 +160,14 @@ class InteractionManager {
                 camera.setScale(thisMoment.cameraAction.zoom)
                 
                 // display infos
+                var i: NSTimeInterval = 0
+                otherEntity.displaySpeech(thisMoment.otherResponseText, delay: 1.0)
                 for choice in thisMoment.activeEntityChoices {
-                    activeEntity.displayOption(choice.text, completion: { self.executeMomentTransition(animKey: choice.animationKey, animQueueKey: choice.animationQueueKey, nextMomentKey: choice.nextMomentKey) } )
+                    activeEntity.displayOption(choice.text,
+                                                completion: { self.executeMomentTransition(animKey: choice.animationKey, animQueueKey: choice.animationQueueKey, nextMomentKey: choice.nextMomentKey) },
+                                                delay: (i * 0.25 + 2.0) )
+                    i += 1.0
                 }
-                otherEntity.displayOption(thisMoment.otherResponseText, completion: {} )
                 
                 // run initial animations
                 for (entityKey, info) in thisMoment.startAnimations {
@@ -178,14 +182,15 @@ class InteractionManager {
         }
     }
     func endInteraction() {
-        // TODO
         
+        // get all of the current objects
         let thisMoment = activeInteraction!.currentMoment!
         let otherEntity = getEntity(activeInteraction!.otherEntityKey)!
         let activeEntity = getEntity(activeInteraction!.activeEntityKey)!
         activeInteraction!.currentMoment = nil
         
         otherEntity.dismissOption(0)
+        otherEntity.dismissSpeech(delay: 0.5)
         activeEntity.dismissOption(0)
         
         let otherChar = (otherEntity.owner as Character)
@@ -234,157 +239,111 @@ class InteractiveEntity {
     let displayNode: NHCNode = NHCNode()
     let owner: NHCNode
     
-    let slot1: Button = Button(activeImageName: "button_default", defaultImageName: "button_default", action:  {} )
-    let slot2: Button = Button(activeImageName: "button_default", defaultImageName: "button_default", action:  {} )
-    let slot3: Button = Button(activeImageName: "button_default", defaultImageName: "button_default", action:  {} )
-    let slot4: Button = Button(activeImageName: "button_default", defaultImageName: "button_default", action:  {} )
-    
-    let slot1Target: CGPoint = CGPoint(x:  90, y:  60)
-    let slot2Target: CGPoint = CGPoint(x: 120, y:   0)
-    let slot3Target: CGPoint = CGPoint(x: 110, y: -60)
-    let slot4Target: CGPoint = CGPoint(x: -99, y:  25)
-    
-    let slot1Text: SKLabelNode = SKLabelNode()
-    let slot2Text: SKLabelNode = SKLabelNode()
-    let slot3Text: SKLabelNode = SKLabelNode()
-    let slot4Text: SKLabelNode = SKLabelNode()
-    
-    let slot1Active: Bool = false
-    let slot2Active: Bool = false
-    let slot3Active: Bool = false
-    let slot4Active: Bool = false
+    // buttons
+    let slot1:  InteractiveButton = InteractiveButton(type: .Option)
+    let slot2:  InteractiveButton = InteractiveButton(type: .Option)
+    let slot3:  InteractiveButton = InteractiveButton(type: .Option)
+    let speech: InteractiveButton = InteractiveButton(type: .Speech)
     
     // MARK: Initializers
     init(owner: NHCNode) {
         self.owner = owner
         
-        slot1Text.horizontalAlignmentMode = .Center
-        slot1Text.verticalAlignmentMode   = .Center
-        slot2Text.horizontalAlignmentMode = .Center
-        slot2Text.verticalAlignmentMode   = .Center
-        slot3Text.horizontalAlignmentMode = .Center
-        slot3Text.verticalAlignmentMode   = .Center
-        slot4Text.horizontalAlignmentMode = .Center
-        slot4Text.verticalAlignmentMode   = .Center
-        
-        slot1Text.fontName = "HelveticaNeue-Light"
-        slot2Text.fontName = "HelveticaNeue-Light"
-        slot3Text.fontName = "HelveticaNeue-Light"
-        slot4Text.fontName = "HelveticaNeue-Light"
-        
-        slot1Text.fontSize = 12.0
-        slot2Text.fontSize = 12.0
-        slot3Text.fontSize = 12.0
-        slot4Text.fontSize = 12.0
-        
-        slot1.addChild(slot1Text)
-        slot2.addChild(slot2Text)
-        slot3.addChild(slot3Text)
-        slot4.addChild(slot4Text)
-        
-        slot1Text.position.x = 6.5
-        slot2Text.position.x = 6.5
-        slot3Text.position.x = 6.5
-        slot4Text.position.x = 6.5
-        
-        slot1.position = CGPoint(x:  0, y:  0)
-        slot2.position = CGPoint(x:  0, y:  0)
-        slot3.position = CGPoint(x:  0, y:  0)
-        slot4.position = CGPoint(x:  0, y:  0)
-        slot1.xScale = 0.05
-        slot1.yScale = 0.05
-        slot2.xScale = 0.05
-        slot2.yScale = 0.05
-        slot3.xScale = 0.05
-        slot3.yScale = 0.05
-        slot4.xScale = 0.05
-        slot4.yScale = 0.05
+        slot1.targetPosition = CGPoint(x:   80, y:  60)
+        slot2.targetPosition = CGPoint(x:  110, y:   0)
+        slot3.targetPosition = CGPoint(x:  100, y: -60)
+        speech.targetPosition = CGPoint(x: -99, y:  25)
         
         displayNode.addChild(slot1)
         displayNode.addChild(slot2)
         displayNode.addChild(slot3)
-        displayNode.addChild(slot4)
-        
-        slot1.hidden = true
-        slot2.hidden = true
-        slot3.hidden = true
-        slot4.hidden = true
-        
+        displayNode.addChild(speech)
     }
     
     // MARK: Methods
-    func displayOption(text: String, completion: ()->()) {
-        if slot1.hidden {
-            slot1.hidden = false
-            slot1Text.text = text
-            slot1.completionAction = completion
-            slot1.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot1Target, duration: 0.5) ] ))
-        } else if slot2.hidden {
-            slot2.hidden = false
-            slot2Text.text = text
-            slot2.completionAction = completion
-            slot2.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot2Target, duration: 0.5) ] ))
-        } else if slot3.hidden {
-            slot3.hidden = false
-            slot3Text.text = text
-            slot3.completionAction = completion
-            slot3.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot3Target, duration: 0.5) ] ))
-        } else if slot4.hidden {
-            slot4.hidden = false
-            slot4Text.text = text
-            slot4.completionAction = completion
-            slot4.runAction(SKAction.group( [ SKAction.scaleTo(1.0, duration: 0.5), SKAction.moveTo(slot4Target, duration: 0.5) ] ))
+    func setMirrored(mirrored: Bool) {
+        if !mirrored {
+            slot1.targetPosition = CGPoint(x:  -80, y:  60)
+            slot2.targetPosition = CGPoint(x: -110, y:   0)
+            slot3.targetPosition = CGPoint(x: -100, y: -60)
+            speech.targetPosition = CGPoint(x: 99,  y:  25)
+        } else {
+            slot1.targetPosition = CGPoint(x:   80, y:  60)
+            slot2.targetPosition = CGPoint(x:  110, y:   0)
+            slot3.targetPosition = CGPoint(x:  100, y: -60)
+            speech.targetPosition = CGPoint(x: -99, y:  25)
+        }
+    }
+    func displayOption(text: String, completion: ()->(), delay: NSTimeInterval = 0) {
+        let display: () -> () =   {
+            if !self.slot1.isPresented {
+                self.slot1.text = text
+                self.slot1.completionAction = completion
+                self.slot1.isPresented = true
+            } else if !self.slot2.isPresented {
+                self.slot2.text = text
+                self.slot2.completionAction = completion
+                self.slot2.isPresented = true
+            } else if !self.slot3.isPresented {
+                self.slot3.text = text
+                self.slot3.completionAction = completion
+                self.slot3.isPresented = true
+            }
         }
         
+        if delay > 0 {
+            displayNode.runAction(SKAction.sequence([SKAction.waitForDuration(delay),SKAction.runBlock(display)]))
+        } else {
+            display()
+        }
     }
-    
-    func dismissOption(index: Int) {
-        switch (index) {
-        case 0:
-//            slot1.hidden = true
-            slot1Text.text = ""
-            slot1.completionAction = {}
-//            slot2.hidden = true
-            slot2Text.text = ""
-            slot2.completionAction = {}
-//            slot3.hidden = true
-            slot3Text.text = ""
-            slot3.completionAction = {}
-//            slot4.hidden = true
-            slot4Text.text = ""
-            slot4.completionAction = {}
-            
-//            slot1.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot1.hidden = true })]) ] ))
-//            slot2.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot2.hidden = true })]) ] ))
-//            slot3.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot3.hidden = true })]) ] ))
-//            slot4.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot4.hidden = true })]) ] ))
-            
-        case 1:
-//            slot1.hidden = true
-            slot1Text.text = ""
-            slot1.completionAction = {}
-            slot1.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot1.hidden = true })]) ] ))
-            
-        case 2:
-//            slot2.hidden = true
-            slot2Text.text = ""
-            slot2.completionAction = {}
-            slot2.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot2.hidden = true })]) ] ))
-            
-        case 3:
-//            slot3.hidden = true
-            slot3Text.text = ""
-            slot3.completionAction = {}
-            slot3.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot3.hidden = true })]) ] ))
-            
-        case 4:
-//            slot4.hidden = true
-            slot4Text.text = ""
-            slot4.completionAction = {}
-            slot4.runAction(SKAction.group( [ SKAction.scaleTo(0.05, duration: 0.5), SKAction.moveTo(CGPointZero, duration: 0.5), SKAction.sequence([SKAction.waitForDuration(0.5), SKAction.runBlock({ self.slot4.hidden = true })]) ] ))
-            
-        default:
-            break
+    func displaySpeech(text: String, delay: NSTimeInterval = 0) {
+        
+        let display: () -> () = {
+            self.speech.text = text
+            self.speech.isPresented = true
+        }
+        
+        if delay > 0 {
+            displayNode.runAction(SKAction.sequence([SKAction.waitForDuration(delay),SKAction.runBlock(display)]))
+        } else {
+            display()
+        }
+    }
+    func dismissOption(index: Int, delay: NSTimeInterval = 0) {
+        let dismiss: () -> () = {
+            switch (index)
+            {
+                case 1:
+                    self.slot1.isPresented = false
+                    
+                case 2:
+                    self.slot2.isPresented = false
+                    
+                case 3:
+                    self.slot3.isPresented = false
+                    
+                default:
+                    self.slot1.isPresented = false
+                    self.slot2.isPresented = false
+                    self.slot3.isPresented = false
+            }
+        }
+        if delay > 0 {
+            displayNode.runAction(SKAction.sequence([SKAction.waitForDuration(delay),SKAction.runBlock(dismiss)]))
+        } else {
+            dismiss()
+        }
+    }
+    func dismissSpeech(delay: NSTimeInterval = 0) {
+        let dismiss: () -> () = {
+            self.speech.isPresented = false
+        }
+        
+        if delay > 0 {
+            displayNode.runAction(SKAction.sequence([SKAction.waitForDuration(delay),SKAction.runBlock(dismiss)]))
+        } else {
+            dismiss()
         }
     }
     

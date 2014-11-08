@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2102C70419E1CF9F008E830A /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70319E1CF9F008E830A /* CameraController.swift */; };
 		2102C70619E1D222008E830A /* Utilities2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70519E1D222008E830A /* Utilities2D.swift */; };
+		216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216101EB1A0D178B000AA0AB /* InteractiveButton.swift */; };
 		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
 		21B2E7B219F1B33600000E70 /* house.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B2E7B019F1B33600000E70 /* house.png */; };
 		21B2E7B319F1B33600000E70 /* house@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B2E7B119F1B33600000E70 /* house@2x.png */; };
@@ -67,6 +68,7 @@
 		2102C70319E1CF9F008E830A /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		2102C70519E1D222008E830A /* Utilities2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities2D.swift; sourceTree = "<group>"; };
 		2136D43019FDD31400DB07BD /* wwShootProto-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wwShootProto-Bridging-Header.h"; sourceTree = "<group>"; };
+		216101EB1A0D178B000AA0AB /* InteractiveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractiveButton.swift; sourceTree = "<group>"; };
 		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
 		21B2E7B019F1B33600000E70 /* house.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = house.png; path = resources/house.png; sourceTree = SOURCE_ROOT; };
 		21B2E7B119F1B33600000E70 /* house@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "house@2x.png"; path = "resources/house@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -149,6 +151,15 @@
 				21B2E7BE19F5A17000000E70 /* Button.swift */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		216101EA1A0D1667000AA0AB /* Interactions */ = {
+			isa = PBXGroup;
+			children = (
+				21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */,
+				216101EB1A0D178B000AA0AB /* InteractiveButton.swift */,
+			);
+			name = Interactions;
 			sourceTree = "<group>";
 		};
 		2181E16C19D10E93009FE3FB /* Particles */ = {
@@ -374,7 +385,7 @@
 				21EA22C919FF001900A1E612 /* SpineImporter */,
 				21EA22A219FEB34F00A1E612 /* Game.swift */,
 				21EA22A419FEC78200A1E612 /* AnimationManager.swift */,
-				21EFBB6D19F70E310081C1C5 /* InteractionManager.swift */,
+				216101EA1A0D1667000AA0AB /* Interactions */,
 				21EA22E019FF1FAE00A1E612 /* TimeManager.swift */,
 			);
 			name = Systems;
@@ -517,6 +528,7 @@
 				21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */,
 				21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
+				216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */,
 				21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */,
 				21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */,
 				21B5AF9F19CF9336004B00C9 /* Whale.swift in Sources */,
