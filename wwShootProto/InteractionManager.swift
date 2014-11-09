@@ -21,10 +21,12 @@ class InteractionManager {
     
     // MARK: Properties
     var isInteracting: Bool                         = false
+    var interactionHasEnded: Bool                   = false
     var activeInteraction: InteractionData?         = nil
     var activeInteractiveEntity: InteractiveEntity? = nil
     var hoverTrigger: InteractionTrigger?           = nil
     var debugLayer: NHCNode                         = NHCNode()
+    var timingNode: NHCNode                         = NHCNode()
     
     var timeLeftInMoment: NSTimeInterval            = 0.0
     
@@ -92,12 +94,19 @@ class InteractionManager {
                     hoverTrigger = tempHovTrig
                 }
             }
-        } else {
+        } else if !interactionHasEnded {
             timeLeftInMoment -= dt
             if timeLeftInMoment <= 0 {
                 if let thisMoment = activeInteraction?.currentMoment {
                     let timeOut = thisMoment.timeOutChoice
-                    executeMomentTransition(animKey: timeOut.animationKey, animQueueKey: timeOut.animationQueueKey, nextMomentKey: timeOut.nextMomentKey)
+                    executeMomentTransition(speech: timeOut.activeSpeech, animKey: timeOut.animationKey, animQueueKey: timeOut.animationQueueKey, nextMomentKey: timeOut.nextMomentKey)
+                }
+            }
+            if let interaction = activeInteraction {
+                if let thisMoment = interaction.currentMoment {
+                    if let entity = getEntity(interaction.otherEntityKey) {
+                        entity.speech.updateSpeechAlpha(CGFloat(timeLeftInMoment)/thisMoment.decisionLength)
+                    }
                 }
             }
             println("\(timeLeftInMoment)")
@@ -125,19 +134,34 @@ class InteractionManager {
             (activeInteractiveEntity?.owner as Dad).interact()
             (activeInteractiveEntity?.owner as Dad).facePoint(getEntity(thisInteraction.otherEntityKey)!.displayNode.position)
             
-            presentMoment(thisInteraction.startingMomentKey)
+            presentMoment(thisInteraction.startingMomentKey, startDelay: 0.0)
         }
     }
-    func executeMomentTransition(#animKey: String, animQueueKey: String, nextMomentKey: String) {
+    func executeMomentTransition(#speech: String, animKey: String, animQueueKey: String, nextMomentKey: String) {
         if let interaction = activeInteraction {
             if let animEntity: AnimatableEntity = game.animationManager.getEntity(interaction.activeEntityKey) {
                 animEntity.setQueuedAnimation(animQueueKey)
                 animEntity.playAnimation(animKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
             }
-            presentMoment(nextMomentKey)
+            var offsetTotal: NSTimeInterval = 0.0
+            if speech != "" {
+                if let entity = getEntity(interaction.activeEntityKey) {
+                    offsetTotal += 3.25
+                    entity.displaySpeech(speech, delay: 0.0)
+                    entity.dismissSpeech(delay: offsetTotal)
+                }
+            }
+            if let entity = getEntity(interaction.activeEntityKey) {
+                entity.dismissOption(0, delay: 0.0)
+            }
+            if let entity = getEntity(interaction.otherEntityKey) {
+                entity.dismissSpeech(delay: 0.0)
+            }
+            offsetTotal += 0.75
+            presentMoment(nextMomentKey, startDelay: offsetTotal)
         }
     }
-    func presentMoment(momentKey: String) {
+    func presentMoment(momentKey: String, startDelay: NSTimeInterval = 0.0) {
         if momentKey != "end" {
             if let momentExists = activeInteraction?.moments[momentKey] {
                 
@@ -146,13 +170,10 @@ class InteractionManager {
                 let otherEntity = getEntity(activeInteraction!.otherEntityKey)!
                 let activeEntity = getEntity(activeInteraction!.activeEntityKey)!
                 
-                // discard old info
-                otherEntity.dismissSpeech()
-                activeEntity.dismissSpeech()
-                activeEntity.dismissOption(0)
-                
-                // set timer
+                // set timings
                 timeLeftInMoment = NSTimeInterval(thisMoment.decisionLength)
+                let choiceDisplayOffset: NSTimeInterval = 1.5 + startDelay
+                let otherSpeechDisplayOffset: NSTimeInterval = startDelay
                 
                 // set camera target
                 let camera = activeInteractiveEntity!.displayNode.scene!.childNodeWithName("CamCon") as CameraController
@@ -161,11 +182,11 @@ class InteractionManager {
                 
                 // display infos
                 var i: NSTimeInterval = 0
-                otherEntity.displaySpeech(thisMoment.otherResponseText, delay: 1.0)
+                otherEntity.displaySpeech(thisMoment.otherResponseText, delay: otherSpeechDisplayOffset)
                 for choice in thisMoment.activeEntityChoices {
                     activeEntity.displayOption(choice.text,
-                                                completion: { self.executeMomentTransition(animKey: choice.animationKey, animQueueKey: choice.animationQueueKey, nextMomentKey: choice.nextMomentKey) },
-                                                delay: (i * 0.25 + 2.0) )
+                        completion: { self.executeMomentTransition(speech: choice.activeSpeech, animKey: choice.animationKey, animQueueKey: choice.animationQueueKey, nextMomentKey: choice.nextMomentKey) },
+                                                delay: (i * 0.25 + choiceDisplayOffset) )
                     i += 1.0
                 }
                 
@@ -178,20 +199,20 @@ class InteractionManager {
                 }
             }
         } else {
-            endInteraction()
+            if let interaction = activeInteraction {
+                if let entity = getEntity(interaction.activeEntityKey) {
+                    interactionHasEnded = true
+                    entity.displayNode.runAction(SKAction.sequence([ SKAction.waitForDuration(startDelay), SKAction.runBlock({ self.endInteraction() }) ]))
+                }
+            }
         }
     }
     func endInteraction() {
         
         // get all of the current objects
-        let thisMoment = activeInteraction!.currentMoment!
         let otherEntity = getEntity(activeInteraction!.otherEntityKey)!
         let activeEntity = getEntity(activeInteraction!.activeEntityKey)!
         activeInteraction!.currentMoment = nil
-        
-        otherEntity.dismissOption(0)
-        otherEntity.dismissSpeech(delay: 0.5)
-        activeEntity.dismissOption(0)
         
         let otherChar = (otherEntity.owner as Character)
         otherChar.animator.setQueuedAnimation(otherChar.defaultAnimationKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
@@ -199,6 +220,7 @@ class InteractionManager {
         
         (activeInteractiveEntity!.owner as Dad).stopInteracting()
         
+        interactionHasEnded = false
         isInteracting = false
         activeInteraction = nil
     }
@@ -252,7 +274,7 @@ class InteractiveEntity {
         slot1.targetPosition = CGPoint(x:   80, y:  60)
         slot2.targetPosition = CGPoint(x:  110, y:   0)
         slot3.targetPosition = CGPoint(x:  100, y: -60)
-        speech.targetPosition = CGPoint(x: -99, y:  25)
+        speech.targetPosition = CGPoint(x: -75, y:  25)
         
         displayNode.addChild(slot1)
         displayNode.addChild(slot2)
@@ -266,12 +288,12 @@ class InteractiveEntity {
             slot1.targetPosition = CGPoint(x:  -80, y:  60)
             slot2.targetPosition = CGPoint(x: -110, y:   0)
             slot3.targetPosition = CGPoint(x: -100, y: -60)
-            speech.targetPosition = CGPoint(x: 99,  y:  25)
+            speech.targetPosition = CGPoint(x: 75,  y:  25)
         } else {
             slot1.targetPosition = CGPoint(x:   80, y:  60)
             slot2.targetPosition = CGPoint(x:  110, y:   0)
             slot3.targetPosition = CGPoint(x:  100, y: -60)
-            speech.targetPosition = CGPoint(x: -99, y:  25)
+            speech.targetPosition = CGPoint(x: -75, y:  25)
         }
     }
     func displayOption(text: String, completion: ()->(), delay: NSTimeInterval = 0) {
@@ -542,12 +564,14 @@ struct InteractionChoice {
     let animationQueueKey: String
     let nextMomentKey: String
     let text: String
+    let activeSpeech: String
     
     init(data: NSDictionary) {
         animationKey = data["animation"] as String
         animationQueueKey = data["animationQueue"] as String
         nextMomentKey = data["nextMomentKey"] as String
         text = data["text"] as String
+        activeSpeech = data["speech"] as String
     }
     
 }

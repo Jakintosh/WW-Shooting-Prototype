@@ -19,6 +19,9 @@ enum CharacterState {
 
 class Character : NHCNode {
     
+    
+    let SCALE_THING: CGFloat = 0.33333
+    
     // MARK: - Properties
     var state: CharacterState = .Idling
     var orientation: CharacterOrientation = .Right
@@ -96,11 +99,11 @@ class Character : NHCNode {
         if orientation != newOrientation {
             switch(newOrientation) {
                 case .Left:
-                    animationNode.xScale = -0.37
+                    animationNode.xScale = -SCALE_THING
                     interactor.setMirrored(true)
                 
                 case .Right:
-                    animationNode.xScale = 0.37
+                    animationNode.xScale = SCALE_THING
                     interactor.setMirrored(false)
             }
             orientation = newOrientation
@@ -129,8 +132,8 @@ class Daughter : Character {
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
-        animationNode.xScale = 0.37
-        animationNode.yScale = 0.37
+        animationNode.xScale = SCALE_THING
+        animationNode.yScale = SCALE_THING
         setSpine("spine_daughter_home_default")
     }
     
@@ -149,7 +152,7 @@ class Dad : Character {
     
     var canUseStairs: Bool = false
     
-    var button: Button?
+//    var button: Button?
     
     init(startingRoom room: HouseRoom) {
         currentFloor = room.associatedFloor
@@ -163,14 +166,14 @@ class Dad : Character {
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)
-        animationNode.xScale = 0.37
-        animationNode.yScale = 0.37
+        animationNode.xScale = SCALE_THING
+        animationNode.yScale = SCALE_THING
         setSpine("spine_dad_home_default")
 
-        button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
-        button!.position = CGPoint(x: 110, y: 180)
-        button!.hidden = true
-        addChild(button!)
+//        button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
+//        button!.position = CGPoint(x: 110, y: 180)
+//        button!.hidden = true
+//        addChild(button!)
     }
     
     // update garbage
@@ -232,7 +235,6 @@ class Dad : Character {
             currentPath.setActive()
         }
     }
-
     
     func walk() {
         if state == .Idling {
@@ -261,7 +263,8 @@ class Dad : Character {
     
     // deal with later
     func presentStairBox() {
-        button!.hidden = false
+        interactor.displayOption("Climb Stairs", completion: { self.useStairs() } , delay: 0.0)
+//        button!.hidden = false
     }
     func useStairs() {
         
@@ -297,7 +300,7 @@ class Dad : Character {
         dismissStairBox()
     }
     func dismissStairBox() {
-        button!.hidden = true
+        interactor.dismissOption(1, delay: 0.0)
     }
     
 }

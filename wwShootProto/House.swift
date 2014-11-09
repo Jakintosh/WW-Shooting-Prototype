@@ -77,7 +77,7 @@ class House : NHCNode {
         stair4_1.setDestination(stair3_1)
         
         // set starting locations
-        startingRoom = room4_1
+        startingRoom = room3_2
         
         // set up the house sprite
         houseSprite.zPosition = -1

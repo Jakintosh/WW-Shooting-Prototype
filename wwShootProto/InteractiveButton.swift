@@ -91,6 +91,10 @@ class InteractiveButton : Button {
         
     }
     
+    func updateSpeechAlpha(newAlpha: CGFloat) {
+        self.alpha = newAlpha
+    }
+    
     private func moveTo(point: CGPoint) {
         self.removeActionForKey("movement")
         
@@ -98,7 +102,6 @@ class InteractiveButton : Button {
         move.timingMode = .EaseInEaseOut
         self.runAction(move, withKey: "movement")
     }
-    
     private func scaleFade(#present: Bool) {
         self.removeActionForKey("scale_alpha")
         

@@ -33,9 +33,9 @@
 					<key>position</key>
 					<dict>
 						<key>x</key>
-						<integer>820</integer>
+						<integer>805</integer>
 						<key>y</key>
-						<integer>1000</integer>
+						<real>1000</real>
 					</dict>
 				</dict>
 				<key>decisionLength</key>
@@ -57,12 +57,14 @@
 				<key>timeOut</key>
 				<dict>
 					<key>animation</key>
-					<string>int1_oneshot</string>
+					<string>int2_oneshot</string>
 					<key>animationQueue</key>
-					<string>int1_idle</string>
+					<string>idle</string>
 					<key>nextMomentKey</key>
 					<string>end</string>
 					<key>text</key>
+					<string>I aint no homie</string>
+					<key>speech</key>
 					<string>I aint no homie</string>
 				</dict>
 				<key>choices</key>
@@ -76,6 +78,8 @@
 						<string>moment2</string>
 						<key>text</key>
 						<string>I aint no homie</string>
+						<key>speech</key>
+						<string>I aint no homie</string>
 					</dict>
 					<dict>
 						<key>animation</key>
@@ -86,6 +90,8 @@
 						<string>moment2</string>
 						<key>text</key>
 						<string>heh</string>
+						<key>speech</key>
+						<string>heh</string>
 					</dict>
 					<dict>
 						<key>animation</key>
@@ -95,6 +101,8 @@
 						<key>nextMomentKey</key>
 						<string>moment2</string>
 						<key>text</key>
+						<string>nothin... teehee</string>
+						<key>speech</key>
 						<string>nothin... teehee</string>
 					</dict>
 				</array>
@@ -108,7 +116,7 @@
 					<key>position</key>
 					<dict>
 						<key>x</key>
-						<real>835</real>
+						<integer>825</integer>
 						<key>y</key>
 						<integer>990</integer>
 					</dict>
@@ -140,13 +148,15 @@
 				<key>timeOut</key>
 				<dict>
 					<key>animation</key>
-					<string>int1_oneshot</string>
+					<string>int2_oneshot</string>
 					<key>animationQueue</key>
-					<string>int1_idle</string>
+					<string>idle</string>
 					<key>nextMomentKey</key>
 					<string>end</string>
 					<key>text</key>
-					<string>I aint no homie</string>
+					<string></string>
+					<key>speech</key>
+					<string></string>
 				</dict>
 				<key>choices</key>
 				<array>
@@ -154,10 +164,12 @@
 						<key>animation</key>
 						<string>int1_oneshot</string>
 						<key>animationQueue</key>
-						<string>int1_idle</string>
+						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
+						<string>let&apos;s blow up the moon</string>
+						<key>speech</key>
 						<string>let&apos;s blow up the moon</string>
 					</dict>
 					<dict>
@@ -169,15 +181,19 @@
 						<string>end</string>
 						<key>text</key>
 						<string>duh</string>
+						<key>speech</key>
+						<string>duh</string>
 					</dict>
 					<dict>
 						<key>animation</key>
 						<string>int3_idle</string>
 						<key>animationQueue</key>
-						<string>int3_idle</string>
+						<string>idle</string>
 						<key>nextMomentKey</key>
 						<string>end</string>
 						<key>text</key>
+						<string>im scared of the dark</string>
+						<key>speech</key>
 						<string>im scared of the dark</string>
 					</dict>
 				</array>
