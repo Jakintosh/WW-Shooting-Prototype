@@ -14,13 +14,15 @@ enum CharacterOrientation {
 }
 
 enum CharacterState {
-    case Idling, Walking, Interacting
+    case Idling, Walking, Interacting, Stairs
 }
 
 class Character : NHCNode {
     
     
     let SCALE_THING: CGFloat = 0.33333
+    
+    var timeSinceTouchDown: NSTimeInterval = 0
     
     // MARK: - Properties
     var state: CharacterState = .Idling
@@ -62,11 +64,18 @@ class Character : NHCNode {
     
     // MARK: - Methods
     func update(dt: NSTimeInterval) {
+        timeSinceTouchDown += dt
         animator.update(dt)
     }
     
+    func idle() {  }
+    func walk() {  }
+    func interact() {  }
+    func stopInteracting() {  }
+    
     func moveToPoint(target: CGPoint, visible: Bool = true) {
-        if canMove {
+        if state == .Idling || state == .Walking {
+            
             let xDistance = target.x - self.position.x
             let distance = Utilities2D.distanceFromPoint(target, toPoint: self.position)
             
@@ -78,12 +87,15 @@ class Character : NHCNode {
             
             let moveDuration = CGFloat(distance)/movementSpeed
             var disappearAction: SKAction
-            if visible { disappearAction = SKAction.runBlock({}) }
-            else { disappearAction = SKAction.runBlock({ self.animationNode.hidden = !self.animationNode.hidden }) }
+            var appearAction: SKAction
+            if visible { disappearAction = SKAction.runBlock({}); appearAction = SKAction.runBlock({}) }
+//            else { disappearAction = SKAction.runBlock({ self.animationNode.hidden = !self.animationNode.hidden }) }
+            else { disappearAction = SKAction.fadeAlphaTo(0.0, duration: 0.5); appearAction = SKAction.fadeAlphaTo(1.0, duration: 0.5) }
             let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
             moveAction.timingMode = .EaseOut
+            let idleThing = SKAction.runBlock( { self.idle() } )
             removeActionForKey("move")
-            runAction(SKAction.sequence([ /*disappearAction,*/ moveAction, /*disappearAction*/]), withKey: "move")
+            runAction(SKAction.sequence([ disappearAction, moveAction, appearAction, idleThing]), withKey: "move")
         }
     }
     
@@ -140,6 +152,59 @@ class Daughter : Character {
     override func update(dt: NSTimeInterval) {
         super.update(dt)
     }
+}
+
+class DadStairs : NHCNode {
+    
+    let stepSprite: SKSpriteNode = SKSpriteNode(imageNamed: "dad_stairs1")
+    let transSprite: SKSpriteNode = SKSpriteNode(imageNamed: "dad_stairs2")
+    
+    let stairWidth: CGFloat = 31
+    let stairHeight: CGFloat = 10
+    
+    let stairSize = CGPoint(x: CGFloat(31.0), y: CGFloat(10.0))
+    
+    init(housePosition: CGPoint) {
+        super.init()
+        
+        // y offset = 65
+        // stair offset = 10
+        position = housePosition
+        stepSprite.position = CGPointZero
+        transSprite.position = stairSize
+        
+        addChild(stepSprite)
+        addChild(transSprite)
+    }
+    
+    func run() {
+        let fadeInOut = SKAction.sequence([ SKAction.fadeAlphaTo(1.0, duration: 0.25), SKAction.fadeAlphaTo(0.0, duration: 0.25) ])
+        let wait = SKAction.waitForDuration(0.5)
+        
+        let step: () -> () = {
+            self.stepSprite.runAction(SKAction.sequence([fadeInOut, wait]), completion: {
+                self.transSprite.runAction(SKAction.sequence([fadeInOut, wait]), completion: {
+                    self.stepSprite.position = Utilities2D.addPoint(self.stairSize, toPoint: self.stepSprite.position)
+                    self.transSprite.position = Utilities2D.addPoint(self.stairSize, toPoint: self.transSprite.position)
+                })
+            })
+        }
+        
+        let end: () -> () = {
+            self.removeAllActions()
+            self.removeAllChildren()
+            self.removeFromParent()
+        }
+        
+        self.runAction( SKAction.sequence([ SKAction.runBlock(step),
+                                            SKAction.waitForDuration(1.1),
+                                            SKAction.runBlock(step),
+                                            SKAction.waitForDuration(1.1),
+                                            SKAction.runBlock(step),
+                                            SKAction.waitForDuration(1.1),
+                                            SKAction.runBlock(end)]) )
+    }
+    
 }
 
 // MARK: -
@@ -218,6 +283,9 @@ class Dad : Character {
                 
             case .Interacting:
                 break
+            
+            case .Stairs:
+                break
         }
         
         super.update(dt)
@@ -236,7 +304,7 @@ class Dad : Character {
         }
     }
     
-    func walk() {
+    override func walk() {
         if state == .Idling {
             state = .Walking
             animator.setQueuedAnimation("walk", introPeriod: 0.1)
@@ -244,7 +312,7 @@ class Dad : Character {
         }
     }
     
-    func idle() {
+    override func idle() {
         if state != .Interacting {
             state = .Idling
             animator.setQueuedAnimation("idle", introPeriod: 0.1)
@@ -252,13 +320,65 @@ class Dad : Character {
         }
     }
     
-    func interact() {
+    override func interact() {
         state = .Interacting
     }
     
-    func stopInteracting() {
+    override func stopInteracting() {
         state = .Idling
         animator.setQueuedAnimation("idle", introPeriod: 0.25)
+    }
+    
+    
+    func touchDown(screenLoc: CGPoint) {
+        if state != .Stairs && state != .Interacting {
+            timeSinceTouchDown = 0
+            
+            if state != .Interacting {
+                if screenLoc.x > 0 {
+                    setOrientation(.Right)
+                } else {
+                    setOrientation(.Left)
+                }
+            }
+            self.removeActionForKey("move")
+            walk()
+        }
+    }
+    
+    func touchMove(screenLoc: CGPoint) {
+        if state != .Interacting {
+            if screenLoc.x > 0 {
+                setOrientation(.Right)
+            } else {
+                setOrientation(.Left)
+            }
+        }
+        
+        if state != .Walking {
+            var moveDistance = movementSpeed * CGFloat(0.016)
+            if orientation == .Left { moveDistance *= -1 }
+            let atEnd: Bool = currentPath.getNewX(position.x, movement: moveDistance).atEnd
+            if !atEnd {
+                walk()
+            } else {
+                idle()
+            }
+        }
+    }
+    
+    func touchEnd(screenLoc: CGPoint) {
+        if state != .Interacting && state != .Stairs {
+            if timeSinceTouchDown < 0.5 {
+                let worldPos = scene!.convertPoint(screenLoc, toNode: scene!.childNodeWithName("//Root_Node")!)
+                let house: House = scene!.childNodeWithName("//Root_House")! as House
+                if let newPos = house.getNewLocation(worldPos, fromRoom: currentRoom) {
+                    moveToPoint(newPos)
+                }
+            } else {
+                idle()
+            }
+        }
     }
     
     // deal with later
@@ -280,6 +400,8 @@ class Dad : Character {
         if let stairs = staircase {
             if let stairDestination = stairs.useStaircase() {
                 targetPoint = stairDestination
+                moveToPoint(targetPoint, visible: false)
+                state = .Stairs
             } else {
                 println("tried to use stairs but stairs return null destniation point")
                 return
@@ -288,8 +410,6 @@ class Dad : Character {
             println("tried to use stairs but stairs not found")
             return
         }
-        
-        moveToPoint(targetPoint, visible: false)
         
         if let stairs = staircase {
             if let destination = stairs.destination {

@@ -32,6 +32,22 @@
 		21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47219F061430023EAE9 /* daughter_room@2x.png */; };
 		21B7A47619F061430023EAE9 /* main.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47319F061430023EAE9 /* main.png */; };
 		21B7A47719F061430023EAE9 /* main@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B7A47419F061430023EAE9 /* main@2x.png */; };
+		21D2072D1A105FD40019A73B /* Attic.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2071D1A105FD40019A73B /* Attic.png */; };
+		21D2072E1A105FD40019A73B /* Attic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2071E1A105FD40019A73B /* Attic@2x.png */; };
+		21D2072F1A105FD40019A73B /* Bathroom.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2071F1A105FD40019A73B /* Bathroom.png */; };
+		21D207301A105FD40019A73B /* Bathroom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207201A105FD40019A73B /* Bathroom@2x.png */; };
+		21D207311A105FD40019A73B /* Kitchen.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207211A105FD40019A73B /* Kitchen.png */; };
+		21D207321A105FD40019A73B /* Kitchen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207221A105FD40019A73B /* Kitchen@2x.png */; };
+		21D207331A105FD40019A73B /* LivingRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207231A105FD40019A73B /* LivingRoom.png */; };
+		21D207341A105FD40019A73B /* LivingRoom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207241A105FD40019A73B /* LivingRoom@2x.png */; };
+		21D207351A105FD40019A73B /* MudRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207251A105FD40019A73B /* MudRoom.png */; };
+		21D207361A105FD40019A73B /* MudRoom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207261A105FD40019A73B /* MudRoom@2x.png */; };
+		21D207371A105FD40019A73B /* Office_shaft.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207271A105FD40019A73B /* Office_shaft.png */; };
+		21D207381A105FD40019A73B /* Office_shaft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207281A105FD40019A73B /* Office_shaft@2x.png */; };
+		21D207391A105FD40019A73B /* Office.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D207291A105FD40019A73B /* Office.png */; };
+		21D2073A1A105FD40019A73B /* Office@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072A1A105FD40019A73B /* Office@2x.png */; };
+		21D2073B1A105FD40019A73B /* ParentsRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072B1A105FD40019A73B /* ParentsRoom.png */; };
+		21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */; };
 		21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229419FDEE5200A1E612 /* testDayOne.plist */; };
 		21EA229C19FDEFA000A1E612 /* main.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229B19FDEFA000A1E612 /* main.json */; };
 		21EA22A319FEB34F00A1E612 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22A219FEB34F00A1E612 /* Game.swift */; };
@@ -95,6 +111,22 @@
 		21B7A47219F061430023EAE9 /* daughter_room@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "daughter_room@2x.png"; path = "resources/daughter_room@2x.png"; sourceTree = SOURCE_ROOT; };
 		21B7A47319F061430023EAE9 /* main.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = main.png; path = resources/main.png; sourceTree = SOURCE_ROOT; };
 		21B7A47419F061430023EAE9 /* main@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "main@2x.png"; path = "resources/main@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D2071D1A105FD40019A73B /* Attic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Attic.png; path = resources/house.atlas/Attic.png; sourceTree = SOURCE_ROOT; };
+		21D2071E1A105FD40019A73B /* Attic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Attic@2x.png"; path = "resources/house.atlas/Attic@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D2071F1A105FD40019A73B /* Bathroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Bathroom.png; path = resources/house.atlas/Bathroom.png; sourceTree = SOURCE_ROOT; };
+		21D207201A105FD40019A73B /* Bathroom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Bathroom@2x.png"; path = "resources/house.atlas/Bathroom@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D207211A105FD40019A73B /* Kitchen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Kitchen.png; path = resources/house.atlas/Kitchen.png; sourceTree = SOURCE_ROOT; };
+		21D207221A105FD40019A73B /* Kitchen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Kitchen@2x.png"; path = "resources/house.atlas/Kitchen@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D207231A105FD40019A73B /* LivingRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LivingRoom.png; path = resources/house.atlas/LivingRoom.png; sourceTree = SOURCE_ROOT; };
+		21D207241A105FD40019A73B /* LivingRoom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LivingRoom@2x.png"; path = "resources/house.atlas/LivingRoom@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D207251A105FD40019A73B /* MudRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MudRoom.png; path = resources/house.atlas/MudRoom.png; sourceTree = SOURCE_ROOT; };
+		21D207261A105FD40019A73B /* MudRoom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MudRoom@2x.png"; path = "resources/house.atlas/MudRoom@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D207271A105FD40019A73B /* Office_shaft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Office_shaft.png; path = resources/house.atlas/Office_shaft.png; sourceTree = SOURCE_ROOT; };
+		21D207281A105FD40019A73B /* Office_shaft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Office_shaft@2x.png"; path = "resources/house.atlas/Office_shaft@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D207291A105FD40019A73B /* Office.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Office.png; path = resources/house.atlas/Office.png; sourceTree = SOURCE_ROOT; };
+		21D2072A1A105FD40019A73B /* Office@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Office@2x.png"; path = "resources/house.atlas/Office@2x.png"; sourceTree = SOURCE_ROOT; };
+		21D2072B1A105FD40019A73B /* ParentsRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ParentsRoom.png; path = resources/house.atlas/ParentsRoom.png; sourceTree = SOURCE_ROOT; };
+		21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ParentsRoom@2x.png"; path = "resources/house.atlas/ParentsRoom@2x.png"; sourceTree = SOURCE_ROOT; };
 		21EA229419FDEE5200A1E612 /* testDayOne.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = testDayOne.plist; sourceTree = "<group>"; };
 		21EA229B19FDEFA000A1E612 /* main.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = main.json; sourceTree = "<group>"; };
 		21EA22A219FEB34F00A1E612 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -224,6 +256,7 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				21D2071C1A105FC80019A73B /* house */,
 				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
 				21EB81891A0A5FC100C7525D /* dad.atlas */,
 				21EA22A119FDFBB300A1E612 /* Project Files */,
@@ -296,6 +329,29 @@
 				21B7A47019F05DDA0023EAE9 /* daughter_room.png */,
 			);
 			name = "additional images";
+			sourceTree = "<group>";
+		};
+		21D2071C1A105FC80019A73B /* house */ = {
+			isa = PBXGroup;
+			children = (
+				21D2071D1A105FD40019A73B /* Attic.png */,
+				21D2071E1A105FD40019A73B /* Attic@2x.png */,
+				21D2071F1A105FD40019A73B /* Bathroom.png */,
+				21D207201A105FD40019A73B /* Bathroom@2x.png */,
+				21D207211A105FD40019A73B /* Kitchen.png */,
+				21D207221A105FD40019A73B /* Kitchen@2x.png */,
+				21D207231A105FD40019A73B /* LivingRoom.png */,
+				21D207241A105FD40019A73B /* LivingRoom@2x.png */,
+				21D207251A105FD40019A73B /* MudRoom.png */,
+				21D207261A105FD40019A73B /* MudRoom@2x.png */,
+				21D207271A105FD40019A73B /* Office_shaft.png */,
+				21D207281A105FD40019A73B /* Office_shaft@2x.png */,
+				21D207291A105FD40019A73B /* Office.png */,
+				21D2072A1A105FD40019A73B /* Office@2x.png */,
+				21D2072B1A105FD40019A73B /* ParentsRoom.png */,
+				21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */,
+			);
+			name = house;
 			sourceTree = "<group>";
 		};
 		21EA229019FDEE5200A1E612 /* data */ = {
@@ -474,17 +530,32 @@
 			files = (
 				21B2E7B219F1B33600000E70 /* house.png in Resources */,
 				21EB818F1A0A5FCB00C7525D /* daughter.atlas in Resources */,
+				21D207381A105FD40019A73B /* Office_shaft@2x.png in Resources */,
+				21D207391A105FD40019A73B /* Office.png in Resources */,
 				21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */,
 				21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */,
+				21D207371A105FD40019A73B /* Office_shaft.png in Resources */,
 				21B7A47619F061430023EAE9 /* main.png in Resources */,
+				21D2073B1A105FD40019A73B /* ParentsRoom.png in Resources */,
 				21B7A47719F061430023EAE9 /* main@2x.png in Resources */,
+				21D207311A105FD40019A73B /* Kitchen.png in Resources */,
+				21D207321A105FD40019A73B /* Kitchen@2x.png in Resources */,
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
+				21D207341A105FD40019A73B /* LivingRoom@2x.png in Resources */,
+				21D207301A105FD40019A73B /* Bathroom@2x.png in Resources */,
+				21D2072D1A105FD40019A73B /* Attic.png in Resources */,
 				21EB81901A0A5FCB00C7525D /* daughter.json in Resources */,
+				21D2072E1A105FD40019A73B /* Attic@2x.png in Resources */,
 				21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */,
+				21D2072F1A105FD40019A73B /* Bathroom.png in Resources */,
+				21D2073A1A105FD40019A73B /* Office@2x.png in Resources */,
+				21D207331A105FD40019A73B /* LivingRoom.png in Resources */,
 				21EB818B1A0A5FC100C7525D /* dad.atlas in Resources */,
 				21EB818C1A0A5FC100C7525D /* dad.json in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
+				21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */,
+				21D207351A105FD40019A73B /* MudRoom.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
 				21B2E7B319F1B33600000E70 /* house@2x.png in Resources */,
 				21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */,
@@ -492,6 +563,7 @@
 				21EB81871A0983C600C7525D /* house_foreground.png in Resources */,
 				21EA22AD19FED98600A1E612 /* home_characters.plist in Resources */,
 				21EA229C19FDEFA000A1E612 /* main.json in Resources */,
+				21D207361A105FD40019A73B /* MudRoom@2x.png in Resources */,
 				21B5AF7F19CF8D17004B00C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

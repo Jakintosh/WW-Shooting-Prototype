@@ -39,7 +39,7 @@ class GameViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "willTransitionToLandscape", name: "NHCSWillTransitionToHome", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "willTransitionToPortrait",  name: "NHCSWillTransitionToWork", object: nil)
     }
-
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "willTransitionToLandscape", name: "NHCSWillTransitionToHome", object: nil)
@@ -67,11 +67,11 @@ class GameViewController: UIViewController {
         skView.presentScene(scene)
         
     }
-
+    
     override func shouldAutorotate() -> Bool {
         return true
     }
-
+    
     override func supportedInterfaceOrientations() -> Int {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             if gameOrientation == .Portrait {
@@ -87,7 +87,7 @@ class GameViewController: UIViewController {
             return Int(UIInterfaceOrientationMask.All.rawValue)
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
@@ -108,7 +108,9 @@ class GameViewController: UIViewController {
     }
     
     func forceOrientationChange() {
-        presentViewController(UIViewController(), animated: false, completion: nil)
+        let tempUIViewController = UIViewController()
+        view.window?.addSubview(view)
+        presentViewController(tempUIViewController, animated: false, completion: nil)
         dismissViewControllerAnimated(false, completion: nil)
     }
 }

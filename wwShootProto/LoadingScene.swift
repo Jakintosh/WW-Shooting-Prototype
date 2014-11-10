@@ -27,7 +27,6 @@ class LoadingScene : SKScene {
         super.init(coder: aDecoder)
     }
     
-    
     override func didMoveToView(view: SKView) {
         
         game.interactionManager.loadInteractions("home", dataFile: "testDayOne")

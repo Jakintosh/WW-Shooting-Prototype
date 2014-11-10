@@ -30,9 +30,10 @@ class HomeScene : SKFuckScene {
         dad = Dad(startingRoom: house.startingRoom)
         super.init(size: size)
         
-        tripleTap = UITapGestureRecognizer(target: self, action: "handleTap:")
+        tripleTap = UITapGestureRecognizer(target: self, action: "handleTripleTap:")
         tripleTap!.numberOfTouchesRequired = 3
         tripleTap!.numberOfTapsRequired = 1
+        tripleTap!.cancelsTouchesInView = false
     }
     
     override func didMoveToView(view: SKView) {
@@ -77,7 +78,7 @@ class HomeScene : SKFuckScene {
         }
         
         // set up "daughter"
-        daughter.position = CGPoint(x: 660, y: 890)
+        daughter.position = CGPoint(x: 660, y: 1000)
         
         // camera stuff
         camCon.addHUDChild(timeText, withZ: 0)
@@ -121,46 +122,35 @@ class HomeScene : SKFuckScene {
         let touch: UITouch = touches.anyObject() as UITouch
         let locationWorld = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
-        
-        if dad.state != .Interacting {
-            if locationScreen.x > 0 {
-                dad.setOrientation(.Right)
-            } else {
-                dad.setOrientation(.Left)
-            }
-        }
-
-        dad.walk()
+    
+        dad.touchDown(locationScreen)
     }
     
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         let touch: UITouch = touches.anyObject() as UITouch
         let locationWorld = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
-        if dad.state != .Interacting {
-            if locationScreen.x > 0 {
-                dad.setOrientation(.Right)
-            } else {
-                dad.setOrientation(.Left)
-            }
-        }
+
+        dad.touchMove(locationScreen)
     }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
         let touch: UITouch = touches.anyObject() as UITouch
         let location = touch.locationInNode(camCon.rootNode)
+        let locationScreen = touch.locationInNode(scene)
 
-        dad.idle()
+        dad.touchEnd(locationScreen)
     }
     
     override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
         let touch: UITouch = touches.anyObject() as UITouch
         let location = touch.locationInNode(camCon.rootNode)
+        let locationScreen = touch.locationInNode(scene)
         
-        dad.idle()
+        dad.touchEnd(locationScreen)
     }
     
-    func handleTap(gestureRecognizer: UITapGestureRecognizer) {
+    func handleTripleTap(gestureRecognizer: UITapGestureRecognizer) {
         house.toggleDebug()
         debug = !debug
         camCon.enableDebug()
