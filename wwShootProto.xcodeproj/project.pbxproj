@@ -9,6 +9,16 @@
 /* Begin PBXBuildFile section */
 		2102C70419E1CF9F008E830A /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70319E1CF9F008E830A /* CameraController.swift */; };
 		2102C70619E1D222008E830A /* Utilities2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70519E1D222008E830A /* Utilities2D.swift */; };
+		2103B3601A11A4B600CCDCB9 /* Sky.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 2103B35F1A11A4B600CCDCB9 /* Sky.fsh */; };
+		2103B3641A11A74700CCDCB9 /* NHCSky.m in Sources */ = {isa = PBXBuildFile; fileRef = 2103B3631A11A74700CCDCB9 /* NHCSky.m */; };
+		2103B36D1A11B64900CCDCB9 /* Balcony.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B3651A11B64900CCDCB9 /* Balcony.png */; };
+		2103B36E1A11B64900CCDCB9 /* Balcony@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B3661A11B64900CCDCB9 /* Balcony@2x.png */; };
+		2103B36F1A11B64900CCDCB9 /* Sky.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B3671A11B64900CCDCB9 /* Sky.png */; };
+		2103B3701A11B64900CCDCB9 /* Sky@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B3681A11B64900CCDCB9 /* Sky@2x.png */; };
+		2103B3711A11B64900CCDCB9 /* Sun.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B3691A11B64900CCDCB9 /* Sun.png */; };
+		2103B3721A11B64900CCDCB9 /* Sun@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B36A1A11B64900CCDCB9 /* Sun@2x.png */; };
+		2103B3731A11B64900CCDCB9 /* Water.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B36B1A11B64900CCDCB9 /* Water.png */; };
+		2103B3741A11B64900CCDCB9 /* Water@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B36C1A11B64900CCDCB9 /* Water@2x.png */; };
 		216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216101EB1A0D178B000AA0AB /* InteractiveButton.swift */; };
 		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
 		21B2E7B219F1B33600000E70 /* house.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B2E7B019F1B33600000E70 /* house.png */; };
@@ -83,6 +93,17 @@
 /* Begin PBXFileReference section */
 		2102C70319E1CF9F008E830A /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		2102C70519E1D222008E830A /* Utilities2D.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities2D.swift; sourceTree = "<group>"; };
+		2103B35F1A11A4B600CCDCB9 /* Sky.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Sky.fsh; sourceTree = "<group>"; };
+		2103B3621A11A74700CCDCB9 /* NHCSky.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NHCSky.h; sourceTree = "<group>"; };
+		2103B3631A11A74700CCDCB9 /* NHCSky.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NHCSky.m; sourceTree = "<group>"; };
+		2103B3651A11B64900CCDCB9 /* Balcony.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Balcony.png; path = resources/Balcony.png; sourceTree = SOURCE_ROOT; };
+		2103B3661A11B64900CCDCB9 /* Balcony@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Balcony@2x.png"; path = "resources/Balcony@2x.png"; sourceTree = SOURCE_ROOT; };
+		2103B3671A11B64900CCDCB9 /* Sky.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Sky.png; path = resources/Sky.png; sourceTree = SOURCE_ROOT; };
+		2103B3681A11B64900CCDCB9 /* Sky@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Sky@2x.png"; path = "resources/Sky@2x.png"; sourceTree = SOURCE_ROOT; };
+		2103B3691A11B64900CCDCB9 /* Sun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Sun.png; path = resources/Sun.png; sourceTree = SOURCE_ROOT; };
+		2103B36A1A11B64900CCDCB9 /* Sun@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Sun@2x.png"; path = "resources/Sun@2x.png"; sourceTree = SOURCE_ROOT; };
+		2103B36B1A11B64900CCDCB9 /* Water.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Water.png; path = resources/Water.png; sourceTree = SOURCE_ROOT; };
+		2103B36C1A11B64900CCDCB9 /* Water@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Water@2x.png"; path = "resources/Water@2x.png"; sourceTree = SOURCE_ROOT; };
 		2136D43019FDD31400DB07BD /* wwShootProto-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wwShootProto-Bridging-Header.h"; sourceTree = "<group>"; };
 		216101EB1A0D178B000AA0AB /* InteractiveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractiveButton.swift; sourceTree = "<group>"; };
 		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
@@ -185,6 +206,23 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
+		2103B35D1A11A3A700CCDCB9 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				2103B35F1A11A4B600CCDCB9 /* Sky.fsh */,
+			);
+			name = Shaders;
+			sourceTree = "<group>";
+		};
+		2103B3611A11A70500CCDCB9 /* Sky */ = {
+			isa = PBXGroup;
+			children = (
+				2103B3621A11A74700CCDCB9 /* NHCSky.h */,
+				2103B3631A11A74700CCDCB9 /* NHCSky.m */,
+			);
+			name = Sky;
+			sourceTree = "<group>";
+		};
 		216101EA1A0D1667000AA0AB /* Interactions */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,14 +294,15 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				21D2071C1A105FC80019A73B /* house */,
-				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
-				21EB81891A0A5FC100C7525D /* dad.atlas */,
 				21EA22A119FDFBB300A1E612 /* Project Files */,
 				21EA229019FDEE5200A1E612 /* data */,
 				2181E16C19D10E93009FE3FB /* Particles */,
+				2103B35D1A11A3A700CCDCB9 /* Shaders */,
+				21D2071C1A105FC80019A73B /* house */,
 				21B7A46B19F0516E0023EAE9 /* additional images */,
 				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
+				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
+				21EB81891A0A5FC100C7525D /* dad.atlas */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -319,6 +358,14 @@
 		21B7A46B19F0516E0023EAE9 /* additional images */ = {
 			isa = PBXGroup;
 			children = (
+				2103B3651A11B64900CCDCB9 /* Balcony.png */,
+				2103B3661A11B64900CCDCB9 /* Balcony@2x.png */,
+				2103B3671A11B64900CCDCB9 /* Sky.png */,
+				2103B3681A11B64900CCDCB9 /* Sky@2x.png */,
+				2103B3691A11B64900CCDCB9 /* Sun.png */,
+				2103B36A1A11B64900CCDCB9 /* Sun@2x.png */,
+				2103B36B1A11B64900CCDCB9 /* Water.png */,
+				2103B36C1A11B64900CCDCB9 /* Water@2x.png */,
 				21EB81851A0983C600C7525D /* house_foreground.png */,
 				21EB81861A0983C600C7525D /* house_foreground@2x.png */,
 				21B2E7B019F1B33600000E70 /* house.png */,
@@ -442,6 +489,7 @@
 				21EA22A219FEB34F00A1E612 /* Game.swift */,
 				21EA22A419FEC78200A1E612 /* AnimationManager.swift */,
 				216101EA1A0D1667000AA0AB /* Interactions */,
+				2103B3611A11A70500CCDCB9 /* Sky */,
 				21EA22E019FF1FAE00A1E612 /* TimeManager.swift */,
 			);
 			name = Systems;
@@ -528,10 +576,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2103B3711A11B64900CCDCB9 /* Sun.png in Resources */,
 				21B2E7B219F1B33600000E70 /* house.png in Resources */,
 				21EB818F1A0A5FCB00C7525D /* daughter.atlas in Resources */,
 				21D207381A105FD40019A73B /* Office_shaft@2x.png in Resources */,
 				21D207391A105FD40019A73B /* Office.png in Resources */,
+				2103B3721A11B64900CCDCB9 /* Sun@2x.png in Resources */,
+				2103B3701A11B64900CCDCB9 /* Sky@2x.png in Resources */,
 				21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */,
 				21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */,
 				21D207371A105FD40019A73B /* Office_shaft.png in Resources */,
@@ -543,20 +594,26 @@
 				21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */,
 				21D207341A105FD40019A73B /* LivingRoom@2x.png in Resources */,
 				21D207301A105FD40019A73B /* Bathroom@2x.png in Resources */,
+				2103B3601A11A4B600CCDCB9 /* Sky.fsh in Resources */,
 				21D2072D1A105FD40019A73B /* Attic.png in Resources */,
 				21EB81901A0A5FCB00C7525D /* daughter.json in Resources */,
 				21D2072E1A105FD40019A73B /* Attic@2x.png in Resources */,
+				2103B3741A11B64900CCDCB9 /* Water@2x.png in Resources */,
 				21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */,
 				21D2072F1A105FD40019A73B /* Bathroom.png in Resources */,
 				21D2073A1A105FD40019A73B /* Office@2x.png in Resources */,
 				21D207331A105FD40019A73B /* LivingRoom.png in Resources */,
 				21EB818B1A0A5FC100C7525D /* dad.atlas in Resources */,
 				21EB818C1A0A5FC100C7525D /* dad.json in Resources */,
+				2103B36F1A11B64900CCDCB9 /* Sky.png in Resources */,
+				2103B36D1A11B64900CCDCB9 /* Balcony.png in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
+				2103B36E1A11B64900CCDCB9 /* Balcony@2x.png in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */,
 				21D207351A105FD40019A73B /* MudRoom.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
+				2103B3731A11B64900CCDCB9 /* Water.png in Resources */,
 				21B2E7B319F1B33600000E70 /* house@2x.png in Resources */,
 				21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */,
 				21B7A47119F05DDA0023EAE9 /* daughter_room.png in Resources */,
@@ -585,6 +642,7 @@
 				2102C70619E1D222008E830A /* Utilities2D.swift in Sources */,
 				21EA22D919FF001900A1E612 /* SGG_SkinSlot.m in Sources */,
 				21B2E7B819F1E20200000E70 /* House.swift in Sources */,
+				2103B3641A11A74700CCDCB9 /* NHCSky.m in Sources */,
 				21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */,
 				21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,

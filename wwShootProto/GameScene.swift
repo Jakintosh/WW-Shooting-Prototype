@@ -18,7 +18,7 @@ class GameScene: SKScene {
     
     // components?
     let reticle = SKShapeNode(circleOfRadius: 20)
-    let bg: SKSpriteNode
+    let bg: NHCSky
     var whales = [Whale]()
     var touchLocation: CGPoint?
     var touch: UITouch?
@@ -43,18 +43,18 @@ class GameScene: SKScene {
     // MARK: - initializers
     required init?(coder aDecoder: NSCoder) {
         char = SKSpriteNode(imageNamed: "idle01")
-        bg = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 1000, height: 1000))
+        bg = NHCSky(color: SKColor.blueColor(), size: CGSize(width: 1000, height: 1000))
         super.init(coder: aDecoder)
         
         swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-        swipeUpGesture?.numberOfTouchesRequired = 3
-        swipeUpGesture?.direction = .Up
-        swipeUpGesture?.cancelsTouchesInView = false
+        swipeUpGesture!.numberOfTouchesRequired = 3
+        swipeUpGesture!.direction = .Up
+        swipeUpGesture!.cancelsTouchesInView = false
     }
     
     override init(size: CGSize) {
         char = SKSpriteNode(imageNamed: "idle01")
-        bg = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 1000, height: 1000))
+        bg = NHCSky(color: SKColor.blueColor(), size: CGSize(width: 1000, height: 1000))
         super.init(size: size)
         
         swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
@@ -77,16 +77,18 @@ class GameScene: SKScene {
         camCon.connectGestureRecognizers(view)
         self.addChild(camCon)
         
-        bg.color = SKColor(hue: 0.03, saturation: 0.6, brightness: 0.8, alpha: 1.00)
-        camCon.addHUDChild(bg, withZ: -5000)
-        
-//        bg.color = SKColor(hue: 0.5, saturation: 0.5, brightness: 0.9, alpha: 1.00)
-        bg.runAction(SKAction.sequence([
-            SKAction.colorizeWithColor(SKColor(hue: 0.5, saturation: 0.6, brightness: 0.9, alpha: 1.00), colorBlendFactor: 1.0, duration: totalDayTime/5.0),
-            SKAction.waitForDuration((totalDayTime/5.0)*3.0),
-            SKAction.colorizeWithColor(SKColor(hue: 0.045, saturation: 0.8, brightness: 1.0, alpha: 1.00), colorBlendFactor: 1.0, duration: totalDayTime/5.0),
-            SKAction.colorizeWithColor(SKColor(hue: 0.7, saturation: 0.6, brightness: 0.2, alpha: 1.00), colorBlendFactor: 1.0, duration: (totalDayTime/5.0) * 2)
-        ]))
+//        bg.color = SKColor(hue: 0.03, saturation: 0.6, brightness: 0.8, alpha: 1.00)
+        bg.texture = SKTexture(imageNamed: "Sky")
+        bg.position = CGPoint(x: 350, y: 284)
+        camCon.addCameraChild(bg, withZ: -5000)
+//
+////        bg.color = SKColor(hue: 0.5, saturation: 0.5, brightness: 0.9, alpha: 1.00)
+//        bg.runAction(SKAction.sequence([
+//            SKAction.colorizeWithColor(SKColor(hue: 0.5, saturation: 0.6, brightness: 0.9, alpha: 1.00), colorBlendFactor: 1.0, duration: totalDayTime/5.0),
+//            SKAction.waitForDuration((totalDayTime/5.0)*3.0),
+//            SKAction.colorizeWithColor(SKColor(hue: 0.045, saturation: 0.8, brightness: 1.0, alpha: 1.00), colorBlendFactor: 1.0, duration: totalDayTime/5.0),
+//            SKAction.colorizeWithColor(SKColor(hue: 0.7, saturation: 0.6, brightness: 0.2, alpha: 1.00), colorBlendFactor: 1.0, duration: (totalDayTime/5.0) * 2)
+//        ]))
         
         partcleManager = ParticleManager(cc: camCon, numParticles: 750)
         
@@ -125,24 +127,22 @@ class GameScene: SKScene {
         
 //        let bg = SKSpriteNode(imageNamed: "bg")
 //        camCon.addHUDChild(bg, withZ: -2000)
+
+        let water = SKSpriteNode(imageNamed: "Water")
+        water.anchorPoint = CGPointMake(0.5, 0.0)
+        water.position = CGPoint(x: 350, y: 0)
+        camCon.addCameraChild(water, withZ: -1)
         
-        let water1 = SKSpriteNode(imageNamed: "wave")
-        water1.anchorPoint = CGPointMake(0, 0)
-        water1.position = CGPointMake(0, 30)
-        camCon.addCameraChild(water1, withZ: 100)
-        let water2 = SKSpriteNode(imageNamed: "wave")
-        water2.anchorPoint = CGPointMake(0, 0)
-        water2.position = CGPointMake(350, 30)
-        camCon.addCameraChild(water2, withZ: 100)
-//        let water3 = SKSpriteNode(imageNamed: "wave")
-//        water3.anchorPoint = CGPointMake(0, 0)
-//        water3.position = CGPointMake(700, 30)
-//        camCon.addCameraChild(water3, withZ: 100)
-        let railing = SKSpriteNode(imageNamed: "rail")
+        let sun = SKSpriteNode(imageNamed: "Sun")
+        sun.position = CGPoint(x: 200, y: 400)
+        camCon.addCameraChild(sun, withZ: -100)
+        
+        let railing = SKSpriteNode(imageNamed: "Balcony")
         railing.anchorPoint = CGPointMake(0.5, 0)
         railing.position = CGPoint(x: 0, y: -frame.height/2)
         railing.name = "rail"
         camCon.addHUDChild(railing, withZ: 0)
+        
         char.anchorPoint = CGPoint(x: 0.5, y: 0)
         char.xScale = 2.0
         char.yScale = 2.0

@@ -113,7 +113,6 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
 //        rootNode.shouldRasterize = false
 //        rootNode.filter = nil
     }
-    
 
 //    MARK: - Getters/Setters
     
@@ -138,6 +137,10 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
 //        zoomNode.xScale = CGFloat(scale)
 //        zoomNode.yScale = CGFloat(scale)
         camScale = scale
+    }
+    
+    func setRotiation(rotation: CGFloat) {
+        zoomNode.zRotation = rotation
     }
     
     func getScale() -> CGFloat {

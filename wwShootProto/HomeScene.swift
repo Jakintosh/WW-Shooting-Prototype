@@ -16,6 +16,8 @@ class HomeScene : SKFuckScene {
     let camCon: CameraController = CameraController()
     let house: House = House()
     
+    var rotation: Double = 0.0
+    
     var lastTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
     
@@ -46,7 +48,6 @@ class HomeScene : SKFuckScene {
         backgroundColor = SKColor.blackColor()
 
         setup()
-        
     }
     
     override func willMoveFromView(view: SKView) {
@@ -105,6 +106,16 @@ class HomeScene : SKFuckScene {
                 camCon.setScale(1.0)
             }
         }
+        
+//        let xData = game.motionManager.accelerometerData.acceleration.x
+//        let yData = game.motionManager.accelerometerData.acceleration.y
+//        let zData = game.motionManager.accelerometerData.acceleration.z
+//        var nextAngle = atan2(yData, xData)
+//        if (nextAngle < 0) { nextAngle += (M_PI * 2.0) }
+//        nextAngle = nextAngle + ((rotation - nextAngle) * 0.01)
+//        rotation = nextAngle
+//        camCon.setRotiation(CGFloat(nextAngle))
+        
         camCon.update(deltaTime)
     }
     

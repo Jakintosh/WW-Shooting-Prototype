@@ -211,7 +211,7 @@ class InteractionManager {
     func endInteraction() {
         
         // get all of the current objects
-        let otherEntity = getEntity(activeInteraction!.otherEntityKey)!
+        let otherEntity = getEntity(activeInteraction!.otherEntityKey)!  // activeInteraction just isn't here sometimes
         let activeEntity = getEntity(activeInteraction!.activeEntityKey)!
         activeInteraction!.currentMoment = nil
         

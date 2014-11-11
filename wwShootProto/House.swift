@@ -58,7 +58,7 @@ class House : NHCNode {
         let room1_1     = floor1.addRoom(name: "bathroom", xPos: 0,    width: 295,  path: path1_1)
         let room1_2     = floor1.addRoom(name: "kitchen",  xPos: 295,  width: 1065, path: path1_1)
         let room1_3     = floor1.addRoom(name: "mudroom",  xPos: 1360, width: 325,  path: path1_1)
-        let stair1_1    = path1_1.addStaircase(820, room: room1_2, dir: .Up, doorway: nil, ladder: nil)
+        let stair1_1    = path1_1.addStaircase(820, room: room1_2, dir: .Up, doorway: doorway1_1, ladder: nil)
         floors.append(floor1)
         
         // initialize second floor
@@ -108,7 +108,7 @@ class House : NHCNode {
         office.anchorPoint      = CGPointZero
         parentsRoom.anchorPoint = CGPointZero
         
-        bathroom.position    = CGPoint(x: 30,   y: 20)
+        bathroom.position    = CGPoint(x: 26,   y: 20)
         kitchen.position     = CGPoint(x: 295,  y: 25)
         mudRoom.position     = CGPoint(x: 1360, y: 25)
         office.position      = CGPoint(x: 0,    y: 335)

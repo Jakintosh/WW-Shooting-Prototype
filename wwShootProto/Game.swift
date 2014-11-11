@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import CoreMotion
 
 class Game {
     
-    let animationManager: AnimationManager = AnimationManager()
-    let interactionManager: InteractionManager = InteractionManager()
-    let timeManager: TimeManager = TimeManager()
+    let animationManager:    AnimationManager    = AnimationManager()
+    let interactionManager:  InteractionManager  = InteractionManager()
+    let timeManager:         TimeManager         = TimeManager()
+    let motionManager:       CMMotionManager     = CMMotionManager()
     
 }
 

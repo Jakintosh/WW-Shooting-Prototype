@@ -10,5 +10,6 @@
 #define wwShootProto_wwShootProto_Bridging_Header_h
 
 #import "SpineImport.h"
+#import "NHCSky.h"
 
 #endif
