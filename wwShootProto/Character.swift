@@ -322,6 +322,7 @@ class Dad : Character {
     
     override func interact() {
         state = .Interacting
+        self.removeActionForKey("move") // THIS MIGHT BREAK IT
     }
     
     override func stopInteracting() {

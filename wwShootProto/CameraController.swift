@@ -13,32 +13,40 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     
     // camera properties
     var camera: CGPoint = CGPointZero   // starts at (0,0)
-    var camScale: CGFloat = 1.0            // standard zoom as default
+    var lastPoint: CGPoint = CGPointZero
+    var camScale: CGFloat = 1.0         // standard zoom as default
     var lerpSpeed: CGFloat = 0.1        // 0 - doesn't move, 1 - locked to target
     
-    // camera components
-    let zoomNode: SKNode
-    let rootNode: SKNode
-    let hudNode: SKNode
+    // screen shake
+    var shakeIntensity: CGFloat = 0.0         // max number of points to move
+    var shakeDuration: NSTimeInterval = 0.0
+    var shakeRemaining: NSTimeInterval = 0.0
+    var isShaking: Bool = false
     
-    let blurFilter: CIFilter
+    // camera components
+    let zoomNode: SKNode = SKNode()
+    let rootNode: SKNode = SKNode()
+    let hudNode: SKNode = SKNode()
     
     // other
-    var debugMode: Bool
+    var debugMode: Bool = false
     
-    private let pinchGestureRecognizer: UIPinchGestureRecognizer?
-    private let panGestureRecognizer: UIPanGestureRecognizer?
+    private var pinchGestureRecognizer: UIPinchGestureRecognizer?
+    private var panGestureRecognizer: UIPanGestureRecognizer?
     
     // MARK: - CameraController
     
     override init() {
-        zoomNode = SKNode()
-        rootNode = SKNode()
-        hudNode = SKNode()
-        blurFilter = CIFilter(name: "CIGaussianBlur")
-        debugMode = false
         super.init()
-        
+        setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    func setup() {
         self.name = "CamCon"
         zoomNode.name = "Zoom_Node"
         rootNode.name = "Root_Node"
@@ -47,9 +55,6 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
         zoomNode.zPosition = 0.0
         rootNode.zPosition = 0.0
         hudNode.zPosition = 1000.0
-        
-        blurFilter.setDefaults()
-        blurFilter.setValue(30.0, forKey: "inputRadius")
         
         pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "handlePinch:")
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
@@ -60,22 +65,50 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
         zoomNode.addChild(rootNode)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        camera = CGPointZero
-        zoomNode = SKNode()
-        rootNode = SKNode()
-        hudNode = SKNode()
-        blurFilter = CIFilter(name: "CIGaussianBlur")
-        debugMode = false
-        super.init(coder: aDecoder)
-    }
-    
     func update(dt: NSTimeInterval) {
-        rootNode.position = Utilities2D.lerpFromPoint(rootNode.position, toPoint: CGPointMake(-camera.x, -camera.y), atPosition: lerpSpeed)
         
+        // find camera position for this frame
+        rootNode.position = Utilities2D.lerpFromPoint(lastPoint, toPoint: CGPointMake(-camera.x, -camera.y), atPosition: lerpSpeed)
+        
+        // set this position as last point
+        lastPoint = rootNode.position
+        
+        // find shake offset
+        if isShaking {
+            shakeRemaining -= dt
+            if shakeRemaining <= 0 {
+                isShaking = false
+                shakeRemaining = 0.0
+                shakeDuration = 0.0
+                shakeIntensity = 0.0
+            } else {
+                var random: CGFloat = (CGFloat(arc4random()%100)/100.0) * shakeIntensity * CGFloat(shakeRemaining/shakeDuration)
+                rootNode.position = Utilities2D.addPoint(CGPoint(x: random, y: random), toPoint: rootNode.position)
+            }
+        }
+        
+        // apply zoom and rotation
         let newScale = Utilities2D.lerpFrom(zoomNode.xScale, toNum: camScale, atPosition: lerpSpeed)
         zoomNode.xScale = newScale
         zoomNode.yScale = newScale
+    }
+    
+    func shake(intensity: CGFloat, duration: NSTimeInterval) {
+        if intensity > 0.0 {
+            isShaking = true
+            if intensity > shakeIntensity {
+                shakeIntensity = intensity      // if the new intensity is stronger, overwrite
+            } else if shakeIntensity > 0.0 {
+                shakeIntensity += intensity/2.0 // if it's already shaking stronger, just add a little bit more
+            }
+            if duration > shakeRemaining {
+                shakeDuration = duration      // if the new duration is longer, overwrite
+                shakeRemaining = duration
+            } else if shakeRemaining > 0.0 {
+                shakeDuration += duration/2.0 // if it's already shaking longer, just add a little bit more
+                shakeRemaining += duration/2.0
+            }
+        }
     }
     
     func addCameraChild(inNode: SKNode, withZ z: Float) {
@@ -99,20 +132,6 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     func convertScenePointToCamera(point: CGPoint) -> CGPoint {
         return Utilities2D.subPoint(rootNode.position, fromPoint: point)
     }
-    
-    func blurRootNode() {
-//        rootNode.shouldCenterFilter = true
-//        rootNode.shouldEnableEffects = true
-//        rootNode.shouldRasterize = true
-//        rootNode.filter = blurFilter
-    }
-    
-    func resetEffects() {
-//        rootNode.shouldCenterFilter = false
-//        rootNode.shouldEnableEffects = false
-//        rootNode.shouldRasterize = false
-//        rootNode.filter = nil
-    }
 
 //    MARK: - Getters/Setters
     
@@ -134,8 +153,6 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     }
     
     override func setScale(scale: CGFloat) {
-//        zoomNode.xScale = CGFloat(scale)
-//        zoomNode.yScale = CGFloat(scale)
         camScale = scale
     }
     

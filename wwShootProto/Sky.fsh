@@ -1,10 +1,6 @@
 void main( void )
 {
-    // vec4 topColor
-    // vec4 botColor
-    // vec3 size
-    
-    float mod = ((gl_FragCoord.y / size.y) * 2.0) - 1.0;
+    float mod = (v_tex_coord.y * 1.5) - 0.5;
     float dom = 1.0 - mod;
     
     float r = (topColor.r * mod) + (botColor.r * dom);
@@ -12,7 +8,8 @@ void main( void )
     float b = (topColor.b * mod) + (botColor.b * dom);
     
     vec4 col = vec4(r, g, b, 1.0) * 0.73;
-    vec4 tex = texture2D(u_texture, v_tex_coord) * 0.27;
+    float tex = texture2D(u_texture, v_tex_coord).r * 0.27;
     
     gl_FragColor = col + tex;
+//    gl_FragColor = vec4(mod, mod, mod, 1.0);
 }

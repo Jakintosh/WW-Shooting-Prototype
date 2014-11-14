@@ -10,4 +10,12 @@
 
 @interface NHCSky : SKSpriteNode
 
+@property(nonatomic,strong) NSArray* topColors;
+@property(nonatomic,strong) NSArray* botColors;
+@property(nonatomic,strong) NSArray* times;
+
+@property(nonatomic) NSTimeInterval currentTime;
+
+-(void)updateShader:(CGFloat)currentHour;
+
 @end

@@ -11,8 +11,6 @@ import SpriteKit
 
 class NHCNode : SKNode {
     func getScenePosition() -> CGPoint {
-        // TODO: Figure out whats up here
-//        return Utilities2D.dividePoint(scene!.childNodeWithName("/CamCon/Zoom_Node/Root_Node")!.convertPoint(position, fromNode: self), byNumber: 2.0)
         return scene!.childNodeWithName("/CamCon/Zoom_Node/Root_Node")!.convertPoint(position, fromNode: self)
     }
 }
@@ -30,8 +28,6 @@ class House : NHCNode {
     let mudRoom         = SKSpriteNode(imageNamed: "MudRoom")
     let office          = SKSpriteNode(imageNamed: "Office")
     let parentsRoom     = SKSpriteNode(imageNamed: "ParentsRoom")
-//    var houseSprite: SKSpriteNode = SKSpriteNode(imageNamed: "house")
-//    var houseFore: SKSpriteNode = SKSpriteNode(imageNamed: "house_foreground")
     
     // MARK:   Components
     var floors: [HouseFloor] = [HouseFloor]()
@@ -44,10 +40,10 @@ class House : NHCNode {
         let doorway2_2  = DoorwayStair(type: .Top)
         let doorway3_2  = DoorwayStair(type: .Top)
         
-        doorway1_1.position = CGPoint(x: 820, y: 75)
-        doorway2_1.position = CGPoint(x: 798, y: 405)
-        doorway2_2.position = CGPoint(x: 1373, y: 405)
-        doorway3_2.position = CGPoint(x: 1375, y: 718)
+        doorway1_1.position = CGPoint(x: 820, y: 95)
+        doorway2_1.position = CGPoint(x: 798, y: 407)
+        doorway2_2.position = CGPoint(x: 1372, y: 405)
+        doorway3_2.position = CGPoint(x: 1372, y: 712)
         
         let ladder = Ladder()
         ladder.position = CGPoint(x: 1275, y: 885)
@@ -97,7 +93,7 @@ class House : NHCNode {
         stair4_1.setDestination(stair3_1)
         
         // set starting locations
-        startingRoom = room3_2
+        startingRoom = room2_1
         
         // set up the house sprite
         attic.anchorPoint       = CGPointZero
@@ -110,7 +106,7 @@ class House : NHCNode {
         
         bathroom.position    = CGPoint(x: 26,   y: 20)
         kitchen.position     = CGPoint(x: 295,  y: 25)
-        mudRoom.position     = CGPoint(x: 1360, y: 25)
+        mudRoom.position     = CGPoint(x: 1358, y: 19)
         office.position      = CGPoint(x: 0,    y: 335)
         livingRoom.position  = CGPoint(x: 540,  y: 335)
         parentsRoom.position = CGPoint(x: 540,  y: 645)
@@ -123,19 +119,6 @@ class House : NHCNode {
         livingRoom.zPosition  = -3
         parentsRoom.zPosition = -2
         attic.zPosition       = -1
-        
-//        houseSprite.zPosition = -1
-//        houseSprite.anchorPoint = CGPoint(x: 0, y: 0)
-//        houseSprite.position = CGPoint(x: 0, y: 0)
-//        houseSprite.xScale = 4.0
-//        houseSprite.yScale = 4.0
-        
-        
-//        houseFore.zPosition = 3
-//        houseFore.anchorPoint = CGPoint(x: 0, y: 0)
-//        houseFore.position = CGPoint(x: 0, y: 0)
-//        houseFore.xScale = 4.0
-//        houseFore.yScale = 4.0
         
         super.init()
         
@@ -158,16 +141,13 @@ class House : NHCNode {
         addChild(office)
         addChild(parentsRoom)
         addChild(ladder)
-            
-//        addChild(houseSprite)
-//        addChild(houseFore)
+        
         addChild(game.interactionManager.debugLayer)
         
         floor1.hidden = true
         floor2.hidden = true
         floor3.hidden = true
         floor4.hidden = true
-//        houseSprite.hidden = false
     }
     
     // MARK:   Methods
@@ -202,7 +182,6 @@ class House : NHCNode {
         for floor in floors {
             floor.hidden = !floor.hidden
         }
-        //houseSprite.hidden = !houseSprite.hidden
     }
     
 }
@@ -223,8 +202,6 @@ class Ladder : NHCNode {
         climb2.position = CGPoint(x: 0, y:  12)
         
         addChild(ladderSprite)
-//        addChild(climb1)
-//        addChild(climb2)
     }
     
     func ascend() {
@@ -264,7 +241,7 @@ class DoorwayStair : NHCNode {
         switch type
         {
             case .Top:
-                departSprites = [SKSpriteNode(imageNamed: "dad_stairs1"), SKSpriteNode(imageNamed: "dad_stairs2"), SKSpriteNode(imageNamed: "dad_stairs3")]
+                departSprites = [SKSpriteNode(imageNamed: "dad_stairs_down1"), SKSpriteNode(imageNamed: "dad_stairs_down2"), SKSpriteNode(imageNamed: "dad_stairs_down3")]
                 arriveSprites = departSprites//[SKSpriteNode(imageNamed: "dad_stairs1"), SKSpriteNode(imageNamed: "dad_stairs2"), SKSpriteNode(imageNamed: "dad_stairs3")]
                 
             case .Bottom:
@@ -274,7 +251,14 @@ class DoorwayStair : NHCNode {
         
         super.init()
         
+        let defaultSprite = SKSpriteNode(imageNamed: "dad_stairs0")
+        defaultSprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        addChild(defaultSprite)
+        
         for sprite in departSprites {
+            sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        }
+        for sprite in arriveSprites {
             sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         }
     }
