@@ -251,9 +251,9 @@ class DoorwayStair : NHCNode {
         
         super.init()
         
-        let defaultSprite = SKSpriteNode(imageNamed: "dad_stairs0")
-        defaultSprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-        addChild(defaultSprite)
+//        let defaultSprite = SKSpriteNode(imageNamed: "dad_stairs0")
+//        defaultSprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+//        addChild(defaultSprite)
         
         for sprite in departSprites {
             sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
