@@ -71,6 +71,7 @@
 		21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D519FF001900A1E612 /* SGG_SpineJSONTools.m */; };
 		21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */; };
 		21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22E019FF1FAE00A1E612 /* TimeManager.swift */; };
+		21EB73BB1A16AD1C00BB9203 /* PromotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EB73BA1A16AD1C00BB9203 /* PromotionManager.swift */; };
 		21EB81871A0983C600C7525D /* house_foreground.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81851A0983C600C7525D /* house_foreground.png */; };
 		21EB81881A0983C600C7525D /* house_foreground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81861A0983C600C7525D /* house_foreground@2x.png */; };
 		21EB818B1A0A5FC100C7525D /* dad.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21EB81891A0A5FC100C7525D /* dad.atlas */; };
@@ -169,6 +170,7 @@
 		21EA22D719FF001900A1E612 /* SGG_SpineSkin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGG_SpineSkin.m; sourceTree = "<group>"; };
 		21EA22D819FF001900A1E612 /* SpineImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpineImport.h; sourceTree = "<group>"; };
 		21EA22E019FF1FAE00A1E612 /* TimeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeManager.swift; path = wwShootProto/TimeManager.swift; sourceTree = SOURCE_ROOT; };
+		21EB73BA1A16AD1C00BB9203 /* PromotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromotionManager.swift; sourceTree = "<group>"; };
 		21EB81851A0983C600C7525D /* house_foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = house_foreground.png; path = resources/house_foreground.png; sourceTree = SOURCE_ROOT; };
 		21EB81861A0983C600C7525D /* house_foreground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "house_foreground@2x.png"; path = "resources/house_foreground@2x.png"; sourceTree = SOURCE_ROOT; };
 		21EB81891A0A5FC100C7525D /* dad.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = dad.atlas; path = resources/dad/dad.atlas; sourceTree = SOURCE_ROOT; };
@@ -482,9 +484,18 @@
 			path = SpineImporter;
 			sourceTree = "<group>";
 		};
+		21EB73B91A16AD0400BB9203 /* Promotions */ = {
+			isa = PBXGroup;
+			children = (
+				21EB73BA1A16AD1C00BB9203 /* PromotionManager.swift */,
+			);
+			name = Promotions;
+			sourceTree = "<group>";
+		};
 		21EFBB6C19F70C810081C1C5 /* Systems */ = {
 			isa = PBXGroup;
 			children = (
+				21EB73B91A16AD0400BB9203 /* Promotions */,
 				21EA22C919FF001900A1E612 /* SpineImporter */,
 				21EA22A219FEB34F00A1E612 /* Game.swift */,
 				21EA22A419FEC78200A1E612 /* AnimationManager.swift */,
@@ -657,6 +668,7 @@
 				21B2E7BC19F46C5E00000E70 /* Character.swift in Sources */,
 				21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */,
 				21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */,
+				21EB73BB1A16AD1C00BB9203 /* PromotionManager.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
 				216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */,
 				21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */,

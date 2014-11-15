@@ -47,7 +47,7 @@
     
     GLKVector3 newTop = [self getTopColor:currentHour];
     GLKVector3 newBot = [self getBotColor:currentHour];
-    NSLog(@"Height: %f", self.scene.frame.size.height);
+    
     self.shader.uniforms = @[
                              [SKUniform uniformWithName:@"height"   float: self.frame.size.height],
                              [SKUniform uniformWithName:@"topColor" floatVector3:newTop],

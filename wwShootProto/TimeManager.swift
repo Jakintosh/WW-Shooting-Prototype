@@ -12,7 +12,7 @@ class TimeManager {
     
     // MARK: Properties
     private var currentTimeOfDaySeconds: CGFloat = 0
-    private var secondsPerSecond: CGFloat =  2000.0 //90.0
+    private var secondsPerSecond: CGFloat =  90.0
     private var militaryTime: Bool = false
     
     // MARK: Initializers
@@ -66,7 +66,7 @@ class TimeManager {
     }
     
     func currentDecimalTime() -> CGFloat {
-        return CGFloat(currentHour()) + CGFloat(currentMinute())/60.0
+        return CGFloat(currentHour()) + CGFloat((currentTimeOfDaySeconds % 3600.0)/60.0)/60.0
     }
     
 }

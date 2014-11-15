@@ -24,6 +24,7 @@ class GameScene: SKScene {
     var touchLocation: CGPoint?
     var touch: UITouch?
     var char: SKSpriteNode
+    var sun: SKSpriteNode!
     
     let timeText = SKLabelNode(fontNamed: "HelveticaNeue-Light")
     
@@ -103,7 +104,7 @@ class GameScene: SKScene {
         water.position = CGPoint(x: 350, y: 0)
         camCon.addCameraChild(water, withZ: -1)
         
-        let sun = SKSpriteNode(imageNamed: "Sun")
+        sun = SKSpriteNode(imageNamed: "Sun")
         sun.position = CGPoint(x: 200, y: 400)
         camCon.addCameraChild(sun, withZ: -100)
         
@@ -167,6 +168,9 @@ class GameScene: SKScene {
                 whale.update(touchPos: nil, dt: deltaTime)
             }
         }
+        
+        sun.position.y = (game.timeManager.currentDecimalTime() * -150.0) + 2700
+        println(sun.position.y)
         
         // update camera position
         updateCameraPosition()
