@@ -18,11 +18,11 @@ class InteractiveButton : Button {
     let PRESENTATION_TIME: NSTimeInterval = 0.75
     
     // MARK: Cool Properties!
-    private var label: SKLabelNode = SKLabelNode()
+    private var label: NORLabelNode = NORLabelNode()
     let type: InteractiveButtonType
     var text: String                = "" {
         didSet {
-            label.text = self.text
+            self.label.text = self.text
         }
     }
     var isPresented: Bool {
@@ -30,10 +30,12 @@ class InteractiveButton : Button {
             if isPresented != oldValue {
                 if isPresented {
                     self.removeActionForKey("completion")
+                    self.activate()
                     
                     moveTo(self.targetPosition)
                     scaleFade(present: true)
                 } else {
+                    self.deactivate()
                     moveTo(CGPointZero)
                     scaleFade(present: false)
                     self.runAction(SKAction.sequence([SKAction.waitForDuration(PRESENTATION_TIME),SKAction.runBlock({
@@ -74,7 +76,6 @@ class InteractiveButton : Button {
         case .Speech:
             super.init(activeImageName: "button_speech", defaultImageName: "button_speech", action: {} )
         }
-        
         
         if type == .Option { targetAlpha = 0.75 }
         

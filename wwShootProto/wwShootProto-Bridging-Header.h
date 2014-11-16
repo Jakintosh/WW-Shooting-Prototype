@@ -11,5 +11,6 @@
 
 #import "SpineImport.h"
 #import "NHCSky.h"
+#import "NORLabelNode.h"
 
 #endif

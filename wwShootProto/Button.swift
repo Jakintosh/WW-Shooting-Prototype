@@ -15,6 +15,7 @@ class Button : NHCNode {
     let activeState: SKSpriteNode
     let defaultState: SKSpriteNode
     var completionAction: () -> Void
+    var activated: Bool = true
     
     // MARK: - Initializers
     init(activeImageName: String, defaultImageName: String, action: () -> Void) {
@@ -30,38 +31,54 @@ class Button : NHCNode {
     }
     
     // MARK: - Methods
+    func activate() {
+        activated = true
+    }
+    
+    func deactivate() {
+        activated = false
+    }
+    
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        activeState.hidden = false
-        defaultState.hidden = true
+        if activated {
+            activeState.hidden = false
+            defaultState.hidden = true
+        }
     }
 
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        var touch: UITouch = touches.allObjects[0] as UITouch
-        var location: CGPoint = touch.locationInNode(self)
-        
-        if defaultState.containsPoint(location) {
-            activeState.hidden = false
-            defaultState.hidden = true
-        } else {
-            activeState.hidden = true
-            defaultState.hidden = false
+        if activated {
+            var touch: UITouch = touches.allObjects[0] as UITouch
+            var location: CGPoint = touch.locationInNode(self)
+            
+            if defaultState.containsPoint(location) {
+                activeState.hidden = false
+                defaultState.hidden = true
+            } else {
+                activeState.hidden = true
+                defaultState.hidden = false
+            }
         }
     }
 
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        var touch: UITouch = touches.allObjects[0] as UITouch
-        var location: CGPoint = touch.locationInNode(self)
-        
-        if defaultState.containsPoint(location) {
-            completionAction()
+        if activated {
+            var touch: UITouch = touches.allObjects[0] as UITouch
+            var location: CGPoint = touch.locationInNode(self)
+            
+            if defaultState.containsPoint(location) {
+                completionAction()
+            }
+            
+            activeState.hidden = true
+            defaultState.hidden = false
         }
-        
-        activeState.hidden = true
-        defaultState.hidden = false
     }
     
     override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
-        activeState.hidden = true
-        defaultState.hidden = false
+        if activated {
+            activeState.hidden = true
+            defaultState.hidden = false
+        }
     }
 }

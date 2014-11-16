@@ -17,7 +17,7 @@ import SpriteKit
 
 class InteractionManager {
     
-    let ANIM_INTRO_CONSTANT_BAD_KILL_ME: CGFloat = 0.25
+    let ANIM_INTRO_CONSTANT_BAD_KILL_ME: CGFloat = 0.33
     
     // MARK: Properties
     var isInteracting: Bool                         = false
@@ -106,7 +106,7 @@ class InteractionManager {
             if let interaction = activeInteraction {
                 if let thisMoment = interaction.currentMoment {
                     if let entity = getEntity(interaction.otherEntityKey) {
-                        entity.speech.updateSpeechAlpha(CGFloat(timeLeftInMoment)/thisMoment.decisionLength)
+                        //entity.speech.updateSpeechAlpha(CGFloat(timeLeftInMoment)/thisMoment.decisionLength)
                     }
                 }
             }
@@ -141,7 +141,7 @@ class InteractionManager {
     func executeMomentTransition(#speech: String, animKey: String, animQueueKey: String, nextMomentKey: String) {
         if let interaction = activeInteraction {
             if let animEntity: AnimatableEntity = game.animationManager.getEntity(interaction.activeEntityKey) {
-                animEntity.setQueuedAnimation(animQueueKey)
+                animEntity.setQueuedAnimation(animQueueKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
                 animEntity.playAnimation(animKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
             }
             var offsetTotal: NSTimeInterval = 0.0
@@ -194,7 +194,7 @@ class InteractionManager {
                 // run initial animations
                 for (entityKey, info) in thisMoment.startAnimations {
                     if let animEnt: AnimatableEntity = game.animationManager.getEntity(entityKey as String) {
-                        animEnt.setQueuedAnimation(info["queue"] as String)
+                        animEnt.setQueuedAnimation(info["queue"] as String, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
                         animEnt.playAnimation( info["key"] as String, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME )
                     }
                 }
@@ -462,7 +462,6 @@ struct InteractionData {
 //        }
 //    }
 }
-
 
 // MARK: -
 struct InteractionCamera {

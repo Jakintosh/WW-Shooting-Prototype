@@ -27,10 +27,16 @@ class HomeScene : SKFuckScene {
     var debug: Bool = false
     let timeText: SKLabelNode = SKLabelNode()
     let tripleTap: UITapGestureRecognizer? = nil
+    let doubleTap: UITapGestureRecognizer! = nil
     
     override init(size: CGSize) {
         dad = Dad(startingRoom: house.startingRoom)
         super.init(size: size)
+        
+//        doubleTap = UITapGestureRecognizer(target: self, action: "handleDoubleTap:")
+//        doubleTap!.numberOfTouchesRequired = 1
+//        doubleTap!.numberOfTapsRequired = 2
+//        doubleTap!.cancelsTouchesInView = false
         
         tripleTap = UITapGestureRecognizer(target: self, action: "handleTripleTap:")
         tripleTap!.numberOfTouchesRequired = 3
@@ -41,6 +47,7 @@ class HomeScene : SKFuckScene {
     override func didMoveToView(view: SKView) {
         
         view.addGestureRecognizer(tripleTap!)
+//        view.addGestureRecognizer(doubleTap!)
         camCon.connectGestureRecognizers(view)
         
         // set up scene
@@ -52,6 +59,7 @@ class HomeScene : SKFuckScene {
     
     override func willMoveFromView(view: SKView) {
         view.removeGestureRecognizer(tripleTap!)
+//        view.removeGestureRecognizer(doubleTap!)
         camCon.disconnectGestureRecognizers(view)
     }
     
@@ -79,7 +87,7 @@ class HomeScene : SKFuckScene {
         }
         
         // set up "daughter"
-        daughter.position = CGPoint(x: 660, y: 1000)
+        daughter.position = CGPoint(x: 660, y: 1010)
         
         // camera stuff
         camCon.addHUDChild(timeText, withZ: 0)
@@ -134,7 +142,7 @@ class HomeScene : SKFuckScene {
         let locationWorld = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
     
-        dad.touchDown(locationScreen)
+        dad.touchDown(touch)
     }
     
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
@@ -142,7 +150,7 @@ class HomeScene : SKFuckScene {
         let locationWorld = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
 
-        dad.touchMove(locationScreen)
+        dad.touchMove()
     }
     
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
@@ -150,7 +158,7 @@ class HomeScene : SKFuckScene {
         let location = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
 
-        dad.touchEnd(locationScreen)
+        dad.touchEnd(touch)
     }
     
     override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
@@ -158,8 +166,14 @@ class HomeScene : SKFuckScene {
         let location = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
         
-        dad.touchEnd(locationScreen)
+        dad.touchEnd(touch)
     }
+    
+//    func handleDoubleTap(gestureRecognizer: UITapGestureRecognizer) {
+//        let sceneLoc = scene!.convertPointFromView(gestureRecognizer.locationInView(self.view!))
+//        
+//        dad.touchEnd(touch)
+//    }
     
     func handleTripleTap(gestureRecognizer: UITapGestureRecognizer) {
         house.toggleDebug()

@@ -20,6 +20,11 @@
 		2103B3731A11B64900CCDCB9 /* Water.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B36B1A11B64900CCDCB9 /* Water.png */; };
 		2103B3741A11B64900CCDCB9 /* Water@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2103B36C1A11B64900CCDCB9 /* Water@2x.png */; };
 		216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216101EB1A0D178B000AA0AB /* InteractiveButton.swift */; };
+		216B93861A17F3E9000F4D2D /* islandCounter.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93821A17F3E9000F4D2D /* islandCounter.png */; };
+		216B93871A17F3E9000F4D2D /* islandCounter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93831A17F3E9000F4D2D /* islandCounter@2x.png */; };
+		216B93881A17F3E9000F4D2D /* tvTable.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93841A17F3E9000F4D2D /* tvTable.png */; };
+		216B93891A17F3E9000F4D2D /* tvTable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93851A17F3E9000F4D2D /* tvTable@2x.png */; };
+		216B93981A186729000F4D2D /* NORLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 216B93971A186729000F4D2D /* NORLabelNode.m */; };
 		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
 		21B2E7B219F1B33600000E70 /* house.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B2E7B019F1B33600000E70 /* house.png */; };
 		21B2E7B319F1B33600000E70 /* house@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21B2E7B119F1B33600000E70 /* house@2x.png */; };
@@ -107,6 +112,12 @@
 		2103B36C1A11B64900CCDCB9 /* Water@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Water@2x.png"; path = "resources/Water@2x.png"; sourceTree = SOURCE_ROOT; };
 		2136D43019FDD31400DB07BD /* wwShootProto-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wwShootProto-Bridging-Header.h"; sourceTree = "<group>"; };
 		216101EB1A0D178B000AA0AB /* InteractiveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractiveButton.swift; sourceTree = "<group>"; };
+		216B93821A17F3E9000F4D2D /* islandCounter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = islandCounter.png; path = resources/house.atlas/islandCounter.png; sourceTree = SOURCE_ROOT; };
+		216B93831A17F3E9000F4D2D /* islandCounter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "islandCounter@2x.png"; path = "resources/house.atlas/islandCounter@2x.png"; sourceTree = SOURCE_ROOT; };
+		216B93841A17F3E9000F4D2D /* tvTable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tvTable.png; path = resources/house.atlas/tvTable.png; sourceTree = SOURCE_ROOT; };
+		216B93851A17F3E9000F4D2D /* tvTable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tvTable@2x.png"; path = "resources/house.atlas/tvTable@2x.png"; sourceTree = SOURCE_ROOT; };
+		216B93961A186729000F4D2D /* NORLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NORLabelNode.h; sourceTree = "<group>"; };
+		216B93971A186729000F4D2D /* NORLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NORLabelNode.m; sourceTree = "<group>"; };
 		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
 		21B2E7B019F1B33600000E70 /* house.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = house.png; path = resources/house.png; sourceTree = SOURCE_ROOT; };
 		21B2E7B119F1B33600000E70 /* house@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "house@2x.png"; path = "resources/house@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -234,6 +245,24 @@
 			name = Interactions;
 			sourceTree = "<group>";
 		};
+		216B938A1A18038A000F4D2D /* External Code */ = {
+			isa = PBXGroup;
+			children = (
+				216B93951A18671A000F4D2D /* NORLabelNode */,
+				21EA22C919FF001900A1E612 /* SpineImporter */,
+			);
+			name = "External Code";
+			sourceTree = "<group>";
+		};
+		216B93951A18671A000F4D2D /* NORLabelNode */ = {
+			isa = PBXGroup;
+			children = (
+				216B93961A186729000F4D2D /* NORLabelNode.h */,
+				216B93971A186729000F4D2D /* NORLabelNode.m */,
+			);
+			name = NORLabelNode;
+			sourceTree = "<group>";
+		};
 		2181E16C19D10E93009FE3FB /* Particles */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +325,7 @@
 		21B5AF7319CF8D17004B00C9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				216B938A1A18038A000F4D2D /* External Code */,
 				21EA22A119FDFBB300A1E612 /* Project Files */,
 				21EA229019FDEE5200A1E612 /* data */,
 				2181E16C19D10E93009FE3FB /* Particles */,
@@ -383,6 +413,10 @@
 		21D2071C1A105FC80019A73B /* house */ = {
 			isa = PBXGroup;
 			children = (
+				216B93821A17F3E9000F4D2D /* islandCounter.png */,
+				216B93831A17F3E9000F4D2D /* islandCounter@2x.png */,
+				216B93841A17F3E9000F4D2D /* tvTable.png */,
+				216B93851A17F3E9000F4D2D /* tvTable@2x.png */,
 				21D2071D1A105FD40019A73B /* Attic.png */,
 				21D2071E1A105FD40019A73B /* Attic@2x.png */,
 				21D2071F1A105FD40019A73B /* Bathroom.png */,
@@ -496,7 +530,6 @@
 			isa = PBXGroup;
 			children = (
 				21EB73B91A16AD0400BB9203 /* Promotions */,
-				21EA22C919FF001900A1E612 /* SpineImporter */,
 				21EA22A219FEB34F00A1E612 /* Game.swift */,
 				21EA22A419FEC78200A1E612 /* AnimationManager.swift */,
 				216101EA1A0D1667000AA0AB /* Interactions */,
@@ -590,6 +623,7 @@
 				2103B3711A11B64900CCDCB9 /* Sun.png in Resources */,
 				21B2E7B219F1B33600000E70 /* house.png in Resources */,
 				21EB818F1A0A5FCB00C7525D /* daughter.atlas in Resources */,
+				216B93891A17F3E9000F4D2D /* tvTable@2x.png in Resources */,
 				21D207381A105FD40019A73B /* Office_shaft@2x.png in Resources */,
 				21D207391A105FD40019A73B /* Office.png in Resources */,
 				2103B3721A11B64900CCDCB9 /* Sun@2x.png in Resources */,
@@ -598,7 +632,9 @@
 				21B7A47519F061430023EAE9 /* daughter_room@2x.png in Resources */,
 				21D207371A105FD40019A73B /* Office_shaft.png in Resources */,
 				21B7A47619F061430023EAE9 /* main.png in Resources */,
+				216B93881A17F3E9000F4D2D /* tvTable.png in Resources */,
 				21D2073B1A105FD40019A73B /* ParentsRoom.png in Resources */,
+				216B93871A17F3E9000F4D2D /* islandCounter@2x.png in Resources */,
 				21B7A47719F061430023EAE9 /* main@2x.png in Resources */,
 				21D207311A105FD40019A73B /* Kitchen.png in Resources */,
 				21D207321A105FD40019A73B /* Kitchen@2x.png in Resources */,
@@ -622,6 +658,7 @@
 				2103B36E1A11B64900CCDCB9 /* Balcony@2x.png in Resources */,
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */,
+				216B93861A17F3E9000F4D2D /* islandCounter.png in Resources */,
 				21D207351A105FD40019A73B /* MudRoom.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
 				2103B3731A11B64900CCDCB9 /* Water.png in Resources */,
@@ -658,6 +695,7 @@
 				21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
 				21EA22DB19FF001900A1E612 /* SGG_Spine.m in Sources */,
+				216B93981A186729000F4D2D /* NORLabelNode.m in Sources */,
 				2102C70419E1CF9F008E830A /* CameraController.swift in Sources */,
 				21EA22A319FEB34F00A1E612 /* Game.swift in Sources */,
 				21EA22DA19FF001900A1E612 /* SGG_SkinSprite.m in Sources */,

@@ -19,7 +19,6 @@ enum CharacterState {
 
 class Character : NHCNode {
     
-    
     let SCALE_THING: CGFloat = 0.33333
     
     var timeSinceTouchDown: NSTimeInterval = 0
@@ -72,6 +71,7 @@ class Character : NHCNode {
     func walk() {  }
     func interact() {  }
     func stopInteracting() {  }
+    func updateAwareness() {  }
     
     func moveToPoint(target: CGPoint, visible: Bool = true) {
         if state == .Idling || state == .Walking {
@@ -94,6 +94,9 @@ class Character : NHCNode {
             let moveAction = SKAction.moveTo(target, duration: NSTimeInterval(moveDuration))
             moveAction.timingMode = .EaseOut
             let idleThing = SKAction.runBlock( { self.idle() } )
+
+//            let completion = SKAction.runBlock({ self.updateAwareness() })
+            
             removeActionForKey("move")
             runAction(SKAction.sequence([ disappearAction, moveAction, appearAction, idleThing]), withKey: "move")
         }
@@ -204,7 +207,6 @@ class DadStairs : NHCNode {
                                             SKAction.waitForDuration(1.1),
                                             SKAction.runBlock(end)]) )
     }
-    
 }
 
 // MARK: -
@@ -216,6 +218,8 @@ class Dad : Character {
     var currentPath: HousePath
     
     var canUseStairs: Bool = false
+    
+    var touches: [UITouch] = [UITouch]()
     
 //    var button: Button?
     
@@ -234,11 +238,6 @@ class Dad : Character {
         animationNode.xScale = SCALE_THING
         animationNode.yScale = SCALE_THING
         setSpine("spine_dad_home_default")
-
-//        button = Button(activeImageName: "button_default", defaultImageName: "button_default", action: { self.useStairs() })
-//        button!.position = CGPoint(x: 110, y: 180)
-//        button!.hidden = true
-//        addChild(button!)
     }
     
     // update garbage
@@ -259,27 +258,7 @@ class Dad : Character {
                 if moveData.atEnd {
                     idle()
                 }
-                
-                // update house awareness
-                var isNearStairs = false
-                for stair in currentPath.stairs {
-                    if stair.pointIsInRange(position) {
-                        isNearStairs = true
-                        break
-                    }
-                }
-                if canUseStairs && !isNearStairs {
-                    canUseStairs = false
-                    dismissStairBox()
-                } else if !canUseStairs && isNearStairs {
-                    canUseStairs = true
-                    presentStairBox()
-                }
-                for (_,room) in currentFloor.rooms {
-                    if room.roomFrame.contains(position) {
-                        updateCurrentLocation(room)
-                    }
-                }
+                updateAwareness()
                 
             case .Interacting:
                 break
@@ -303,6 +282,28 @@ class Dad : Character {
             currentPath.setActive()
         }
     }
+    override func updateAwareness() {
+        // update house awareness
+        var isNearStairs = false
+        for stair in currentPath.stairs {
+            if stair.pointIsInRange(position) {
+                isNearStairs = true
+                break
+            }
+        }
+        if canUseStairs && !isNearStairs {
+            canUseStairs = false
+            dismissStairBox()
+        } else if !canUseStairs && isNearStairs {
+            canUseStairs = true
+            presentStairBox()
+        }
+        for (_,room) in currentFloor.rooms {
+            if room.roomFrame.contains(position) {
+                updateCurrentLocation(room)
+            }
+        }
+    }
     
     override func walk() {
         if state == .Idling {
@@ -313,6 +314,9 @@ class Dad : Character {
     }
     
     override func idle() {
+        if state == .Stairs {
+            updateAwareness()
+        }
         if state != .Interacting {
             state = .Idling
             animator.setQueuedAnimation("idle", introPeriod: 0.1)
@@ -321,8 +325,10 @@ class Dad : Character {
     }
     
     override func interact() {
+        idle()
         state = .Interacting
         self.removeActionForKey("move") // THIS MIGHT BREAK IT
+        
     }
     
     override func stopInteracting() {
@@ -330,8 +336,10 @@ class Dad : Character {
         animator.setQueuedAnimation("idle", introPeriod: 0.25)
     }
     
-    
-    func touchDown(screenLoc: CGPoint) {
+    func touchDown(touch: UITouch) {
+        self.touches.removeAll(keepCapacity: false)
+        self.touches.append(touch)
+        let screenLoc = self.touches.last!.locationInNode(scene)
         if state != .Stairs && state != .Interacting {
             timeSinceTouchDown = 0
             
@@ -347,44 +355,103 @@ class Dad : Character {
         }
     }
     
-    func touchMove(screenLoc: CGPoint) {
-        if state != .Interacting {
-            if screenLoc.x > 0 {
-                setOrientation(.Right)
-            } else {
-                setOrientation(.Left)
+    func touchMove() {
+        if let touch = self.touches.last {
+            let screenLoc = touch.locationInNode(scene)
+            if state == .Stairs {
+                return
             }
-        }
-        
-        if state != .Walking {
-            var moveDistance = movementSpeed * CGFloat(0.016)
-            if orientation == .Left { moveDistance *= -1 }
-            let atEnd: Bool = currentPath.getNewX(position.x, movement: moveDistance).atEnd
-            if !atEnd {
-                walk()
-            } else {
-                idle()
+            
+            var switched: Bool = false
+            if state != .Interacting {
+                self.removeActionForKey("move")
+                if screenLoc.x > 0 {
+                    if orientation == .Left { switched = true }
+                    setOrientation(.Right)
+                } else {
+                    if orientation == .Right { switched = true }
+                    setOrientation(.Left)
+                }
+            }
+            
+            if state != .Walking {
+                if switched {
+                    var moveDistance = movementSpeed * CGFloat(0.016)
+                    if orientation == .Left { moveDistance *= -1 }
+                    let atEnd: Bool = currentPath.getNewX(position.x, movement: moveDistance).atEnd
+                    if !atEnd {
+                        walk()
+                    } else {
+                        idle()
+                    }
+                }
             }
         }
     }
     
-    func touchEnd(screenLoc: CGPoint) {
-        if state != .Interacting && state != .Stairs {
-            if timeSinceTouchDown < 0.5 {
-                let worldPos = scene!.convertPoint(screenLoc, toNode: scene!.childNodeWithName("//Root_Node")!)
-                let house: House = scene!.childNodeWithName("//Root_House")! as House
-                if let newPos = house.getNewLocation(worldPos, fromRoom: currentRoom) {
-                    moveToPoint(newPos)
-                }
-            } else {
+    func touchEnd(touch: UITouch) {
+        // remove the touch
+//        for var i = 0; i < touches.count; i++ {
+//            if touches[i] as UITouch == touch {
+//                touches.removeAtIndex(i)
+//                break
+//            }
+//        }
+        self.touches.removeAll(keepCapacity: false)
+        if state != .Stairs {
+            // if no touches remain end it all
+            if touches.isEmpty {
                 idle()
             }
+        }
+//        let screenLoc = myTouch.locationInNode(scene)
+//        if state != .Interacting && state != .Stairs {
+////            if timeSinceTouchDown < 0.5 {
+////                let worldPos = scene!.convertPoint(screenLoc, toNode: scene!.childNodeWithName("//Root_Node")!)
+////                let house: House = scene!.childNodeWithName("//Root_House")! as House
+////                if let newPos = house.getNewLocation(worldPos, fromRoom: currentRoom) {
+////                    moveToPoint(newPos)
+////                }
+////            } else {
+////                idle()
+////            }
+//            idle()
+//            if myTouch === touch {
+//                self.touch = nil
+//            }
+//        }
+    }
+    
+    func doubleTap(screenLoc: CGPoint) {
+        walk()
+        let worldPos = scene!.convertPoint(screenLoc, toNode: scene!.childNodeWithName("//Root_Node")!)
+        let house: House = scene!.childNodeWithName("//Root_House")! as House
+        if let newPos = house.getNewLocation(worldPos, fromRoom: currentRoom) {
+            moveToPoint(newPos)
         }
     }
     
     // deal with later
     func presentStairBox() {
-        interactor.displayOption("Climb Stairs", completion: { self.useStairs() } , delay: 0.0)
+        var text: String = "Use <ERROR>"
+        for stair in currentPath.stairs {
+            if stair.pointIsInRange(position) {
+                if let door = stair.doorwayAnimation {
+                    switch stair.direction
+                    {
+                    case .Up:
+                        text = "Go Upstairs"
+                        
+                    case .Down:
+                        text = "Go Downstairs"
+                    }
+                } else if let ladder = stair.ladder {
+                    text = "Use Ladder"
+                }
+                break
+            }
+        }
+        interactor.displayOption(text, completion: { self.useStairs() } , delay: 0.0)
 //        button!.hidden = false
     }
     func useStairs() {
@@ -403,6 +470,7 @@ class Dad : Character {
                 targetPoint = stairDestination
                 moveToPoint(targetPoint, visible: false)
                 state = .Stairs
+                canUseStairs = false
             } else {
                 println("tried to use stairs but stairs return null destniation point")
                 return
@@ -423,5 +491,4 @@ class Dad : Character {
     func dismissStairBox() {
         interactor.dismissOption(1, delay: 0.0)
     }
-    
 }

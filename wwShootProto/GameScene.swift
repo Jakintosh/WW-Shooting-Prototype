@@ -90,7 +90,7 @@ class GameScene: SKScene {
         timeText.position = CGPoint(x: 138, y: 228)
         camCon.addHUDChild(timeText, withZ: 10)
         
-        partcleManager = ParticleManager(cc: camCon, numParticles: 750)
+        partcleManager = ParticleManager(cc: camCon, numParticles: 325)
         
         // setup reticle
         reticle.fillColor = SKColor.clearColor()

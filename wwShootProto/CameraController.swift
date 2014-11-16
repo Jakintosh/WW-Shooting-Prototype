@@ -58,7 +58,8 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
         
         pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "handlePinch:")
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePan:")
-        panGestureRecognizer?.maximumNumberOfTouches = 1
+        panGestureRecognizer!.maximumNumberOfTouches = 1
+        panGestureRecognizer!.cancelsTouchesInView = false
         
         addChild(hudNode)
         addChild(zoomNode)
