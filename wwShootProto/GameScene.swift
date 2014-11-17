@@ -15,172 +15,130 @@ class GameScene: SKScene {
     // properties
     var lastTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
+    var targetZoom: CGFloat = 0.0
+    var currentZoom: CGFloat = 0.0
     var rotation: Double = 0.0
-    
-    // components?
-    let reticle = SKShapeNode(circleOfRadius: 20)
-    let bg: NHCSky
-    var whales = [Whale]()
     var touchLocation: CGPoint?
     var touch: UITouch?
-    var char: SKSpriteNode
-    var sun: SKSpriteNode!
     
-    let timeText = SKLabelNode(fontNamed: "HelveticaNeue-Light")
-    
-    let homeButton = Button(activeImageName: "button_default", defaultImageName: "button_default", action: {})
-    let homeText = SKLabelNode(text: "Punch Out")
-    
-    // garbage
-    var moveType: Int = 1
+    // entities
+    var whales = [Whale]()
+    let char: Player       = Player()
+    var sun: Sun           = Sun()
+    let reticle: Reticle   = Reticle()
+    let bg: Background     = Background(sceneWidth: 320.0)
+    let railing: Railing   = Railing(sceneWidth: 320.0)
+    let water: Water       = Water(sceneWidth: 320.0)
     
     // systems
-    var partcleManager: ParticleManager?
     let camCon: CameraController = CameraController()
-    let swipeUpGesture: UISwipeGestureRecognizer?
+    let swipeUpGesture: UISwipeGestureRecognizer!
     
     // scene vars
-    let areaWidth: Float = 700
-    var areaPos: Float = 0
+    let areaWidth: CGFloat = 700.0
+    var currentAreaPos: CGFloat = 0.0
+    var targetAreaPos: CGFloat = 0.0
     
     // MARK: - initializers
     required init?(coder aDecoder: NSCoder) {
-        char = SKSpriteNode(imageNamed: "idle01")
-        bg = NHCSky(color: SKColor.blueColor(), size: CGSize(width: 700, height: 568))
         super.init(coder: aDecoder)
         
         swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-        swipeUpGesture!.numberOfTouchesRequired = 3
-        swipeUpGesture!.direction = .Up
-        swipeUpGesture!.cancelsTouchesInView = false
+        swipeUpGesture.numberOfTouchesRequired = 3
+        swipeUpGesture.direction = .Up
+        swipeUpGesture.cancelsTouchesInView = false
     }
     
     override init(size: CGSize) {
-        char = SKSpriteNode(imageNamed: "idle01")
-        bg = NHCSky(color: SKColor.blueColor(), size: CGSize(width: 700, height: 568))
         super.init(size: size)
         
+        let orca = Orca()
+        
         swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-        swipeUpGesture?.numberOfTouchesRequired = 3
-        swipeUpGesture?.direction = .Up
-        swipeUpGesture?.cancelsTouchesInView = false
+        swipeUpGesture.numberOfTouchesRequired = 3
+        swipeUpGesture.direction = .Up
+        swipeUpGesture.cancelsTouchesInView = false
     }
     
     // MARK: - UIKit
     override func didMoveToView(view: SKView) {
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        view.addGestureRecognizer(swipeUpGesture!)
+        view.addGestureRecognizer(swipeUpGesture)
         
-        areaPos = areaWidth/2
-        
+        // setup camera
         camCon.zPosition = 0.0
-        camCon.setCameraStartingPosition(CGPointMake(CGFloat(areaPos), frame.height/2))
+        camCon.setCameraStartingPosition(CGPointMake(0.0, 0.0))
         camCon.disableDebug()
         camCon.connectGestureRecognizers(view)
         self.addChild(camCon)
-        
-        bg.texture = SKTexture(imageNamed: "Sky")
-        bg.position = CGPoint(x: 350, y: 284)
-        camCon.addCameraChild(bg, withZ: -5000)
-        
-        timeText.fontSize = 18.0
-        timeText.verticalAlignmentMode = .Top
-        timeText.horizontalAlignmentMode = .Right
-        timeText.position = CGPoint(x: 138, y: 228)
-        camCon.addHUDChild(timeText, withZ: 10)
-        
-        partcleManager = ParticleManager(cc: camCon, numParticles: 325)
-        
-        // setup reticle
-        reticle.fillColor = SKColor.clearColor()
-        reticle.strokeColor = SKColor.redColor()
-        reticle.lineWidth = 3
-        camCon.addCameraChild(reticle, withZ: 200)
-        reticle.hidden = true
 
-        let water = SKSpriteNode(imageNamed: "Water")
-        water.anchorPoint = CGPointMake(0.5, 0.0)
-        water.position = CGPoint(x: 350, y: 0)
-        camCon.addCameraChild(water, withZ: -1)
-        
-        sun = SKSpriteNode(imageNamed: "Sun")
-        sun.position = CGPoint(x: 200, y: 400)
-        camCon.addCameraChild(sun, withZ: -100)
-        
-        let railing = SKSpriteNode(imageNamed: "Balcony")
-        railing.anchorPoint = CGPointMake(0.5, 0)
+        // set positions
         railing.position = CGPoint(x: 0, y: -frame.height/2)
-        railing.name = "rail"
-        camCon.addHUDChild(railing, withZ: 0)
+        water.position = CGPoint(x: 0, y: -frame.height/2)
         
-        char.anchorPoint = CGPoint(x: 0.5, y: 0)
-        char.xScale = 2.0
-        char.yScale = 2.0
-        char.position = CGPoint(x: 0, y: -frame.height/2 - 10)
-        camCon.addHUDChild(char, withZ: 1)
+        // add character to railing
+        char.zPosition = 1
+        railing.addChild(char)
         
-        homeText.fontSize = 16.0
-        homeText.verticalAlignmentMode = .Center
-        homeText.horizontalAlignmentMode = .Center
-        homeText.zPosition = 1
-        homeButton.addChild(homeText)
+        // add sun water and background
+        camCon.addCameraChild(bg, withZ: -500)
+        camCon.addCameraChild(sun, withZ: -490)
+        camCon.addCameraChild(water, withZ: -480)
         
-        homeButton.completionAction = {  self.transitionHome() }
-        homeButton.hidden = true
-        homeButton.position = Utilities2D.addPoint(CGPoint(x: 75, y: 100), toPoint: char.position)
-        camCon.addHUDChild(homeButton, withZ: 2)
+        // add character and railing
+        camCon.addCameraChild(railing, withZ: 0)
+        
+        // add reticle
+        camCon.addCameraChild(reticle, withZ: 100)
         
         // run actions
         runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: nil)}), SKAction.waitForDuration(10)])))
     }
     
     override func willMoveFromView(view: SKView) {
-        view.removeGestureRecognizer(swipeUpGesture!)
+        view.removeGestureRecognizer(swipeUpGesture)
     }
     
     // MARK: - Logic
     override func update(currentTime: CFTimeInterval) {
-        
         // time keeping
         deltaTime = Utilities2D.clamp(currentTime - lastTime, min: 0.0, max: 1.0)
         game.timeManager.update(deltaTime)
         lastTime = currentTime
-        timeText.text = "\(game.timeManager.currentTimeString())"
-        
-        if game.timeManager.currentHour() >= 17 {
-            quittinTime()
-        }
         
         // update reticle
-        var retPos: CGPoint? = nil
-        if let u_touchLocation = touchLocation {
-            reticle.hidden = false
-            reticle.position = u_touchLocation
-            reticle.position.y += 100
-            retPos = reticle.position
-            for whale in whales {
-                whale.update(touchPos: reticle.position, dt: deltaTime)
-            }
-        } else {
-            reticle.hidden = true
-            for whale in whales {
-                whale.update(touchPos: nil, dt: deltaTime)
-            }
+        reticle.update(touchLocation)
+        let sceneTouch = convertPoint(reticle.position, fromNode: camCon.rootNode)
+        for whale in whales {
+            whale.update(sceneTouch, dt: deltaTime)
         }
         
-        sun.position.y = (game.timeManager.currentDecimalTime() * -150.0) + 2700
-        println(sun.position.y)
+//        if !reticle.hidden {
+//            for whale in whales {
+//                whale.update(touchPos: reticle.position, dt: deltaTime)
+//            }
+//        } else {
+//            for whale in whales {
+//                whale.update(touchPos: nil)
+//            }
+//        }
         
-        // update camera position
-        updateCameraPosition()
+        // update sun position
+        sun.update()
         
         // update sky shader
-        bg.updateShader(game.timeManager.currentDecimalTime())
+        bg.update(game.timeManager.currentDecimalTime())
+
+        // update camera position
+        updateCameraPosition()
+        updateCameraZoom()
         
-        // why is the particle system updated like this
-        partcleManager?.updateSuction(touchPos: retPos, dt: deltaTime)
-        
+        // finally, update all of the camera changes
+        camCon.update(deltaTime)
+    }
+    
+//    func rotation() {
 //        let xData = game.motionManager.accelerometerData.acceleration.x
 //        let yData = game.motionManager.accelerometerData.acceleration.y
 //        let zData = game.motionManager.accelerometerData.acceleration.z
@@ -189,44 +147,55 @@ class GameScene: SKScene {
 //        nextAngle = nextAngle + ((rotation - nextAngle) * 0.01)
 //        rotation = nextAngle
 //        camCon.setRotiation(CGFloat(nextAngle+(M_PI/2.0)))
+//    }
+    
+    func updateCameraZoom() {
+        // camera panning
+        if let u_touch = touch {
+            targetZoom = 1.0
+        } else {
+            targetZoom = 0.0
+        }
         
-        // finally, update all of the camera changes
-        camCon.update(deltaTime)
+        currentZoom = Utilities2D.lerpFrom(currentZoom, toNum: targetZoom, atPosition: 0.05)
+        
+        railing.updateZoom(currentZoom)
+        water.updateZoom(currentZoom)
     }
     
     func updateCameraPosition() {
+        
         // camera panning
         if let u_touch = touch {
-            touchLocation = u_touch.locationInNode(camCon.rootNode)
-            
             let sceneX = u_touch.locationInNode(scene).x
-            let limit = frame.width/6
+            let limit = frame.width/6.0
             if sceneX > limit {
-                let mod: Float = Float((sceneX-limit)/limit) * Float((sceneX-limit)/limit) + 1
-                areaPos += mod
+                let mod: CGFloat = (sceneX-limit)/limit * (sceneX-limit)/limit + 1
+                targetAreaPos += mod * 2.0
             } else if sceneX < -limit {
-                let mod: Float = Float((sceneX+limit)/limit) * Float((sceneX+limit)/limit) + 1
-                areaPos -= mod
+                let mod: CGFloat = (sceneX+limit)/limit * (sceneX+limit)/limit + 1
+                targetAreaPos -= mod * 2.0
             }
+        } else {
+            targetAreaPos = 0.0
         }
-        if areaPos > areaWidth - Float(frame.width/2) {
-            areaPos = areaWidth - Float(frame.width/2)
-        }
-        if areaPos < Float(frame.width/2) {
-            areaPos = Float(frame.width/2)
-        }
-        camCon.setCameraPosition(CGPoint(x: Double(areaPos), y: Double(frame.height/2)))
-    }
-    
-    func quittinTime() {
-        if homeButton.hidden {
-            homeButton.hidden = false
-        }
+        
+        // clamp it within range
+        targetAreaPos = Utilities2D.clamp(targetAreaPos, min: -areaWidth/2, max: areaWidth/2)
+        currentAreaPos = Utilities2D.lerpFrom(currentAreaPos, toNum: targetAreaPos, atPosition: 0.05)
+        
+        let normalized = currentAreaPos/(areaWidth/2.0)
+        railing.updatePosition(normalized)
+        water.updatePosition(normalized)
+        bg.updatePosition(normalized)
+        
+//        camCon.setCameraPosition(CGPoint(x:areaPos, y:0.0))
     }
     
     func addWhale(position pos: CGPoint?) {
-        let newWhale = Whale(partMan: partcleManager!)
-        camCon.addCameraChild(newWhale, withZ: 0)
+        let newWhale = Orca()
+        newWhale.zPosition = 1
+        water.addChild(newWhale)
         whales += [newWhale]
         
         if let whalePos = pos {
@@ -234,11 +203,11 @@ class GameScene: SKScene {
         } else {
             newWhale.position.y = frame.size.height/2 - 400
             if arc4random_uniform(2) != 0 {
-                newWhale.position.x = CGFloat(areaWidth/2 - 200)
-                newWhale.move(moveType, direction: 1)
+                newWhale.position.x = CGFloat(-150)
+                newWhale.jump()
             } else {
-                newWhale.position.x = CGFloat(areaWidth/2 + 200)
-                newWhale.move(moveType, direction: -1)
+                newWhale.position.x = CGFloat(150)
+                newWhale.jump()
             }
         }
     }
@@ -268,6 +237,7 @@ class GameScene: SKScene {
         for touch: AnyObject in touches {
             touchLocation = touch.locationInNode(camCon.rootNode)
             self.touch = touch as? UITouch
+            targetAreaPos = water.convertPoint(touchLocation!, fromNode: camCon.rootNode).x
         }
     }
     
@@ -283,12 +253,12 @@ class GameScene: SKScene {
         touch = nil
         
         for whale in whales {
-            whale.disengage()
+//            whale.disengage()
         }
     }
     
     func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
-        transitionHome()
-//        camCon.shake(20.0, duration: 2.0)
+//        transitionHome()
+        camCon.shake(20.0, duration: 2.0)
     }
 }

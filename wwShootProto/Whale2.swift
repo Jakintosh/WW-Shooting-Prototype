@@ -9,50 +9,11 @@
 import Foundation
 import SpriteKit
 
-class CanisterManager {
-    
-    let dailyQuota: Int
-    let energyPerCanister: Int
-    var numFullCanisters: Int
-    var currentEnergy: Int
-    
-    
-    init() {
-        dailyQuota = 8
-        energyPerCanister = 500
-        numFullCanisters = 0
-        currentEnergy = 0
-    }
-    
-    func addEnergy() {
-        
-        currentEnergy++
-        
-        if currentEnergy >= energyPerCanister {
-            currentEnergy -= energyPerCanister
-            numFullCanisters++
-        }
-    }
-    
-    func getPercentage() -> Float {
-        let percentage = Float(currentEnergy)/Float(energyPerCanister)
-        if percentage < 0       { return 0 }
-        else if percentage > 1  { return 1 }
-        else                    { return percentage }
-    }
-    
-}
-
-class ParticleManager {
+class ParticleManager2 {
     
     let camCon: CameraController
-    let canMan: CanisterManager
     
-    let canisterLabel: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
-    let canisterBG: SKShapeNode = SKShapeNode(rect: CGRectMake(-140, -16, 280, 32))
-    let canisterMeter: SKShapeNode = SKShapeNode(rect: CGRectMake(0, -14, 272, 28))
-    
-    var particles: [EnergyParticle] = [EnergyParticle]()
+    var particles: [EnergyParticle2] = [EnergyParticle2]()
     var availableParticles: [Int] = [Int]()
     var numParticles: Int = 0
     
@@ -62,7 +23,7 @@ class ParticleManager {
     
     var queueSize: Int = 0
     var spawnPos: CGPoint = CGPointZero
-    var particleSpawn: (EnergyParticle) -> () = {EnergyParticle in}
+    var particleSpawn: (EnergyParticle2) -> () = {EnergyParticle in}
     
     let maxQueuePerTick: Int = 20
     let spewSpeed: Double = 1000
@@ -70,39 +31,23 @@ class ParticleManager {
     init(cc: CameraController, numParticles: Int) {
         self.numParticles = numParticles
         self.camCon = cc
-        self.canMan = CanisterManager()
         for i in 0..<numParticles {
-            let newParticle = EnergyParticle(root: camCon.rootNode, index: i, emitter: self)
+            let newParticle = EnergyParticle2(root: camCon.rootNode, index: i, emitter: self)
             availableParticles += [i]
             particles += [newParticle]
         }
         
-        canisterBG.position = CGPointMake(0, 248)
-        canisterBG.fillColor = SKColor.blackColor()
-        canisterBG.strokeColor = SKColor.clearColor()
-        canisterMeter.position = CGPointMake(-138, 248)
-        canisterMeter.fillColor = SKColor.greenColor()
-        canisterMeter.strokeColor = SKColor.clearColor()
-        canisterLabel.position = CGPointMake(-140, 228)
-        canisterLabel.text = "\(canMan.numFullCanisters)/\(canMan.dailyQuota)"
-        canisterLabel.fontSize = 18.0
-        canisterLabel.horizontalAlignmentMode = .Left
-        canisterLabel.verticalAlignmentMode = .Top
-        camCon.addHUDChild(canisterLabel, withZ: 100)
-        camCon.addHUDChild(canisterBG, withZ: 50)
-        camCon.addHUDChild(canisterMeter, withZ: 51)
-        
     }
     
-    func addToQueue(position: CGPoint, completion: (EnergyParticle) -> (), num: Int = 1) {
+    func addToQueue(position: CGPoint, completion: (EnergyParticle2) -> (), num: Int = 1) {
         queueSize = num
         spawnPos = position
         particleSpawn = completion
     }
     
-    func spawnParticle(position: CGPoint) -> EnergyParticle? {
+    func spawnParticle(position: CGPoint) -> EnergyParticle2? {
         if availableParticles.count > 0 {
-            var selected: EnergyParticle = particles[availableParticles.removeAtIndex(0)]
+            var selected: EnergyParticle2 = particles[availableParticles.removeAtIndex(0)]
             selected.addMe(position)
             return selected
         }
@@ -118,7 +63,6 @@ class ParticleManager {
         var par = particles[index]
         let completion: ()->() = {
             self.removeParticle(index)
-            self.canMan.addEnergy()
         }
         par.particle.runAction(SKAction.sequence([SKAction.moveTo(par.root.convertPoint(CGPointMake(0, -par.particle.scene!.frame.height/2), fromNode: par.particle.scene!), duration: 0.25), SKAction.runBlock(completion)]))
     }
@@ -166,21 +110,19 @@ class ParticleManager {
                 }
             }
         }
-        canisterMeter.xScale = CGFloat(canMan.getPercentage())
-        canisterLabel.text = "\(canMan.numFullCanisters)/\(canMan.dailyQuota)"
     }
     
 }
 
-class EnergyParticle {
+class EnergyParticle2 {
     
     let particle: SKSpriteNode
     let root: SKNode
     var active: Bool = false
     let index: Int
-    let emitter: ParticleManager
+    let emitter: ParticleManager2
     
-    init(root: SKNode, index: Int, emitter: ParticleManager ) {
+    init(root: SKNode, index: Int, emitter: ParticleManager2 ) {
         self.index = index
         self.root = root
         self.emitter = emitter
@@ -239,27 +181,28 @@ class EnergyParticle {
     
 }
 
-class EnergyWell {
+class EnergyWell2 {
     
     enum EnergyWellActivation {
         case NoPower, HalfPower, FullPower
     }
-    
-    var particles: [EnergyParticle] = [EnergyParticle]()
-    var particleMan: ParticleManager
+//    
+//    var particles: [EnergyParticle] = [EnergyParticle]()
+//    var particleMan: ParticleManager
     
     let well: SKShapeNode
     let fillMeter: SKShapeNode
     let lockOn: Float = 2
     var filled: Bool = true
     var lockFill: Float = 0
+    var lockedOn: Bool = false
     var fillPath: UIBezierPath = UIBezierPath()
     var activationLevel: EnergyWellActivation = .NoPower
     
-    let numParticlesInBurst: Int = 275
-    let maxBurstDistance: UInt32 = 175
+//    let numParticlesInBurst: Int = 275
+//    let maxBurstDistance: UInt32 = 175
     
-    init(partMan: ParticleManager) {
+    init() {
         well = SKShapeNode()
         well.path = CGPathCreateWithEllipseInRect(CGRectMake(-20, -20, 40, 40), nil)
         well.strokeColor = SKColor.orangeColor()
@@ -272,41 +215,40 @@ class EnergyWell {
         fillMeter.lineWidth = 3
         
         fillPath.moveToPoint(CGPointMake(0, 25))
-        
-        particleMan = partMan
     }
     
     func updateProgress(dt: CFTimeInterval) {
-        
         if filled {
-            
-            switch(activationLevel) {
-                
-            case .NoPower:
-                lockFill -= Float(dt/2.0)
-                
-            case .HalfPower:
-                lockFill += Float(dt/3.0)
-                
-            case .FullPower:
-                lockFill += Float(dt)
-                
+            switch(activationLevel)
+            {
+                case .NoPower:
+                    lockFill -= Float(dt/2.0)
+                    
+                case .HalfPower:
+                    lockFill += Float(dt/3.0)
+                    
+                case .FullPower:
+                    lockFill += Float(dt)
             }
             
             if lockFill < 0 { lockFill = 0.00; fillMeter.alpha = 0.0 }
             else { fillMeter.alpha = 1.0 }
-            if lockFill > lockOn { lockFill = lockOn; /*burst()*/ whatTheFuck() }
+            if lockFill > lockOn {
+                lockFill = lockOn
+                lockedOn = true
+                filled = false
+            }
             
             var mod: Float = lockFill/lockOn
             mod *= Float(2*M_PI)
             mod = Float(M_PI/2) - mod
             
             fillPath.removeAllPoints()
-            fillPath.addArcWithCenter(CGPointMake(CGFloat(0), CGFloat(0)),
-                radius: CGFloat(25),
-                startAngle: CGFloat(M_PI/2),
-                endAngle: CGFloat(mod),
-                clockwise: false)
+            fillPath.addArcWithCenter(  CGPointMake(0.0, 0.0),
+                                        radius: 25.0,
+                                        startAngle: CGFloat(M_PI/2.0),
+                                        endAngle: CGFloat(mod),
+                                        clockwise: false )
             
             fillMeter.path = nil
             fillMeter.path = fillPath.CGPath
@@ -315,7 +257,8 @@ class EnergyWell {
     
     func activate(#activation: EnergyWellActivation) {
         if filled {
-            switch (activation) {
+            switch (activation)
+            {
             case .NoPower:
                 activationLevel = .NoPower
                 well.strokeColor = SKColor.orangeColor()
@@ -338,9 +281,6 @@ class EnergyWell {
     }
     
     func burst() {
-        
-        whatTheFuck()
-        
         fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
         filled = false
         activationLevel = .NoPower
@@ -348,26 +288,14 @@ class EnergyWell {
         well.fillColor = SKColor.clearColor()
     }
     
-    func whatTheFuck() {
-        let start = well.parent!.convertPoint(well.position, toNode: well.parent!.parent!)
-        let closureThing: (EnergyParticle) -> () = { (particle: EnergyParticle) -> () in
-            let distance = Float(arc4random_uniform(self.maxBurstDistance))
-            let angle = Float(arc4random_uniform(360)) * Float(M_PI / 180)
-            let end = CGPointMake(CGFloat(cos(angle)*distance) + start.x, CGFloat(sin(angle)*distance) + start.y)
-            let duration = CGFloat(arc4random_uniform(2))/10.0
-            particle.setMovement(start: start, end: end, duration: Float(duration + 0.9))
-        }
-        particleMan.addToQueue(start, completion: closureThing, num: 2)
-    }
-    
 }
 
-class Whale : SKSpriteNode {
+class Whale2 : SKSpriteNode {
     
-    var weakSpots = [EnergyWell]()
+    let explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
+    
+    var weakSpots = [EnergyWell2]()
     var moveSpeed: Float = 7
-    
-    var particleMan: ParticleManager?
     
     override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
         super.init(texture: texture, color: color, size: size)
@@ -377,17 +305,21 @@ class Whale : SKSpriteNode {
         super.init(coder: aDecoder)
     }
     
-    convenience init(partMan: ParticleManager) {
-        self.init(texture: SKTexture(imageNamed: "whale"), color: SKColor.whiteColor(), size: SKTexture(imageNamed: "whale").size())
-        particleMan = partMan
+    override convenience init() {
+        let whaleTexture = SKTexture(imageNamed: "whale")
+        self.init(texture: whaleTexture, color: SKColor.whiteColor(), size: whaleTexture.size())
         addWeakPoint(position: CGPointMake(-20, 50))
     }
     
     func update(#touchPos: CGPoint?, dt: CFTimeInterval) {
-        if let theScene = self.parent {
+        if let theScene = self.scene {
             if let u_touchPos = touchPos {
                 let touchInWhaleSpace = theScene.convertPoint(u_touchPos, toNode: self)
                 for ws in weakSpots {
+                    if ws.lockedOn {
+                        explode()
+                        ws.lockedOn = false
+                    }
                     let a = touchInWhaleSpace.x - ws.well.position.x
                     let b = touchInWhaleSpace.y - ws.well.position.y
                     let distSq = (a*a)+(b*b)
@@ -402,15 +334,13 @@ class Whale : SKSpriteNode {
             }
         }
         
-//        particleMan?.updateSuction(touchPos: touchPos, dt: dt)
-        
         for ws in weakSpots {
             ws.updateProgress(dt)
         }
     }
     
     func addWeakPoint(position pos: CGPoint) {
-        let newWeakPoint = EnergyWell(partMan: particleMan!)
+        let newWeakPoint = EnergyWell2()
         newWeakPoint.setPosition(pos: pos)
         newWeakPoint.well.zPosition = zPosition + 1
         newWeakPoint.fillMeter.zPosition = zPosition + 1
@@ -420,72 +350,28 @@ class Whale : SKSpriteNode {
         weakSpots += [newWeakPoint]
     }
     
-    func move(type: Int, direction dir: CGFloat) {
+    func move(direction dir: CGFloat) {
+        zRotation = 0.3 * dir
+        let rotateAction = SKAction.rotateByAngle((-0.3 * dir), duration: 3.0)
+        let moveUpAction = SKAction.moveByX(0, y: 400, duration: 3.0)
+        let floatAction = SKAction.moveByX(0, y: -10, duration: 2.0)
+        floatAction.timingMode = .EaseInEaseOut
+        let hoverAction = SKAction.repeatActionForever(SKAction.sequence([floatAction, floatAction.reversedAction()]))
+        rotateAction.timingMode = .EaseOut
+        moveUpAction.timingMode = .EaseOut
         xScale = dir
-        
-        if let theScene = scene {
-            
-            switch(type) {
-            
-            case 0:
-                let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2) * dir, duration: NSTimeInterval(moveSpeed))
-                let moveX = SKAction.moveByX(dir * 400, y: 0, duration: NSTimeInterval(moveSpeed))
-                let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
-                let moveDown = moveUp.reversedAction()
-                moveUp.timingMode = .EaseOut
-                moveDown.timingMode = .EaseIn
-                
-                let die = SKAction.runBlock({ () -> Void in
-                    (self.scene! as GameScene).removeWhale(whale: self)
-                    self.removeFromParent()
-                    self.removeAllActions()
-                    self.removeAllChildren()
-                })
-                
-                runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
-
-                
-            case 1:
-                let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2) * dir, duration: NSTimeInterval(moveSpeed))
-                let moveX = SKAction.moveByX(dir * 400, y: 0, duration: NSTimeInterval(moveSpeed))
-                let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
-                let moveDown = moveUp.reversedAction()
-                moveUp.timingFunction = { (dt: Float) -> (Float) in
-                    return 1 - ((1 - dt) * (1 - dt) * (1 - dt))
-                }
-                moveDown.timingFunction = { (dt: Float) -> (Float) in
-                    return (dt * dt * dt)
-                }
-                
-                let die = SKAction.runBlock({ () -> Void in
-                    (self.scene! as GameScene).removeWhale(whale: self)
-                    self.removeFromParent()
-                    self.removeAllActions()
-                    self.removeAllChildren()
-                })
-                
-                runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
-
-                
-            default:
-                let rotate = SKAction.rotateByAngle(-CGFloat(M_PI_2) * dir, duration: NSTimeInterval(moveSpeed))
-                let moveX = SKAction.moveByX(dir * 400, y: 0, duration: NSTimeInterval(moveSpeed))
-                let moveUp = SKAction.moveByX(0, y: 500, duration: NSTimeInterval(moveSpeed)/2)
-                let moveDown = moveUp.reversedAction()
-                moveUp.timingMode = .EaseOut
-                moveDown.timingMode = .EaseIn
-                
-                let die = SKAction.runBlock({ () -> Void in
-                    (self.scene! as GameScene).removeWhale(whale: self)
-                    self.removeFromParent()
-                    self.removeAllActions()
-                    self.removeAllChildren()
-                })
-                
-                runAction(SKAction.group([rotate, moveX, SKAction.sequence([moveUp, moveDown, die])]))
-                
-            }
-        }
+        runAction(SKAction.sequence([SKAction.group([rotateAction, moveUpAction]), hoverAction]))
+    }
+    
+    func explode() {
+        let growFade = SKAction.group([ SKAction.scaleXTo(10.0 * xScale, y: 10.0, duration: 0.5), SKAction.fadeAlphaTo(0.0, duration: 0.5) ])
+        let remove = SKAction.runBlock({
+            self.removeFromParent()
+            self.removeAllChildren()
+            self.removeAllActions()
+        })
+        runAction(SKAction.sequence([explosionSound,growFade,remove]))
+        (scene! as GameScene).camCon.shake(25, duration: 1.5)
     }
     
     func disengage() {

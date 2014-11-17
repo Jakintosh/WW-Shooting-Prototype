@@ -83,7 +83,7 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
                 shakeDuration = 0.0
                 shakeIntensity = 0.0
             } else {
-                var random: CGFloat = (CGFloat(arc4random()%100)/100.0) * shakeIntensity * CGFloat(shakeRemaining/shakeDuration)
+                var random: CGFloat = ((CGFloat(arc4random()%200)-100.0)/100.0) * shakeIntensity * CGFloat(shakeRemaining/shakeDuration)
                 rootNode.position = Utilities2D.addPoint(CGPoint(x: random, y: random), toPoint: rootNode.position)
             }
         }
