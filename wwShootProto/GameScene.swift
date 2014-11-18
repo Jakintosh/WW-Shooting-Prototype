@@ -33,6 +33,7 @@ class GameScene: SKScene {
     // systems
     let camCon: CameraController = CameraController()
     let swipeUpGesture: UISwipeGestureRecognizer!
+    let particleEmitter = EnergyParticleEmitter(num: 500)
     
     // scene vars
     let areaWidth: CGFloat = 700.0
@@ -51,8 +52,6 @@ class GameScene: SKScene {
     
     override init(size: CGSize) {
         super.init(size: size)
-        
-        let orca = Orca()
         
         swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
         swipeUpGesture.numberOfTouchesRequired = 3
@@ -93,7 +92,7 @@ class GameScene: SKScene {
         camCon.addCameraChild(reticle, withZ: 100)
         
         // run actions
-        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: nil)}), SKAction.waitForDuration(10)])))
+        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: CGPoint(x: -250, y: -225), mirrored: false)}), SKAction.waitForDuration(10)])))
     }
     
     override func willMoveFromView(view: SKView) {
@@ -114,25 +113,26 @@ class GameScene: SKScene {
             whale.update(sceneTouch, dt: deltaTime)
         }
         
-//        if !reticle.hidden {
-//            for whale in whales {
-//                whale.update(touchPos: reticle.position, dt: deltaTime)
-//            }
-//        } else {
-//            for whale in whales {
-//                whale.update(touchPos: nil)
-//            }
-//        }
-        
         // update sun position
         sun.update()
         
         // update sky shader
         bg.update(game.timeManager.currentDecimalTime())
-
+        
         // update camera position
         updateCameraPosition()
         updateCameraZoom()
+        
+        // update particles
+        let particleUpdate: (EnergyParticle)->Void = { particle in
+            if let coordSys = particle.parent {
+                let retPos = self.convertPoint(sceneTouch, toNode: coordSys)
+                let distanceSq = Utilities2D.distanceSquaredFromPoint(particle.position, toPoint: retPos)
+                if distanceSq < (30*30) {
+                    particle.remove()
+        }   }   }
+        particleEmitter.update(deltaTime)
+        if !reticle.hidden { particleEmitter.updateParticles(particleUpdate) }
         
         // finally, update all of the camera changes
         camCon.update(deltaTime)
@@ -150,6 +150,7 @@ class GameScene: SKScene {
 //    }
     
     func updateCameraZoom() {
+        
         // camera panning
         if let u_touch = touch {
             targetZoom = 1.0
@@ -157,10 +158,11 @@ class GameScene: SKScene {
             targetZoom = 0.0
         }
         
-        currentZoom = Utilities2D.lerpFrom(currentZoom, toNum: targetZoom, atPosition: 0.05)
+        currentZoom = Utilities2D.lerpFrom(currentZoom, toNum: targetZoom, atPosition: 0.1)
         
         railing.updateZoom(currentZoom)
         water.updateZoom(currentZoom)
+        
     }
     
     func updateCameraPosition() {
@@ -182,33 +184,32 @@ class GameScene: SKScene {
         
         // clamp it within range
         targetAreaPos = Utilities2D.clamp(targetAreaPos, min: -areaWidth/2, max: areaWidth/2)
-        currentAreaPos = Utilities2D.lerpFrom(currentAreaPos, toNum: targetAreaPos, atPosition: 0.05)
+        currentAreaPos = Utilities2D.lerpFrom(currentAreaPos, toNum: targetAreaPos, atPosition: 0.1)
         
         let normalized = currentAreaPos/(areaWidth/2.0)
         railing.updatePosition(normalized)
         water.updatePosition(normalized)
         bg.updatePosition(normalized)
         
-//        camCon.setCameraPosition(CGPoint(x:areaPos, y:0.0))
+//      camCon.setCameraPosition(CGPoint(x:areaPos, y:0.0))
     }
     
-    func addWhale(position pos: CGPoint?) {
-        let newWhale = Orca()
-        newWhale.zPosition = 1
-        water.addChild(newWhale)
-        whales += [newWhale]
+    func addWhale(position pos: CGPoint, mirrored: Bool) {
         
-        if let whalePos = pos {
-            newWhale.position = whalePos
-        } else {
-            newWhale.position.y = frame.size.height/2 - 400
-            if arc4random_uniform(2) != 0 {
-                newWhale.position.x = CGFloat(-150)
-                newWhale.jump()
-            } else {
-                newWhale.position.x = CGFloat(150)
-                newWhale.jump()
-            }
+        let orca = true
+        
+        if orca {
+            let onDeath: (pos: CGPoint) -> Void = { pos in self.particleEmitter.addToQueue(200, pos: pos, root: self.water) }
+            let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
+            
+            let newWhale = Orca(onDeath: onDeath, ss)
+            newWhale.zPosition = 1
+            water.addChild(newWhale)
+            whales += [newWhale]
+            
+            newWhale.position = pos
+            newWhale.mirror(mirrored)
+            newWhale.jump()
         }
     }
     

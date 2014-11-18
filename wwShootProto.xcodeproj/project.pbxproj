@@ -30,7 +30,6 @@
 		21B5AF8419CF8D17004B00C9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF8219CF8D17004B00C9 /* LaunchScreen.xib */; };
 		21B5AF9019CF8D17004B00C9 /* wwShootProtoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF8F19CF8D17004B00C9 /* wwShootProtoTests.swift */; };
 		21B5AF9A19CF8D80004B00C9 /* textures.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21B5AF9919CF8D80004B00C9 /* textures.atlas */; };
-		21B5AF9F19CF9336004B00C9 /* Whale2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5AF9E19CF9336004B00C9 /* Whale2.swift */; };
 		21B7A46A19EB1E020023EAE9 /* HomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B7A46919EB1E020023EAE9 /* HomeScene.swift */; };
 		21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B7A46E19F058470023EAE9 /* LoadingScene.swift */; };
 		21D2072D1A105FD40019A73B /* Attic.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2071D1A105FD40019A73B /* Attic.png */; };
@@ -60,6 +59,8 @@
 		21E3B6311A1929ED00195D36 /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E3B6301A1929ED00195D36 /* Background.swift */; };
 		21E3B6331A19904C00195D36 /* Whale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E3B6321A19904C00195D36 /* Whale.swift */; };
 		21E3B6351A19B37B00195D36 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E3B6341A19B37B00195D36 /* ParticleManager.swift */; };
+		21E3B6371A1AA31200195D36 /* whale_orca.json in Resources */ = {isa = PBXBuildFile; fileRef = 21E3B6361A1AA31200195D36 /* whale_orca.json */; };
+		21E3B6391A1AA32E00195D36 /* whale_orca.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21E3B6381A1AA32E00195D36 /* whale_orca.atlas */; };
 		21EA229619FDEE5200A1E612 /* testDayOne.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229419FDEE5200A1E612 /* testDayOne.plist */; };
 		21EA229C19FDEFA000A1E612 /* main.json in Resources */ = {isa = PBXBuildFile; fileRef = 21EA229B19FDEFA000A1E612 /* main.json */; };
 		21EA22A319FEB34F00A1E612 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EA22A219FEB34F00A1E612 /* Game.swift */; };
@@ -122,7 +123,6 @@
 		21B5AF8E19CF8D17004B00C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21B5AF8F19CF8D17004B00C9 /* wwShootProtoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wwShootProtoTests.swift; sourceTree = "<group>"; };
 		21B5AF9919CF8D80004B00C9 /* textures.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = textures.atlas; path = resources/textures.atlas; sourceTree = SOURCE_ROOT; };
-		21B5AF9E19CF9336004B00C9 /* Whale2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Whale2.swift; sourceTree = "<group>"; };
 		21B7A46919EB1E020023EAE9 /* HomeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScene.swift; sourceTree = "<group>"; };
 		21B7A46E19F058470023EAE9 /* LoadingScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingScene.swift; sourceTree = "<group>"; };
 		21D2071D1A105FD40019A73B /* Attic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Attic.png; path = resources/house.atlas/Attic.png; sourceTree = SOURCE_ROOT; };
@@ -152,6 +152,8 @@
 		21E3B6301A1929ED00195D36 /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Background.swift; path = Entities/Background.swift; sourceTree = "<group>"; };
 		21E3B6321A19904C00195D36 /* Whale.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Whale.swift; path = Entities/Whale.swift; sourceTree = "<group>"; };
 		21E3B6341A19B37B00195D36 /* ParticleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParticleManager.swift; path = Entities/ParticleManager.swift; sourceTree = "<group>"; };
+		21E3B6361A1AA31200195D36 /* whale_orca.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = whale_orca.json; sourceTree = "<group>"; };
+		21E3B6381A1AA32E00195D36 /* whale_orca.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = whale_orca.atlas; path = resources/whale_orca/whale_orca.atlas; sourceTree = SOURCE_ROOT; };
 		21EA229419FDEE5200A1E612 /* testDayOne.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = testDayOne.plist; sourceTree = "<group>"; };
 		21EA229B19FDEFA000A1E612 /* main.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = main.json; sourceTree = "<group>"; };
 		21EA22A219FEB34F00A1E612 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -273,7 +275,6 @@
 		21B2E7B919F46C2500000E70 /* Work */ = {
 			isa = PBXGroup;
 			children = (
-				21B5AF9E19CF9336004B00C9 /* Whale2.swift */,
 				21E3B6321A19904C00195D36 /* Whale.swift */,
 				21E3B6141A191BE000195D36 /* Railing.swift */,
 				21E3B6181A191E3800195D36 /* Player.swift */,
@@ -335,6 +336,7 @@
 				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
 				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
 				21EB81891A0A5FC100C7525D /* dad.atlas */,
+				21E3B6381A1AA32E00195D36 /* whale_orca.atlas */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -474,6 +476,7 @@
 		21EA22A619FED83E00A1E612 /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				21E3B6361A1AA31200195D36 /* whale_orca.json */,
 				21EB818E1A0A5FCB00C7525D /* daughter.json */,
 				21EB818A1A0A5FC100C7525D /* dad.json */,
 				21EA229B19FDEFA000A1E612 /* main.json */,
@@ -647,8 +650,10 @@
 				21D207381A105FD40019A73B /* Office_shaft@2x.png in Resources */,
 				21D2073B1A105FD40019A73B /* ParentsRoom.png in Resources */,
 				21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */,
+				21E3B6391A1AA32E00195D36 /* whale_orca.atlas in Resources */,
 				216B93881A17F3E9000F4D2D /* tvTable.png in Resources */,
 				216B93891A17F3E9000F4D2D /* tvTable@2x.png in Resources */,
+				21E3B6371A1AA31200195D36 /* whale_orca.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,7 +703,6 @@
 				216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */,
 				21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */,
 				21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */,
-				21B5AF9F19CF9336004B00C9 /* Whale2.swift in Sources */,
 				21E3B6351A19B37B00195D36 /* ParticleManager.swift in Sources */,
 				21EA22DC19FF001900A1E612 /* SGG_SpineBone.m in Sources */,
 			);

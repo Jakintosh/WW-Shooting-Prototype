@@ -11,193 +11,187 @@ import SpriteKit
 
 class EnergyParticleEmitter : NHCNode {
     
+    struct EmitterQueue {
+        var queueSize: Int
+        let pos: CGPoint
+        let root: SKNode
+        
+        mutating func setQueueSize(newSize: Int) {
+            queueSize = newSize
+        }
+        
+        func isEmpty() -> Bool {
+            if queueSize <= 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    // properties
+    let numParticles: Int
+    let spewSpeed: CGFloat        = 1000.0
+    let burstDistance: CGFloat    = 180.0
+    let burstTime: NSTimeInterval = 0.5
+    let particleLifetime: NSTimeInterval = 7.0
+    let updateSegmentSize: Int
+    let updateSegments: Int       = 4
+    var currentUpdateSegment: Int = 0
+    
+    // components
     var particles: [EnergyParticle] = [EnergyParticle]()
     var availableParticles: [Int]   = [Int]()
-    var numParticles: Int           = 0
+    var queue: [EmitterQueue]       = [EmitterQueue]()
     
-    let innerRange: Double  = 20
-    let outerRange: Double  = 120
-    let suckSpeed: Double   = 0.5
-    
-    var queue: [(num: Int, pos: CGPoint, root: SKNode)] = []
-    
-    let maxQueuePerTick: Int = 20
-    let spewSpeed: Double    = 1000
-    
-    init(cc: CameraController, numParticles: Int) {
-        self.numParticles = numParticles
-        
+    init(num: Int) {
+        numParticles = num - (num % updateSegments)
+        updateSegmentSize = numParticles / updateSegments
         super.init()
         
+        let removeClosure: (Int) -> Void = { i in
+            self.removeParticle(i)
+        }
+        
         for i in 0..<numParticles {
-            let newParticle = EnergyParticle(index: i, emitter: self)
-            availableParticles += [i]
-            particles += [newParticle]
+            let part = EnergyParticle(i: i, remove: removeClosure)
+            availableParticles.append(i)
+            particles.append(part)
         }
-    }
-    
-    func addToQueue(position: CGPoint, root: SKNode, num: Int = 1) {
-        queue.append((num: num, pos: position, root: root))
-    }
-    
-    func spawnParticle(position: CGPoint, root: SKNode) -> EnergyParticle? {
-        if availableParticles.count > 0 {
-            var selected: EnergyParticle = particles[availableParticles.removeAtIndex(0)]
-            selected.addMe(position, root: root)
-            return selected
-        }
-        return nil
-    }
-    
-    func removeParticle(index: Int) {
-        self.availableParticles.append(index)
-        self.particles[index].killMe()
     }
     
     func update(dt: CFTimeInterval) {
-        if let currentQueue = queue.last {
-            var queueSize: Int = currentQueue.num
-            let queuePos: CGPoint = currentQueue.pos
-            let queueRoot: SKNode = currentQueue.root
-            if queueSize > 0 {
-                var cycles = Int(dt * spewSpeed)
-                if queueSize < cycles {
-                    cycles = queueSize
+        
+        // if there is something on the queue, spawn things
+        if !queue.isEmpty {
+            if var q = queue.last {
+                
+                if q.queueSize > 0 {
+                    var cycles = Int(CGFloat(dt) * spewSpeed)
+                    if cycles > q.queueSize {
+                        cycles = q.queueSize
+                    }
+                    q.setQueueSize(q.queueSize - cycles)
+                    for _ in 0..<cycles {
+                        spawnParticle(q.pos, root: q.root)
+                    }
+                    
+                    queue.removeLast()
+                    addToQueue(q.queueSize, pos: q.pos, root: q.root)
                 }
-                queueSize -= cycles
-                for _ in 0..<cycles {
-    //                var particle = spawnParticle(spawnPos)
-    //                if let part = particle {
-    //                    particleSpawn(part)
-    //                }
+                
+                if q.isEmpty() {
+                    queue.removeLast()
                 }
             }
-            queue.removeLast()
-            addToQueue(queuePos, root: queueRoot, num: queueSize)
         }
     }
     
-//    func takeParticle(index: Int) {
-//        var par = particles[index]
-//        let completion: ()->() = {
-//            self.removeParticle(index)
-//        }
-//        par.particle.runAction(SKAction.sequence([SKAction.moveTo(par.root.convertPoint(CGPointMake(0, -par.particle.scene!.frame.height/2), fromNode: par.particle.scene!), duration: 0.25), SKAction.runBlock(completion)]))
-//    }
-//    
-//    func updateSuction(#touchPos: CGPoint?, dt: CFTimeInterval) {
-//        if queueSize > 0 {
-//            var cycles = Int(dt * spewSpeed)
-//            if queueSize - cycles < 0 { cycles = queueSize }
-//            queueSize -= cycles
-//            for _ in 0..<cycles {
-//                var particle = spawnParticle(spawnPos)
-//                if let part = particle {
-//                    particleSpawn(part)
-//                }
-//            }
-//        }
-//            
-//        else if let pos = touchPos {
-//            if numParticles > availableParticles.count {
-//                let inSq = innerRange * innerRange
-//                let outSq = outerRange * outerRange
-//                let leSuckSpeed = suckSpeed * (dt*4)
-//                for particle in particles {
-//                    if particle.active {
-//                        
-//                        let a: Double = Double(pos.x - particle.particle.position.x)
-//                        let b: Double = Double(pos.y - particle.particle.position.y)
-//                        let dist = (a*a) + (b*b)
-//                        
-//                        var strength: Double = 0
-//                        
-//                        if dist > inSq && dist < outSq {
-//                            strength = 1 - Double((dist - inSq) / (outSq-inSq))
-//                        } else if dist <= inSq {
-//                            takeParticle(particle.index)
-//                        }
-//                        
-//                        let dx: Double = Double(pos.x - particle.particle.position.x) * leSuckSpeed * strength
-//                        let dy: Double = Double(pos.y - particle.particle.position.y) * leSuckSpeed * strength
-//                        
-//                        particle.particle.position.x += CGFloat(dx)
-//                        particle.particle.position.y += CGFloat(dy)
-//                    }
-//                }
-//            }
-//        }
-//    }
+    func updateParticles(function: (EnergyParticle)->Void) {
+        if availableParticles.count < numParticles {
+            currentUpdateSegment++
+            currentUpdateSegment = currentUpdateSegment%updateSegments
+            let start = updateSegmentSize * currentUpdateSegment
+            let end = start + updateSegmentSize
+            for i in start..<end {
+                particles[i].update(function)
+            }
+        }
+    }
+    
+    func addToQueue(num: Int, pos: CGPoint, root: SKNode) {
+        queue.append(EmitterQueue(queueSize: num, pos: pos, root: root))
+    }
+    
+    func spawnParticle(pos: CGPoint, root: SKNode) {
+        if availableParticles.count > 0 {
+            let i: Int = availableParticles.removeAtIndex(0)
+            let part = particles[i]
+            part.spawn(pos, root: root)
+            moveParticle(part)
+        }
+    }
+    
+    func moveParticle(p: EnergyParticle) {
+        let angle: CGFloat = (CGFloat(arc4random() % 100) / 100.0) * CGFloat(2.0 * M_PI)
+        let distMod = (CGFloat(arc4random() % 100) / 100.0)
+        let distance: CGFloat = (distMod * distMod) * burstDistance
+        let x = cos(angle) * distance + p.position.x
+        let y = sin(angle) * distance + p.position.y
+        
+        let move = SKAction.moveTo(CGPoint(x: x, y: y), duration: burstTime)
+        move.timingMode = .EaseOut
+        
+        let rotate = SKAction.rotateByAngle( CGFloat(distMod * 3.0 - 1.5), duration: particleLifetime )
+        let scale = SKAction.scaleBy(distMod, duration: particleLifetime)
+        
+        p.runAction( SKAction.group([move,rotate, scale]) )
+        p.runAction( SKAction.waitForDuration(particleLifetime), completion: { p.remove() } )
+    }
+    
+    func removeParticle(i: Int) {
+        availableParticles.append(i)
+    }
 }
 
 class EnergyParticle : NHCNode {
     
-    // components
-    let particle: SKSpriteNode
-    
     // properties
     let index: Int
     var active: Bool = false
-    let emitter: EnergyParticleEmitter
     
-    init(index: Int, emitter: EnergyParticleEmitter) {
-        self.index = index
-        self.emitter = emitter
+    let removeClosure: (i: Int) -> Void
+    let removeAction: SKAction
+    
+    // components
+    let sprite: SKSpriteNode = SKSpriteNode(imageNamed: "bokeh")
+    
+    init(i: Int, remove: (Int) -> Void) {
         
-        particle = SKSpriteNode(imageNamed: "bokeh")
-        particle.zPosition = 1
-        particle.color = SKColor.greenColor()
-        particle.colorBlendFactor = 1.0
-        particle.blendMode = .Add
+        let rotate = CGFloat((i % 2) - 1) * CGFloat(M_PI_2)
+        removeClosure = remove
+        removeAction = SKAction.group( [SKAction.scaleBy(2.0, duration: 0.25),
+                                        SKAction.fadeAlphaTo(0.0, duration: 0.25),
+                                        SKAction.rotateByAngle(rotate, duration: 0.25)] )
         
+        index = i
         super.init()
         
-        addChild(particle)
+        reset()
         
-        defaultProperties()
+        sprite.zPosition = 1
+        sprite.color = SKColor.greenColor()
+        sprite.colorBlendFactor = 1.0
+        sprite.blendMode = .Add
+        self.addChild(sprite)
     }
     
-    func defaultProperties() {
-        particle.xScale = 0.15
-        particle.yScale = 0.15
-        particle.alpha = 0.5
+    func reset() {
+        self.xScale    = 0.15
+        self.yScale    = 0.15
+        self.alpha     = 1.0
+        self.zRotation = 0.0
     }
     
-    func addMe(pos: CGPoint, root: SKNode) {
-        particle.position = pos
-        (root.parent?.parent as CameraController).addCameraChild(particle, withZ: 101)
-        defaultProperties()
-    }
-    
-    func killMe() {
-        particle.removeFromParent()
-        particle.removeAllChildren()
-        particle.removeAllActions()
-        active = false
-    }
-    
-    func setMovement(#start: CGPoint, end: CGPoint, duration: Float) {
-        particle.position = start
-        
-        let move = SKAction.moveTo(end, duration: NSTimeInterval(duration))
-        move.timingFunction = { (dt: Float) -> (Float) in
-            return 1 - ((1 - dt) * (1 - dt) * (1 - dt))
+    func update(function: (EnergyParticle)->Void) {
+        if active {
+            function(self)
         }
-        
-        let thing: CGFloat = CGFloat(arc4random_uniform(10))/10.0
-        let durations = thing + 6
-        
-        let other = SKAction.runBlock { () -> Void in
-            self.active = true
-        }
-        
-        let rotateFade = SKAction.sequence([ SKAction.group([ SKAction.rotateByAngle(thing*4, duration: NSTimeInterval(durations)),
-            SKAction.moveByX(thing*10, y: thing*10 - (120 * ((thing/2) + 0.5)), duration: NSTimeInterval(durations)),
-            SKAction.sequence( [SKAction.waitForDuration(NSTimeInterval(durations - thing*2 - 0.2)), SKAction.runBlock({self.active = false}), SKAction.fadeOutWithDuration(NSTimeInterval(thing*2 + 0.2))]),
-            SKAction.scaleBy(thing - 0.5, duration: NSTimeInterval(durations))]),
-            SKAction.runBlock({self.emitter.removeParticle(self.index)})])
-        
-        particle.runAction(SKAction.sequence([move, other, rotateFade]))
     }
     
+    func spawn(pos: CGPoint, root: SKNode) {
+        self.active   = true
+        self.position = pos
+        root.addChild(self)
+    }
+    
+    func remove() {
+        self.active = false
+        self.removeAllActions()
+        runAction(removeAction, completion: {
+            self.removeClosure(i: self.index)
+            self.removeFromParent()
+            self.reset()
+        })
+    }
 }

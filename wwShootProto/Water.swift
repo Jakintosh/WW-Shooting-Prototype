@@ -13,7 +13,7 @@ class Water : NHCCenteredParallaxSprite {
     
     init(sceneWidth: CGFloat) {
         super.init(texture: SKTexture(imageNamed: "water"), sceneWidth: sceneWidth)
-        self.maxZoom = 1.3
+        self.maxZoom = 1.2
     }
     
 }

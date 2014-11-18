@@ -18,5 +18,13 @@
 		<key>atlas</key>
 		<string>daughter</string>
 	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_whale_orca_default</string>
+		<key>json</key>
+		<string>whale_orca</string>
+		<key>atlas</key>
+		<string>whale_orca</string>
+	</dict>
 </array>
 </plist>

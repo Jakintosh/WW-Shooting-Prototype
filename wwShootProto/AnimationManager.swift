@@ -11,6 +11,12 @@ import Foundation
 // MARK: -
 class AnimationManager {
     
+    struct AnimationData {
+        let name: String
+        let json: String
+        let atlas: String
+    }
+    
     // Animations are loaded first, then entities are created
     // Entities are assigned their spines seperately
     // Spines can be swapped on entities
@@ -18,6 +24,7 @@ class AnimationManager {
     // MARK: Data
     private var loadedAnimationGroups: [String : [String]]      = [String : [String]]()
     private var loadedAnimations:   [String : SGG_Spine]        = [String : SGG_Spine]()
+    private var loadedAnimationData: [String : AnimationData]   = [String : AnimationData]()
     private var animatableEntities: [String : AnimatableEntity] = [String : AnimatableEntity]()
     
     // MARK: File I/O
@@ -36,9 +43,12 @@ class AnimationManager {
                         let json = definition["json"] as String
                         let atlas = definition["atlas"] as String
                         
-                        let newSpineAnimation = SGG_Spine()
-                        newSpineAnimation.skeletonFromFileNamed(json, andAtlasNamed: atlas, andUseSkinNamed: nil)
-                        loadedAnimations[name] = newSpineAnimation
+                        let animationData = AnimationData(name: name, json: json, atlas: atlas)
+                        loadedAnimationData[name] = animationData
+                        
+//                        let newSpineAnimation = SGG_Spine()
+//                        newSpineAnimation.skeletonFromFileNamed(json, andAtlasNamed: atlas, andUseSkinNamed: nil)
+//                        loadedAnimations[name] = newSpineAnimation
                         
                         animationsBeingLoaded.append(name)
         }   }   }   }
@@ -85,15 +95,21 @@ class AnimationManager {
             return animatableEntities[key]
     }
     func setSpineForEntity(spineKey: String, entityKey: String) {
-        if let spine = loadedAnimations[spineKey] {
+//        if let spine = loadedAnimations[spineKey] {
             if let entity = animatableEntities[entityKey] {
-                entity.setSpine(spine)
+                if let animData = loadedAnimationData[spineKey] {
+                    let newSpineAnimation = SGG_Spine()
+                    newSpineAnimation.skeletonFromFileNamed(animData.json, andAtlasNamed: animData.atlas, andUseSkinNamed: nil)
+                    entity.setSpine(newSpineAnimation)
+                } else {
+                    println("tried to assign spine to entity but spine data doesn't exist for key")
+                }
             } else {
                 println("tried to assign spine to entity but entitiy doesn't exist for key")
             }
-        } else {
-            println("tried to assign spine to entity but spine doesn't exist or hasn't been loaded for key")
-        }
+//        } else {
+//            println("tried to assign spine to entity but spine doesn't exist or hasn't been loaded for key")
+//        }
     }
     func runAnimation(entityKey: String, animationName: String, introPeriod: CGFloat) {
         if let entity = animatableEntities[entityKey] {
@@ -127,6 +143,12 @@ class AnimatableEntity {
     }
     func removeSpine(spine: SGG_Spine?) {
         if spine === animationSpine && spine != nil {
+            animationSpine!.stopAnimation()
+            animationSpine = nil
+        }
+    }
+    func removeSpine() {
+        if animationSpine != nil {
             animationSpine!.stopAnimation()
             animationSpine = nil
         }

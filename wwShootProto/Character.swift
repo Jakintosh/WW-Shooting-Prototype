@@ -157,58 +157,6 @@ class Daughter : Character {
     }
 }
 
-class DadStairs : NHCNode {
-    
-    let stepSprite: SKSpriteNode = SKSpriteNode(imageNamed: "dad_stairs1")
-    let transSprite: SKSpriteNode = SKSpriteNode(imageNamed: "dad_stairs2")
-    
-    let stairWidth: CGFloat = 31
-    let stairHeight: CGFloat = 10
-    
-    let stairSize = CGPoint(x: CGFloat(31.0), y: CGFloat(10.0))
-    
-    init(housePosition: CGPoint) {
-        super.init()
-        
-        // y offset = 65
-        // stair offset = 10
-        position = housePosition
-        stepSprite.position = CGPointZero
-        transSprite.position = stairSize
-        
-        addChild(stepSprite)
-        addChild(transSprite)
-    }
-    
-    func run() {
-        let fadeInOut = SKAction.sequence([ SKAction.fadeAlphaTo(1.0, duration: 0.25), SKAction.fadeAlphaTo(0.0, duration: 0.25) ])
-        let wait = SKAction.waitForDuration(0.5)
-        
-        let step: () -> () = {
-            self.stepSprite.runAction(SKAction.sequence([fadeInOut, wait]), completion: {
-                self.transSprite.runAction(SKAction.sequence([fadeInOut, wait]), completion: {
-                    self.stepSprite.position = Utilities2D.addPoint(self.stairSize, toPoint: self.stepSprite.position)
-                    self.transSprite.position = Utilities2D.addPoint(self.stairSize, toPoint: self.transSprite.position)
-                })
-            })
-        }
-        
-        let end: () -> () = {
-            self.removeAllActions()
-            self.removeAllChildren()
-            self.removeFromParent()
-        }
-        
-        self.runAction( SKAction.sequence([ SKAction.runBlock(step),
-                                            SKAction.waitForDuration(1.1),
-                                            SKAction.runBlock(step),
-                                            SKAction.waitForDuration(1.1),
-                                            SKAction.runBlock(step),
-                                            SKAction.waitForDuration(1.1),
-                                            SKAction.runBlock(end)]) )
-    }
-}
-
 // MARK: -
 class Dad : Character {
     
@@ -220,8 +168,6 @@ class Dad : Character {
     var canUseStairs: Bool = false
     
     var touches: [UITouch] = [UITouch]()
-    
-//    var button: Button?
     
     init(startingRoom room: HouseRoom) {
         currentFloor = room.associatedFloor
