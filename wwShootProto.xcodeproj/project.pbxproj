@@ -48,6 +48,12 @@
 		21D2073A1A105FD40019A73B /* Office@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072A1A105FD40019A73B /* Office@2x.png */; };
 		21D2073B1A105FD40019A73B /* ParentsRoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072B1A105FD40019A73B /* ParentsRoom.png */; };
 		21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */; };
+		21E038DE1A1BAD8100EDC37E /* WhaleSpawnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E038DD1A1BAD8100EDC37E /* WhaleSpawnManager.swift */; };
+		21E038E01A1BC76000EDC37E /* IntroScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E038DF1A1BC76000EDC37E /* IntroScene.swift */; };
+		21E038E51A1BD25C00EDC37E /* Hallway_buffer.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E038E11A1BD25C00EDC37E /* Hallway_buffer.png */; };
+		21E038E61A1BD25C00EDC37E /* Hallway_buffer@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E038E21A1BD25C00EDC37E /* Hallway_buffer@2x.png */; };
+		21E038E71A1BD25C00EDC37E /* Hallway_enter.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E038E31A1BD25C00EDC37E /* Hallway_enter.png */; };
+		21E038E81A1BD25C00EDC37E /* Hallway_enter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E038E41A1BD25C00EDC37E /* Hallway_enter@2x.png */; };
 		21E3B6111A1910E800195D36 /* whale_explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21E3B6101A1910E800195D36 /* whale_explosion.wav */; };
 		21E3B6131A19114300195D36 /* whale_explosion.caf in Resources */ = {isa = PBXBuildFile; fileRef = 21E3B6121A19114300195D36 /* whale_explosion.caf */; };
 		21E3B6151A191BE000195D36 /* Railing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E3B6141A191BE000195D36 /* Railing.swift */; };
@@ -141,6 +147,12 @@
 		21D2072A1A105FD40019A73B /* Office@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Office@2x.png"; path = "resources/house.atlas/Office@2x.png"; sourceTree = SOURCE_ROOT; };
 		21D2072B1A105FD40019A73B /* ParentsRoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ParentsRoom.png; path = resources/house.atlas/ParentsRoom.png; sourceTree = SOURCE_ROOT; };
 		21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ParentsRoom@2x.png"; path = "resources/house.atlas/ParentsRoom@2x.png"; sourceTree = SOURCE_ROOT; };
+		21E038DD1A1BAD8100EDC37E /* WhaleSpawnManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhaleSpawnManager.swift; sourceTree = "<group>"; };
+		21E038DF1A1BC76000EDC37E /* IntroScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroScene.swift; sourceTree = "<group>"; };
+		21E038E11A1BD25C00EDC37E /* Hallway_buffer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Hallway_buffer.png; path = resources/house.atlas/Hallway_buffer.png; sourceTree = SOURCE_ROOT; };
+		21E038E21A1BD25C00EDC37E /* Hallway_buffer@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Hallway_buffer@2x.png"; path = "resources/house.atlas/Hallway_buffer@2x.png"; sourceTree = SOURCE_ROOT; };
+		21E038E31A1BD25C00EDC37E /* Hallway_enter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Hallway_enter.png; path = resources/house.atlas/Hallway_enter.png; sourceTree = SOURCE_ROOT; };
+		21E038E41A1BD25C00EDC37E /* Hallway_enter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Hallway_enter@2x.png"; path = "resources/house.atlas/Hallway_enter@2x.png"; sourceTree = SOURCE_ROOT; };
 		21E3B6101A1910E800195D36 /* whale_explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whale_explosion.wav; sourceTree = "<group>"; };
 		21E3B6121A19114300195D36 /* whale_explosion.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = whale_explosion.caf; sourceTree = "<group>"; };
 		21E3B6141A191BE000195D36 /* Railing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Railing.swift; path = Entities/Railing.swift; sourceTree = "<group>"; };
@@ -372,6 +384,7 @@
 		21B5AF9C19CF92F4004B00C9 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				21E038DF1A1BC76000EDC37E /* IntroScene.swift */,
 				21B5AF7919CF8D17004B00C9 /* GameScene.swift */,
 				21B7A46919EB1E020023EAE9 /* HomeScene.swift */,
 				21B7A46E19F058470023EAE9 /* LoadingScene.swift */,
@@ -399,14 +412,16 @@
 		21D2071C1A105FC80019A73B /* house */ = {
 			isa = PBXGroup;
 			children = (
-				216B93821A17F3E9000F4D2D /* islandCounter.png */,
-				216B93831A17F3E9000F4D2D /* islandCounter@2x.png */,
-				216B93841A17F3E9000F4D2D /* tvTable.png */,
-				216B93851A17F3E9000F4D2D /* tvTable@2x.png */,
 				21D2071D1A105FD40019A73B /* Attic.png */,
 				21D2071E1A105FD40019A73B /* Attic@2x.png */,
 				21D2071F1A105FD40019A73B /* Bathroom.png */,
 				21D207201A105FD40019A73B /* Bathroom@2x.png */,
+				21E038E11A1BD25C00EDC37E /* Hallway_buffer.png */,
+				21E038E21A1BD25C00EDC37E /* Hallway_buffer@2x.png */,
+				21E038E31A1BD25C00EDC37E /* Hallway_enter.png */,
+				21E038E41A1BD25C00EDC37E /* Hallway_enter@2x.png */,
+				216B93821A17F3E9000F4D2D /* islandCounter.png */,
+				216B93831A17F3E9000F4D2D /* islandCounter@2x.png */,
 				21D207211A105FD40019A73B /* Kitchen.png */,
 				21D207221A105FD40019A73B /* Kitchen@2x.png */,
 				21D207231A105FD40019A73B /* LivingRoom.png */,
@@ -419,6 +434,8 @@
 				21D2072A1A105FD40019A73B /* Office@2x.png */,
 				21D2072B1A105FD40019A73B /* ParentsRoom.png */,
 				21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */,
+				216B93841A17F3E9000F4D2D /* tvTable.png */,
+				216B93851A17F3E9000F4D2D /* tvTable@2x.png */,
 			);
 			name = house;
 			sourceTree = "<group>";
@@ -531,6 +548,7 @@
 				216101EA1A0D1667000AA0AB /* Interactions */,
 				2103B3611A11A70500CCDCB9 /* Sky */,
 				21EA22E019FF1FAE00A1E612 /* TimeManager.swift */,
+				21E038DD1A1BAD8100EDC37E /* WhaleSpawnManager.swift */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -638,6 +656,7 @@
 				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				216B93861A17F3E9000F4D2D /* islandCounter.png in Resources */,
 				216B93871A17F3E9000F4D2D /* islandCounter@2x.png in Resources */,
+				21E038E81A1BD25C00EDC37E /* Hallway_enter@2x.png in Resources */,
 				21D207311A105FD40019A73B /* Kitchen.png in Resources */,
 				21D207321A105FD40019A73B /* Kitchen@2x.png in Resources */,
 				21D207331A105FD40019A73B /* LivingRoom.png in Resources */,
@@ -645,11 +664,14 @@
 				21D207351A105FD40019A73B /* MudRoom.png in Resources */,
 				21D207361A105FD40019A73B /* MudRoom@2x.png in Resources */,
 				21D207391A105FD40019A73B /* Office.png in Resources */,
+				21E038E61A1BD25C00EDC37E /* Hallway_buffer@2x.png in Resources */,
 				21D2073A1A105FD40019A73B /* Office@2x.png in Resources */,
 				21D207371A105FD40019A73B /* Office_shaft.png in Resources */,
 				21D207381A105FD40019A73B /* Office_shaft@2x.png in Resources */,
 				21D2073B1A105FD40019A73B /* ParentsRoom.png in Resources */,
 				21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */,
+				21E038E51A1BD25C00EDC37E /* Hallway_buffer.png in Resources */,
+				21E038E71A1BD25C00EDC37E /* Hallway_enter.png in Resources */,
 				21E3B6391A1AA32E00195D36 /* whale_orca.atlas in Resources */,
 				216B93881A17F3E9000F4D2D /* tvTable.png in Resources */,
 				216B93891A17F3E9000F4D2D /* tvTable@2x.png in Resources */,
@@ -696,11 +718,13 @@
 				21B5AF7C19CF8D17004B00C9 /* GameViewController.swift in Sources */,
 				21B2E7BC19F46C5E00000E70 /* Character.swift in Sources */,
 				21EA22A519FEC78200A1E612 /* AnimationManager.swift in Sources */,
+				21E038E01A1BC76000EDC37E /* IntroScene.swift in Sources */,
 				21EA22E119FF1FAE00A1E612 /* TimeManager.swift in Sources */,
 				21EB73BB1A16AD1C00BB9203 /* PromotionManager.swift in Sources */,
 				21B5AF7619CF8D17004B00C9 /* AppDelegate.swift in Sources */,
 				21E3B61F1A19228C00195D36 /* Sun.swift in Sources */,
 				216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */,
+				21E038DE1A1BAD8100EDC37E /* WhaleSpawnManager.swift in Sources */,
 				21EA22DF19FF001900A1E612 /* SGG_SpineSkin.m in Sources */,
 				21EA22DE19FF001900A1E612 /* SGG_SpineJSONTools.m in Sources */,
 				21E3B6351A19B37B00195D36 /* ParticleManager.swift in Sources */,

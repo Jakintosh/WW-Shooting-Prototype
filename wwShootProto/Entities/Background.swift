@@ -18,7 +18,7 @@ class Background : NHCCenteredParallaxNode {
         sky = NHCSky(color: SKColor.whiteColor(), size: skyTexture.size())
         sky.texture = skyTexture // dont ask
         
-        super.init(range: sky.size.width - sceneWidth)
+        super.init(rangeH: sky.size.width - sceneWidth, rangeV: 0.0)
         
         self.addChild(sky)
     }

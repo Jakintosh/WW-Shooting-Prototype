@@ -19,24 +19,28 @@ class NHCNode : SKNode {
 class House : NHCNode {
     
     // MARK:   Properties
-    var startingRoom: HouseRoom
-    
-    let attic           = SKSpriteNode(imageNamed: "Attic")
-    let bathroom        = SKSpriteNode(imageNamed: "Bathroom")
-    let kitchen         = SKSpriteNode(imageNamed: "Kitchen")
-    let livingRoom      = SKSpriteNode(imageNamed: "LivingRoom")
-    let mudRoom         = SKSpriteNode(imageNamed: "MudRoom")
-    let office          = SKSpriteNode(imageNamed: "Office")
-    let parentsRoom     = SKSpriteNode(imageNamed: "ParentsRoom")
-    
-    let counter         = SKSpriteNode(imageNamed: "islandCounter")
-    let tvTable         = SKSpriteNode(imageNamed: "tvTable")
+    var startingRoom: HouseRoom!
     
     // MARK:   Components
     var floors: [HouseFloor] = [HouseFloor]()
     
     // MARK:   Initializers
     override init() {
+        super.init()
+        setup()
+    }
+    
+    func setup() {
+        let attic           = SKSpriteNode(imageNamed: "Attic")
+        let bathroom        = SKSpriteNode(imageNamed: "Bathroom")
+        let kitchen         = SKSpriteNode(imageNamed: "Kitchen")
+        let livingRoom      = SKSpriteNode(imageNamed: "LivingRoom")
+        let mudRoom         = SKSpriteNode(imageNamed: "MudRoom")
+        let office          = SKSpriteNode(imageNamed: "Office")
+        let parentsRoom     = SKSpriteNode(imageNamed: "ParentsRoom")
+        
+        let counter         = SKSpriteNode(imageNamed: "islandCounter")
+        let tvTable         = SKSpriteNode(imageNamed: "tvTable")
         
         let doorway1_1  = DoorwayStair(type: .Bottom)
         let doorway2_1  = DoorwayStair(type: .Bottom)
@@ -123,8 +127,6 @@ class House : NHCNode {
         parentsRoom.zPosition = -2
         attic.zPosition       = -1
         
-        super.init()
-        
         name = "Root_House"
         
         // add children
@@ -194,6 +196,69 @@ class House : NHCNode {
         for floor in floors {
             floor.hidden = !floor.hidden
         }
+    }
+    
+}
+
+class IntroHouse : House {
+    
+    override func setup() {
+        
+        let hallway = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeMake(2000, 355))
+        let hallwayEnter = SKSpriteNode(imageNamed: "Hallway_enter")
+        let hallwayBuffer0 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer1 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer2 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer3 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer4 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer5 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer6 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        let hallwayBuffer7 = SKSpriteNode(imageNamed: "Hallway_buffer")
+        
+        // initialize first floor
+        let floor1      = HouseFloor(height: 355, floorY: 50, yPosition: 0)
+        let path1_1     = floor1.addPath(left: 75, right: 1925)
+        let room1_1     = floor1.addRoom(name: "hallway_start", xPos: 0,    width: 300,  path: path1_1)
+        let room1_2     = floor1.addRoom(name: "hallway",       xPos: 300,    width: 1700,  path: path1_1)
+        floors.append(floor1)
+        
+        // set starting locations
+        startingRoom = room1_1
+        
+        // set up the house sprite
+        name = "Root_House"
+        hallwayEnter.position = CGPointZero
+        hallwayEnter.anchorPoint = CGPointZero
+        hallwayBuffer0.position = CGPoint(x: 534, y: 0)
+        hallwayBuffer0.anchorPoint = CGPointZero
+        hallwayBuffer1.position = CGPoint(x: 534 + 186, y: 0)
+        hallwayBuffer1.anchorPoint = CGPointZero
+        hallwayBuffer2.position = CGPoint(x: 534 + (186 * 2), y: 0)
+        hallwayBuffer2.anchorPoint = CGPointZero
+        hallwayBuffer3.position = CGPoint(x: 534 + (186 * 3), y: 0)
+        hallwayBuffer3.anchorPoint = CGPointZero
+        hallwayBuffer4.position = CGPoint(x: 534 + (186 * 4), y: 0)
+        hallwayBuffer4.anchorPoint = CGPointZero
+        hallwayBuffer5.position = CGPoint(x: 534 + (186 * 5), y: 0)
+        hallwayBuffer5.anchorPoint = CGPointZero
+        hallwayBuffer6.position = CGPoint(x: 534 + (186 * 6), y: 0)
+        hallwayBuffer6.anchorPoint = CGPointZero
+        hallwayBuffer7.position = CGPoint(x: 534 + (186 * 7), y: 0)
+        hallwayBuffer7.anchorPoint = CGPointZero
+        
+        // add children
+//        addChild(floor1)
+        addChild(hallwayEnter)
+        addChild(hallwayBuffer0)
+        addChild(hallwayBuffer1)
+        addChild(hallwayBuffer2)
+        addChild(hallwayBuffer3)
+        addChild(hallwayBuffer4)
+        addChild(hallwayBuffer5)
+        addChild(hallwayBuffer6)
+        addChild(hallwayBuffer7)
+        
+        floor1.hidden = true
     }
     
 }

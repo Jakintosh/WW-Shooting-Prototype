@@ -1,76 +1,39 @@
 //
-//  HomeScene.swift
+//  IntroScene.swift
 //  wwShootProto
 //
-//  Created by Jak Tiano on 10/12/14.
+//  Created by Jak Tiano on 11/18/14.
 //  Copyright (c) 2014 not a hipster coffee shop. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
 
-class SKFuckScene : SKScene {/* why even */}
-
-class HomeScene : SKFuckScene {
+class IntroScene : SKFuckScene {
     
-    let camCon: CameraController = CameraController()
-    let house: House = House()
-    
-    var rotation: Double = 0.0
+    let camCon = CameraController()
+    let house = IntroHouse()
+    let dad: Dad
+    let daughter = Daughter()
     
     var lastTime: CFTimeInterval = 0
     var deltaTime: CFTimeInterval = 0
     
-    let dad: Dad
-    let daughter: Daughter = Daughter()
-    
-    var debug: Bool = false
-    let timeText: SKLabelNode = SKLabelNode()
-    let tripleTap: UITapGestureRecognizer? = nil
-    let doubleTap: UITapGestureRecognizer! = nil
+    var isZoomingOut: Bool = false
+    var currentZoom: CGFloat = 1.0
     
     override init(size: CGSize) {
         dad = Dad(startingRoom: house.startingRoom)
         super.init(size: size)
-        
-        tripleTap = UITapGestureRecognizer(target: self, action: "handleTripleTap:")
-        tripleTap!.numberOfTouchesRequired = 3
-        tripleTap!.numberOfTapsRequired = 1
-        tripleTap!.cancelsTouchesInView = false
     }
     
-    override func didMoveToView(view: SKView) {
-        
-        view.addGestureRecognizer(tripleTap!)
-//        view.addGestureRecognizer(doubleTap!)
-        camCon.connectGestureRecognizers(view)
-        
-        // set up scene
-        anchorPoint = CGPointMake(0.5, 0.5)
-        backgroundColor = SKColor.blackColor()
-
-        setup()
-    }
-    
-    override func willMoveFromView(view: SKView) {
-        view.removeGestureRecognizer(tripleTap!)
-//        view.removeGestureRecognizer(doubleTap!)
-        camCon.disconnectGestureRecognizers(view)
-    }
-    
-    func setup() {
+    func setup(view: SKView) {
         
         game.interactionManager.setActiveEntity("entity_dad")
         
         // set up camera
         camCon.disableDebug()
         addChild(camCon)
-        
-        // time hud
-        timeText.position = CGPoint(x: -frame.size.width/2 + 20, y: frame.size.height/2 - 20)
-        timeText.horizontalAlignmentMode = .Left
-        timeText.verticalAlignmentMode = .Top
-        timeText.fontSize = 16.0
         
         // set up dad
         var posStartLoc = house.getStartingLocation()
@@ -80,16 +43,40 @@ class HomeScene : SKFuckScene {
             dad.position = CGPointZero
             println("tried to set dad location with nil position")
         }
+        dad.interactor.completion = {
+            self.isZoomingOut = true
+            self.camCon.setCameraPosition(x: 2087, y: 150)
+            self.camCon.runAction(SKAction.fadeAlphaTo(0.0, duration: 5.0))
+            self.runAction(SKAction.sequence([SKAction.waitForDuration(4.0), SKAction.runBlock({
+                NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
+                let transition = SKTransition.crossFadeWithDuration(1.0)
+                transition.pausesOutgoingScene = false
+                let nextScene = GameScene(size: CGSize(width: self.frame.height, height: self.frame.width))
+                view.presentScene(nextScene, transition: transition)
+            })]))
+        }
         
         // set up "daughter"
-        daughter.position = CGPoint(x: 660, y: 1010)
+        daughter.position = CGPoint(x: 2150, y: 53)
+        daughter.setOrientation(.Left)
         
         // camera stuff
-        camCon.addHUDChild(timeText, withZ: 0)
+        camCon.lerpSpeed = 0.03
         camCon.addCameraChild(house, withZ: 0)
         camCon.addCameraChild(dad, withZ: 2)
         camCon.addCameraChild(daughter, withZ: 1)
-        camCon.setCameraStartingPosition(x: 0, y: 0)
+        camCon.setCameraStartingPosition(dad.position)
+    }
+    
+    override func didMoveToView(view: SKView) {
+        // set up scene
+        anchorPoint = CGPointMake(0.5, 0.5)
+        backgroundColor = SKColor.blackColor()
+        setup(view)
+    }
+    
+    override func willMoveFromView(view: SKView) {
+        
     }
     
     override func update(currentTime: NSTimeInterval) {
@@ -100,43 +87,38 @@ class HomeScene : SKFuckScene {
         daughter.update(deltaTime)
         game.interactionManager.update(deltaTime)
         
-        timeText.text = game.timeManager.currentTimeString()
-        
         // update camera
-        if !debug {
-            if dad.state != .Interacting {
-                camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: 100)))
-                camCon.setScale(1.0)
-            }
+        if dad.state != .Interacting && !isZoomingOut {
+            camCon.setCameraPosition(Utilities2D.addPoint(dad.position, toPoint: CGPoint(x: 0, y: 100)))
+            camCon.setScale(1.0)
+        }
+        if isZoomingOut {
+            currentZoom *= 1.008
+            camCon.setScale(1.0/(currentZoom*currentZoom))
         }
         
-//        let xData = game.motionManager.accelerometerData.acceleration.x
-//        let yData = game.motionManager.accelerometerData.acceleration.y
-//        let zData = game.motionManager.accelerometerData.acceleration.z
-//        var nextAngle = atan2(yData, xData)
-//        if (nextAngle < 0) { nextAngle += (M_PI * 2.0) }
-//        nextAngle = nextAngle + ((rotation - nextAngle) * 0.01)
-//        rotation = nextAngle
-//        camCon.setRotiation(CGFloat(nextAngle))
+        // update alpha
+        let mod = dad.position.x / 1600.0
+        var thing = 1.0 - (mod*mod)
+        if thing < 0 { thing = 0.0 }
+        house.alpha = thing
         
         camCon.update(deltaTime)
     }
     
     func updateTime(currentTime:NSTimeInterval) {
         game.timeManager.update(deltaTime)
-        //println(game.timeManager.currentTimeString())
         deltaTime = currentTime - lastTime
         if deltaTime > 1.0 { deltaTime = 1.0 }
         lastTime = currentTime
     }
     
     // MARK: - Touches
-    
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         let touch: UITouch = touches.anyObject() as UITouch
         let locationWorld = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
-    
+        
         dad.touchDown(touch)
     }
     
@@ -144,7 +126,7 @@ class HomeScene : SKFuckScene {
         let touch: UITouch = touches.anyObject() as UITouch
         let locationWorld = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
-
+        
         dad.touchMove()
     }
     
@@ -152,7 +134,7 @@ class HomeScene : SKFuckScene {
         let touch: UITouch = touches.anyObject() as UITouch
         let location = touch.locationInNode(camCon.rootNode)
         let locationScreen = touch.locationInNode(scene)
-
+        
         dad.touchEnd(touch)
     }
     
@@ -162,11 +144,5 @@ class HomeScene : SKFuckScene {
         let locationScreen = touch.locationInNode(scene)
         
         dad.touchEnd(touch)
-    }
-    
-    func handleTripleTap(gestureRecognizer: UITapGestureRecognizer) {
-        house.toggleDebug()
-        debug = !debug
-        camCon.enableDebug()
     }
 }

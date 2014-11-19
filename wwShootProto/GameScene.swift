@@ -36,9 +36,11 @@ class GameScene: SKScene {
     let particleEmitter = EnergyParticleEmitter(num: 500)
     
     // scene vars
-    let areaWidth: CGFloat = 700.0
+    let areaWidth: CGFloat      = 700.0
     var currentAreaPos: CGFloat = 0.0
-    var targetAreaPos: CGFloat = 0.0
+    var targetAreaPos: CGFloat  = 0.0
+    var currentCameraY: CGFloat = 0.0
+    var targetCameraY: CGFloat  = 0.0
     
     // MARK: - initializers
     required init?(coder aDecoder: NSCoder) {
@@ -73,8 +75,8 @@ class GameScene: SKScene {
         self.addChild(camCon)
 
         // set positions
-        railing.position = CGPoint(x: 0, y: -frame.height/2)
-        water.position = CGPoint(x: 0, y: -frame.height/2)
+        railing.basePosition = CGPoint(x: 0, y: -frame.height/2)
+        water.basePosition = CGPoint(x: 0, y: -frame.height/2)
         
         // add character to railing
         char.zPosition = 1
@@ -92,7 +94,7 @@ class GameScene: SKScene {
         camCon.addCameraChild(reticle, withZ: 100)
         
         // run actions
-        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: CGPoint(x: -250, y: -225), mirrored: false)}), SKAction.waitForDuration(10)])))
+        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: CGPoint(x: -300, y: -225), mirrored: false)}), SKAction.waitForDuration(10)])))
     }
     
     override func willMoveFromView(view: SKView) {
@@ -169,6 +171,8 @@ class GameScene: SKScene {
         
         // camera panning
         if let u_touch = touch {
+            
+            // get X stuff
             let sceneX = u_touch.locationInNode(scene).x
             let limit = frame.width/6.0
             if sceneX > limit {
@@ -178,18 +182,28 @@ class GameScene: SKScene {
                 let mod: CGFloat = (sceneX+limit)/limit * (sceneX+limit)/limit + 1
                 targetAreaPos -= mod * 2.0
             }
+            
+            // get Y stuff
+            let sceneY = u_touch.locationInNode(scene).y
+            targetCameraY = sceneY + frame.height/2
+            
         } else {
             targetAreaPos = 0.0
+            targetCameraY = 0.0
         }
         
         // clamp it within range
         targetAreaPos = Utilities2D.clamp(targetAreaPos, min: -areaWidth/2, max: areaWidth/2)
-        currentAreaPos = Utilities2D.lerpFrom(currentAreaPos, toNum: targetAreaPos, atPosition: 0.1)
         
-        let normalized = currentAreaPos/(areaWidth/2.0)
-        railing.updatePosition(normalized)
-        water.updatePosition(normalized)
-        bg.updatePosition(normalized)
+        // lerp movements
+        currentAreaPos = Utilities2D.lerpFrom(currentAreaPos, toNum: targetAreaPos, atPosition: 0.1)
+        currentCameraY = Utilities2D.lerpFrom(currentCameraY, toNum: targetCameraY, atPosition: 0.1)
+        
+        let normalizedX = currentAreaPos / (areaWidth/2.0)
+        let normalizedY = currentCameraY / frame.height
+        railing.updatePosition(normalizedX, modY: normalizedY)
+        water.updatePosition(normalizedX, modY: normalizedY)
+        bg.updatePosition(normalizedX, modY: normalizedY)
         
 //      camCon.setCameraPosition(CGPoint(x:areaPos, y:0.0))
     }

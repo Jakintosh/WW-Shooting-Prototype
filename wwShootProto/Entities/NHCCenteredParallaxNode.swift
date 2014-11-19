@@ -13,16 +13,24 @@ class NHCCenteredParallaxNode : NHCNode {
     
     // properties
     var normalizedPosition: CGFloat = 0.0
-    var movementRange: CGFloat
+    var horizontalMovementRange: CGFloat
+    var verticalMovementRange: CGFloat
+    var basePosition: CGPoint = CGPointZero {
+        didSet {
+            self.position = self.basePosition
+        }
+    }
     
-    init(range: CGFloat) {
-        movementRange = range
+    init(rangeH: CGFloat, rangeV: CGFloat) {
+        horizontalMovementRange = rangeH
+        verticalMovementRange = rangeV
         super.init()
     }
     
-    func updatePosition(mod: CGFloat) {
+    func updatePosition(modX: CGFloat, modY: CGFloat) {
         // mod = -1.0 -> 1.0
-        position.x = -mod * (movementRange/2.0)
+        position.x = basePosition.x + ( -modX * (horizontalMovementRange/2.0) )
+        position.y = basePosition.y + ( -modY * (verticalMovementRange/2.0) )
     }
     
 }
@@ -37,7 +45,7 @@ class NHCCenteredParallaxSprite : NHCCenteredParallaxNode {
     
     let insetAmt: CGFloat = 0.95
     
-    init(texture: SKTexture, sceneWidth: CGFloat) {
+    init(texture: SKTexture, sceneWidth: CGFloat, verticalMovement: CGFloat) {
         self.sprite = SKSpriteNode(texture: texture)
         self.sceneWidth = sceneWidth
         
@@ -46,15 +54,16 @@ class NHCCenteredParallaxSprite : NHCCenteredParallaxNode {
         
         self.sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         
-        super.init(range: sprite.size.width - sceneWidth)
+        super.init(rangeH: sprite.size.width - sceneWidth, rangeV: verticalMovement)
         
         addChild(sprite)
     }
     
-    override func updatePosition(mod: CGFloat) {
-        // mod = -1.0 -> 1.0
+    override func updatePosition(modX: CGFloat, modY: CGFloat) {
+        // modX = -1.0 -> 1.0, modY = 0.0 -> 1.0
         let moveRange = ((sprite.size.width) * xScale) - sceneWidth
-        position.x = -mod * insetAmt * (moveRange/2.0)
+        position.x = basePosition.x + ( -modX * insetAmt * (moveRange/2.0) )
+        position.y = basePosition.y + ( -modY * (verticalMovementRange/2.0) )
     }
     
     func updateZoom(mod: CGFloat) {

@@ -65,7 +65,7 @@ class Whale : NHCNode {
         animationNode.removeAllChildren()
         
         game.animationManager.setSpineForEntity(spineKey, entityKey: animatorKey)
-        animator.setupSpine(animKey, introPeriod: 0.1)
+        animator.setupSpine(animKey, introPeriod: 0.5)
         
         if let spineNode = animator.animationSpine {
             animationNode.addChild(spineNode)
@@ -117,13 +117,9 @@ class Whale : NHCNode {
     func jump() {}
     func stun() {}
     func kill() {
-//        self.onDeath(pos: self.position)
-        runAction(SKAction.waitForDuration(1.0), completion: {
-            self.remove()
-        })
+        isAlive = false
     }
     func remove() {
-        isAlive = false
         self.animator.removeSpine()
         self.removeFromParent()
         self.removeAllChildren()
@@ -144,21 +140,25 @@ class Orca : Whale {
         // setup SKActions
         
         // .3333 into max jump, 4.1666, 0.5
-        let animLength: NSTimeInterval = 5.0
+        let animLength: NSTimeInterval = 8.0
         let horizontalMove = SKAction.sequence([
-            SKAction.moveByX(100, y: 0, duration: 0.3333),
-            SKAction.moveByX(300, y: 0, duration: 4.1666),
-            SKAction.moveByX(150, y: 0, duration: 0.5000) ])
+            SKAction.moveByX(50, y: 0, duration: animLength/15.0),
+            SKAction.moveByX(50, y: 0, duration: (animLength*5.0)/6.0),
+            SKAction.moveByX(50, y: 0, duration: animLength/10.0) ])
         horizontalMove.timingMode = .EaseInEaseOut
-        let up = SKAction.moveByX(0, y: 550, duration: 1.0)
+        let up = SKAction.moveByX(0, y: 700, duration: animLength/2.0)
         let down = up.reversedAction()
-        up.timingMode = .EaseInEaseOut
-        down.timingMode = .EaseIn
-        let verticalMovement = SKAction.sequence([up, SKAction.waitForDuration(3.0), down])
+        up.timingFunction  = { time in
+            return (1.0 - ((1.0 - time)*(1.0 - time)*(1.0 - time)))
+        }
+        down.timingFunction = { time in
+            return (time*time*time)
+        }
+        let verticalMovement = SKAction.sequence([up, /*SKAction.waitForDuration(animLength/3.0)*/ down])
         let rotate = SKAction.sequence([
-            SKAction.rotateByAngle(CGFloat(M_PI * -0.25), duration: 1.25),
-            SKAction.rotateByAngle(CGFloat(M_PI * -0.16), duration: 2.50),
-            SKAction.rotateByAngle(CGFloat(M_PI * -0.25), duration: 1.25)])
+            SKAction.rotateByAngle(CGFloat(M_PI * -0.1), duration: animLength/4.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *  0.0), duration: animLength/2.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *  0.1), duration: animLength/4.0)])
         
         jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
         jumpAction.timingMode = .EaseInEaseOut
@@ -174,11 +174,12 @@ class Orca : Whale {
         animationNode.xScale = 0.5
         animationNode.yScale = 0.5
         setSpine("spine_whale_orca_default", animKey: "jump_normal")
+//        animator.animationSpine?.timeResolution = 5.0 / 8.0
     }
     override func setupExposedNode() {
-        let well1 = EnergyWell(radius: 25.0, duration: 0.6)
+        let well1 = EnergyWell(radius: 25.0, duration: 0.5)
         let well2 = EnergyWell(radius: 20.0, duration: 0.4)
-        let well3 = EnergyWell(radius: 15.0, duration: 0.2)
+        let well3 = EnergyWell(radius: 15.0, duration: 0.1)
         
         well1.position = CGPoint(x:  10.0, y:  20.0)
         well2.position = CGPoint(x: -45.0, y:   0.0)
@@ -190,6 +191,7 @@ class Orca : Whale {
         exposedNode.addChild(well2)
         exposedNode.addChild(well3)
         exposedNode.zPosition = 1
+        exposedNode.zRotation = CGFloat(M_PI) / 6.0
     }
     override func setupLockOnNode() {
         lockOnWell = EnergyWell(radius: 20.0, duration: 1.0)
@@ -217,7 +219,7 @@ class Orca : Whale {
     
     override func jump() {
         super.jump()
-        runAction(jumpAction, completion: { self.kill() })
+        runAction(jumpAction, completion: { self.remove() })
         lockOnNode.hidden = false
         animator.playAnimation("jump_normal", introPeriod: 0.1)
     }
@@ -232,7 +234,11 @@ class Orca : Whale {
             self.onDeath(pos: self.position)
             self.screenShake(intensity: 15, duration: 0.5)
             self.runAction(self.explosionSound)
+            self.remove()
         })
+    }
+    override func remove() {
+        super.remove()
     }
 }
 

@@ -22,27 +22,28 @@ class LoadingScene : SKScene {
         
         backgroundColor = SKColor.blackColor()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     override func didMoveToView(view: SKView) {
         
-        game.interactionManager.loadInteractions("home", dataFile: "testDayOne")
-        game.animationManager.loadAnimations("home", dataFile: "home_characters")
+//        game.interactionManager.loadInteractions("home", dataFile: "testDayOne")
+//        game.animationManager.loadAnimations("home", dataFile: "home_characters")
         
-//        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)
-        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)
+//        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
         
         runAction(SKAction.sequence([SKAction.waitForDuration(1.0), SKAction.runBlock({
                 // set up transition
                 let transition = SKTransition.crossFadeWithDuration(1.0)
-                transition.pausesIncomingScene = false
-                transition.pausesOutgoingScene = false
+                transition.pausesIncomingScene = true
+                transition.pausesOutgoingScene = true
                 
                 // set up scene
-                let nextScene = GameScene(size: CGSize(width: self.screen.short, height: self.screen.long))
+                let nextScene = IntroScene(size: CGSize(width: self.screen.long, height: self.screen.short))
+//                let nextScene = GameScene(size: CGSize(width: self.screen.short, height: self.screen.long))
 //                let nextScene = HomeScene(size: CGSize(width: self.screen.long, height: self.screen.short))
             
                 // present scene

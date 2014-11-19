@@ -95,23 +95,24 @@ class InteractionManager {
                     hoverTrigger = tempHovTrig
                 }
             }
-        } else if !interactionHasEnded {
-            timeLeftInMoment -= dt
-            if timeLeftInMoment <= 0 {
-                if let thisMoment = activeInteraction?.currentMoment {
-                    let timeOut = thisMoment.timeOutChoice
-                    executeMomentTransition(speech: timeOut.activeSpeech, animKey: timeOut.animationKey, animQueueKey: timeOut.animationQueueKey, nextMomentKey: timeOut.nextMomentKey)
-                }
-            }
-            if let interaction = activeInteraction {
-                if let thisMoment = interaction.currentMoment {
-                    if let entity = getEntity(interaction.otherEntityKey) {
-                        //entity.speech.updateSpeechAlpha(CGFloat(timeLeftInMoment)/thisMoment.decisionLength)
-                    }
-                }
-            }
-            println("\(timeLeftInMoment)")
         }
+//            else if !interactionHasEnded {
+//                timeLeftInMoment -= dt
+//                if timeLeftInMoment <= 0 {
+//                    if let thisMoment = activeInteraction?.currentMoment {
+//                        let timeOut = thisMoment.timeOutChoice
+//                        executeMomentTransition(speech: timeOut.activeSpeech, animKey: timeOut.animationKey, animQueueKey: timeOut.animationQueueKey, nextMomentKey: timeOut.nextMomentKey)
+//                    }
+//                }
+//                if let interaction = activeInteraction {
+//                    if let thisMoment = interaction.currentMoment {
+//                        if let entity = getEntity(interaction.otherEntityKey) {
+//                            //entity.speech.updateSpeechAlpha(CGFloat(timeLeftInMoment)/thisMoment.decisionLength)
+//                        }
+//                    }
+//                }
+//                println("\(timeLeftInMoment)")
+//            }
     }
     
     // interaction mnagement
@@ -124,6 +125,13 @@ class InteractionManager {
     func beginInteraction(key: String) {
         
         // clear active entity options
+        for i in 0..<interactionTriggers.count {
+            if interactionTriggers[i].linkedInteractionKey == key {
+                interactionTriggers.removeAtIndex(i)
+                break
+            }
+        }
+        
         hoverTrigger = nil
         activeInteractiveEntity?.dismissOption(0)
         
@@ -133,7 +141,7 @@ class InteractionManager {
             
             // player cant move
             (activeInteractiveEntity?.owner as Dad).interact()
-            (activeInteractiveEntity?.owner as Dad).facePoint(getEntity(thisInteraction.otherEntityKey)!.displayNode.position)
+            (activeInteractiveEntity?.owner as Dad).facePoint(getEntity(thisInteraction.otherEntityKey)!.displayNode.getScenePosition())
             
             presentMoment(thisInteraction.startingMomentKey, startDelay: 0.0)
         }
@@ -148,15 +156,15 @@ class InteractionManager {
             if speech != "" {
                 if let entity = getEntity(interaction.activeEntityKey) {
                     offsetTotal += 3.25
-                    entity.displaySpeech(speech, delay: 0.0)
+                    entity.displaySpeech(speech, delay: 0.25)
                     entity.dismissSpeech(delay: offsetTotal)
                 }
             }
-            if let entity = getEntity(interaction.activeEntityKey) {
-                entity.dismissOption(0, delay: 0.0)
+            if let aEntity = getEntity(interaction.activeEntityKey) {
+                aEntity.dismissOption(0, delay: 0.0)
             }
-            if let entity = getEntity(interaction.otherEntityKey) {
-                entity.dismissSpeech(delay: 0.0)
+            if let oEntity = getEntity(interaction.otherEntityKey) {
+                oEntity.dismissSpeech(delay: 0.125)
             }
             offsetTotal += 0.75
             presentMoment(nextMomentKey, startDelay: offsetTotal)
@@ -211,7 +219,7 @@ class InteractionManager {
     func endInteraction() {
         
         // get all of the current objects
-        let otherEntity = getEntity(activeInteraction!.otherEntityKey)!  // activeInteraction just isn't here sometimes
+        let otherEntity = getEntity(activeInteraction!.otherEntityKey)!
         let activeEntity = getEntity(activeInteraction!.activeEntityKey)!
         activeInteraction!.currentMoment = nil
         
@@ -219,6 +227,7 @@ class InteractionManager {
         otherChar.animator.setQueuedAnimation(otherChar.defaultAnimationKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
         otherChar.animator.playAnimation(otherChar.defaultAnimationKey, introPeriod: ANIM_INTRO_CONSTANT_BAD_KILL_ME)
         
+        activeEntity.endInteraction()
         (activeInteractiveEntity!.owner as Dad).stopInteracting()
         
         interactionHasEnded = false
@@ -261,6 +270,8 @@ class InteractiveEntity {
     // MARK: Properties
     let displayNode: NHCNode = NHCNode()
     let owner: NHCNode
+    
+    var completion: () -> () = { }
     
     // buttons
     let slot1:  InteractiveButton = InteractiveButton(type: .Option)
@@ -368,6 +379,10 @@ class InteractiveEntity {
         } else {
             dismiss()
         }
+    }
+    
+    func endInteraction() {
+        completion()
     }
     
 }

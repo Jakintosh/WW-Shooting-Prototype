@@ -15,7 +15,7 @@ enum InteractiveButtonType {
 
 class InteractiveButton : Button {
     
-    let PRESENTATION_TIME: NSTimeInterval = 0.75
+    let PRESENTATION_TIME: NSTimeInterval = 1.25
     
     // MARK: Cool Properties!
     private var label: NORLabelNode = NORLabelNode()
@@ -73,9 +73,13 @@ class InteractiveButton : Button {
         {
         case .Option:
             super.init(activeImageName: "button_default", defaultImageName: "button_default", action: {} )
+            
         case .Speech:
             super.init(activeImageName: "button_speech", defaultImageName: "button_speech", action: {} )
         }
+        
+        self.activeState.alpha = 0.0
+        self.defaultState.alpha = 0.0
         
         if type == .Option { targetAlpha = 0.75 }
         
@@ -84,6 +88,7 @@ class InteractiveButton : Button {
         label.horizontalAlignmentMode = .Center
         label.fontName = "HelveticaNeue-Light"
         label.fontSize = 12.0
+        label.lineSpacing = 1.2
         self.addChild(label)
         
         self.xScale = 0.05
