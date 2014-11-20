@@ -32,6 +32,12 @@ class Whale : NHCNode {
     
     // properties
     var angerState: WhaleAngerState  = .White
+    var scale: CGFloat = 1.0 {
+        didSet {
+            self.xScale = self.scale
+            self.yScale = self.scale
+        }
+    }
     var isAlive: Bool    = true
     var isMirrored: Bool = false
     
@@ -112,7 +118,7 @@ class Whale : NHCNode {
     // methods
     func mirror(m: Bool) {
         isMirrored = m
-        if m { xScale = -1 } else { xScale = 1 }
+        if m { xScale = -scale } else { xScale = scale }
     }
     func jump() {}
     func stun() {}
@@ -169,6 +175,8 @@ class Orca : Whale {
         Stored.instanceNum++
         
         super.init(onDeath: onDeath, ss: ss, animatorKey: key)
+        
+        scale = 0.66
     }
     override func setupAnimationNode() {
         animationNode.xScale = 0.5
@@ -181,9 +189,18 @@ class Orca : Whale {
         let well2 = EnergyWell(radius: 20.0, duration: 0.4)
         let well3 = EnergyWell(radius: 15.0, duration: 0.1)
         
-        well1.position = CGPoint(x:  10.0, y:  20.0)
-        well2.position = CGPoint(x: -45.0, y:   0.0)
-        well3.position = CGPoint(x: -75.0, y: -40.0)
+        well1.position = CGPoint(x: 112.5, y:  100.0)
+        well2.position = CGPoint(x:  20.0, y:   30.0)
+        well3.position = CGPoint(x: -35.0, y: -112.5)
+        
+        well1.xScale = 1.5
+        well1.yScale = 1.5
+        
+        well2.xScale = 1.5
+        well2.yScale = 1.5
+        
+        well3.xScale = 1.5
+        well3.yScale = 1.5
         
         exposedWells += [well1, well2, well3]
         
@@ -191,11 +208,13 @@ class Orca : Whale {
         exposedNode.addChild(well2)
         exposedNode.addChild(well3)
         exposedNode.zPosition = 1
-        exposedNode.zRotation = CGFloat(M_PI) / 6.0
+//        exposedNode.zRotation = CGFloat(M_PI) / 6.0
     }
     override func setupLockOnNode() {
         lockOnWell = EnergyWell(radius: 20.0, duration: 1.0)
         lockOnWell.position = CGPoint(x: 0, y: 0)
+        lockOnWell.xScale = 1.5
+        lockOnWell.yScale = 1.5
         
         lockOnNode.addChild(lockOnWell)
         lockOnNode.zPosition = 1

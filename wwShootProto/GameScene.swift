@@ -73,7 +73,7 @@ class GameScene: SKScene {
         camCon.disableDebug()
         camCon.connectGestureRecognizers(view)
         self.addChild(camCon)
-
+        
         // set positions
         railing.basePosition = CGPoint(x: 0, y: -frame.height/2)
         water.basePosition = CGPoint(x: 0, y: -frame.height/2)
@@ -94,7 +94,7 @@ class GameScene: SKScene {
         camCon.addCameraChild(reticle, withZ: 100)
         
         // run actions
-        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: CGPoint(x: -300, y: -225), mirrored: false)}), SKAction.waitForDuration(10)])))
+        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: CGPoint(x: -250, y: -250), mirrored: false)}), SKAction.waitForDuration(10)])))
     }
     
     override func willMoveFromView(view: SKView) {

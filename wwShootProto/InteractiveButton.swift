@@ -73,9 +73,11 @@ class InteractiveButton : Button {
         {
         case .Option:
             super.init(activeImageName: "button_default", defaultImageName: "button_default", action: {} )
+            label.fontName = "HelveticaNeue-LightItalic"
             
         case .Speech:
             super.init(activeImageName: "button_speech", defaultImageName: "button_speech", action: {} )
+            label.fontName = "HelveticaNeue-Light"
         }
         
         self.activeState.alpha = 0.0
@@ -86,7 +88,6 @@ class InteractiveButton : Button {
         // label setup
         label.verticalAlignmentMode   = .Center
         label.horizontalAlignmentMode = .Center
-        label.fontName = "HelveticaNeue-Light"
         label.fontSize = 12.0
         label.lineSpacing = 1.2
         self.addChild(label)
