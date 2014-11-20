@@ -19,7 +19,9 @@ class Sun : NHCNode {
     }
     
     func update() {
-        self.position.y = (game.timeManager.currentDecimalTime() * -150.0) + 2700
+//        self.position.y = (game.timeManager.currentDecimalTime() * -150.0) + 2700
+        let pixPerHour: CGFloat = 25
+        self.position.y = (130 + (pixPerHour*8)) - (game.timeManager.currentDecimalTime() * pixPerHour)
     }
     
 }

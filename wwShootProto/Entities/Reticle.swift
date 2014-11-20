@@ -11,41 +11,58 @@ import SpriteKit
 
 class Reticle : NHCNode {
     
+    enum ReticleState {
+        case ZoomedIn, ZoomedOut
+    }
+    
+    // parts
+    let reticle: SKSpriteNode
+    let bigReticle: SKSpriteNode
+    
+    // properties
+    var targetPosition: CGPoint = CGPointZero
+    var currentState: ReticleState = .ZoomedOut {
+        didSet {
+            switch (self.currentState)
+            {
+                case .ZoomedIn:
+                    break
+                    
+                case .ZoomedOut:
+                    break
+            }
+        }
+    }
+    
     override init() {
+        
+        reticle = SKSpriteNode(imageNamed: "reticle")
+        bigReticle = SKSpriteNode(imageNamed: "ui_full")
+        
         super.init()
         
         // setup reticle
-        let reticleA = SKShapeNode()
-        let pathA = CGPathCreateMutable()
-        CGPathMoveToPoint(pathA, nil, -10, -10)
-        CGPathAddLineToPoint(pathA, nil, 10, 10)
+        reticle.zPosition = 1
+        bigReticle.alpha = 0.6
         
-        reticleA.path = pathA
-        reticleA.strokeColor = SKColor.redColor()
-        reticleA.fillColor = SKColor.clearColor()
-        self.addChild(reticleA)
+        addChild(reticle)
+        addChild(bigReticle)
         
-        let reticleB = SKShapeNode()
-        let pathB = CGPathCreateMutable()
-        CGPathMoveToPoint(pathB, nil, -10, 10)
-        CGPathAddLineToPoint(pathB, nil, 10, -10)
-        
-        reticleB.path = pathB
-        reticleB.strokeColor = SKColor.redColor()
-        reticleB.fillColor = SKColor.clearColor()
-        self.addChild(reticleB)
-        
-        self.hidden = true
+//        self.hidden = true
     }
     
     func update(touchLocation: CGPoint?) {
         if let u_touchLocation = touchLocation {
-            self.hidden = false
+            self.reticle.hidden = false
+            self.bigReticle.hidden = true
             self.position = u_touchLocation
-            self.position.y += 40
+            self.position.y += 50
         } else {
-            self.hidden = true
-            self.position = CGPoint(x: -9999, y: -9999)
+//            self.hidden = true
+//            self.position = CGPoint(x: -9999, y: -9999)
+            self.reticle.hidden = true
+            self.bigReticle.hidden = false
+            self.position = CGPoint(x: 0, y: 125)
         }
     }
     

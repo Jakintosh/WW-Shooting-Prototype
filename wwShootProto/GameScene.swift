@@ -32,8 +32,8 @@ class GameScene: SKScene {
     
     // systems
     let camCon: CameraController = CameraController()
-    let swipeUpGesture: UISwipeGestureRecognizer!
     let particleEmitter = EnergyParticleEmitter(num: 500)
+//    let swipeUpGesture: UISwipeGestureRecognizer!
     
     // scene vars
     let areaWidth: CGFloat      = 700.0
@@ -46,26 +46,26 @@ class GameScene: SKScene {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-        swipeUpGesture.numberOfTouchesRequired = 3
-        swipeUpGesture.direction = .Up
-        swipeUpGesture.cancelsTouchesInView = false
+//        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+//        swipeUpGesture.numberOfTouchesRequired = 3
+//        swipeUpGesture.direction = .Up
+//        swipeUpGesture.cancelsTouchesInView = false
     }
     
     override init(size: CGSize) {
         super.init(size: size)
         
-        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-        swipeUpGesture.numberOfTouchesRequired = 3
-        swipeUpGesture.direction = .Up
-        swipeUpGesture.cancelsTouchesInView = false
+//        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+//        swipeUpGesture.numberOfTouchesRequired = 3
+//        swipeUpGesture.direction = .Up
+//        swipeUpGesture.cancelsTouchesInView = false
     }
     
     // MARK: - UIKit
     override func didMoveToView(view: SKView) {
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        view.addGestureRecognizer(swipeUpGesture)
+//        view.addGestureRecognizer(swipeUpGesture)
         
         // setup camera
         camCon.zPosition = 0.0
@@ -77,29 +77,34 @@ class GameScene: SKScene {
         // set positions
         railing.basePosition = CGPoint(x: 0, y: -frame.height/2)
         water.basePosition = CGPoint(x: 0, y: -frame.height/2)
+        sun.position = CGPoint(x: 0, y: 130)
+        sun.zPosition = -10
         
         // add character to railing
         char.zPosition = 1
+        char.position.y = 7
+        char.animationScale = 0.17
         railing.addChild(char)
         
         // add sun water and background
+        water.addChild(sun)
         camCon.addCameraChild(bg, withZ: -500)
-        camCon.addCameraChild(sun, withZ: -490)
+//        camCon.addCameraChild(sun, withZ: -490)
         camCon.addCameraChild(water, withZ: -480)
         
         // add character and railing
         camCon.addCameraChild(railing, withZ: 0)
         
         // add reticle
-        camCon.addCameraChild(reticle, withZ: 100)
+        camCon.addCameraChild(reticle, withZ: -10)
         
         // run actions
         runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock({self.addWhale(position: CGPoint(x: -250, y: -250), mirrored: false)}), SKAction.waitForDuration(10)])))
     }
     
-    override func willMoveFromView(view: SKView) {
-        view.removeGestureRecognizer(swipeUpGesture)
-    }
+//    override func willMoveFromView(view: SKView) {
+//        view.removeGestureRecognizer(swipeUpGesture)
+//    }
     
     // MARK: - Logic
     override func update(currentTime: CFTimeInterval) {
@@ -118,8 +123,10 @@ class GameScene: SKScene {
         // update sun position
         sun.update()
         
-        // update sky shader
+        // update sky shader // not in there anymore
         bg.update(game.timeManager.currentDecimalTime())
+        
+        char.update(deltaTime)
         
         // update camera position
         updateCameraPosition()
@@ -131,7 +138,7 @@ class GameScene: SKScene {
                 let retPos = self.convertPoint(sceneTouch, toNode: coordSys)
                 let distanceSq = Utilities2D.distanceSquaredFromPoint(particle.position, toPoint: retPos)
                 if distanceSq < (30*30) {
-                    particle.remove()
+                    particle.collect()
         }   }   }
         particleEmitter.update(deltaTime)
         if !reticle.hidden { particleEmitter.updateParticles(particleUpdate) }
@@ -253,6 +260,8 @@ class GameScene: SKScene {
             touchLocation = touch.locationInNode(camCon.rootNode)
             self.touch = touch as? UITouch
             targetAreaPos = water.convertPoint(touchLocation!, fromNode: camCon.rootNode).x
+            
+            char.currentState = .Aim
         }
     }
     
@@ -267,13 +276,11 @@ class GameScene: SKScene {
         touchLocation = nil
         touch = nil
         
-        for whale in whales {
-//            whale.disengage()
-        }
+        char.currentState = .Idle
     }
     
-    func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
-//        transitionHome()
-        camCon.shake(20.0, duration: 2.0)
-    }
+//    func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
+//
+//        camCon.shake(20.0, duration: 2.0)
+//    }
 }

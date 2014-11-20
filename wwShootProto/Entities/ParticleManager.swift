@@ -118,14 +118,14 @@ class EnergyParticleEmitter : NHCNode {
         let distance: CGFloat = (distMod * distMod) * burstDistance
         let x = cos(angle) * distance + p.position.x
         let y = sin(angle) * distance + p.position.y
+        let s: CGFloat = (CGFloat(arc4random() % 100) / 100.0)
         
         let move = SKAction.moveTo(CGPoint(x: x, y: y), duration: burstTime)
         move.timingMode = .EaseOut
         
-        let rotate = SKAction.rotateByAngle( CGFloat(distMod * 3.0 - 1.5), duration: particleLifetime )
-        let scale = SKAction.scaleBy(distMod, duration: particleLifetime)
+        let scale = SKAction.scaleBy(s, duration: particleLifetime)
         
-        p.runAction( SKAction.group([move,rotate, scale]) )
+        p.runAction( SKAction.group([move, scale]) )
         p.runAction( SKAction.waitForDuration(particleLifetime), completion: { p.remove() } )
     }
     
@@ -142,17 +142,20 @@ class EnergyParticle : NHCNode {
     
     let removeClosure: (i: Int) -> Void
     let removeAction: SKAction
+    let collectAction: SKAction
     
     // components
-    let sprite: SKSpriteNode = SKSpriteNode(imageNamed: "bokeh")
+    let sprite: SKSpriteNode = SKSpriteNode(imageNamed: "particle")
     
     init(i: Int, remove: (Int) -> Void) {
         
         let rotate = CGFloat((i % 2) - 1) * CGFloat(M_PI_2)
         removeClosure = remove
-        removeAction = SKAction.group( [SKAction.scaleBy(2.0, duration: 0.25),
-                                        SKAction.fadeAlphaTo(0.0, duration: 0.25),
-                                        SKAction.rotateByAngle(rotate, duration: 0.25)] )
+        removeAction = SKAction.group( [SKAction.scaleTo(0.0, duration: 0.25),
+                                        SKAction.fadeAlphaTo(0.0, duration: 0.25)] )
+        
+        collectAction = SKAction.group( [SKAction.scaleBy(2.5, duration: 0.25),
+                                         SKAction.fadeAlphaTo(0.0, duration: 0.25)] )
         
         index = i
         super.init()
@@ -167,8 +170,9 @@ class EnergyParticle : NHCNode {
     }
     
     func reset() {
-        self.xScale    = 0.15
-        self.yScale    = 0.15
+        let rand: CGFloat = (CGFloat(arc4random() % 50) / 100.0) - 0.25
+        self.xScale    = 1.0 + rand
+        self.yScale    = 1.0 + rand
         self.alpha     = 1.0
         self.zRotation = 0.0
     }
@@ -183,6 +187,16 @@ class EnergyParticle : NHCNode {
         self.active   = true
         self.position = pos
         root.addChild(self)
+    }
+    
+    func collect() {
+        self.active = false
+        self.removeAllActions()
+        runAction(collectAction, completion: {
+            self.removeClosure(i: self.index)
+            self.removeFromParent()
+            self.reset()
+        })
     }
     
     func remove() {

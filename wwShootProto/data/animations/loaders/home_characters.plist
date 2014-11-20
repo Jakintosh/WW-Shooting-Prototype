@@ -26,5 +26,13 @@
 		<key>atlas</key>
 		<string>whale_orca</string>
 	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_player_entity</string>
+		<key>json</key>
+		<string>dad_work</string>
+		<key>atlas</key>
+		<string>dad_work</string>
+	</dict>
 </array>
 </plist>

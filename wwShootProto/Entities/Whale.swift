@@ -71,7 +71,7 @@ class Whale : NHCNode {
         animationNode.removeAllChildren()
         
         game.animationManager.setSpineForEntity(spineKey, entityKey: animatorKey)
-        animator.setupSpine(animKey, introPeriod: 0.5)
+        animator.setupSpine(animKey, introPeriod: 0.1)
         
         if let spineNode = animator.animationSpine {
             animationNode.addChild(spineNode)
@@ -162,9 +162,9 @@ class Orca : Whale {
         }
         let verticalMovement = SKAction.sequence([up, /*SKAction.waitForDuration(animLength/3.0)*/ down])
         let rotate = SKAction.sequence([
-            SKAction.rotateByAngle(CGFloat(M_PI * -0.1), duration: animLength/4.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *  -0.05), duration: animLength/4.0),
             SKAction.rotateByAngle(CGFloat(M_PI *  0.0), duration: animLength/2.0),
-            SKAction.rotateByAngle(CGFloat(M_PI *  0.1), duration: animLength/4.0)])
+            SKAction.rotateByAngle(CGFloat(M_PI * -0.1), duration: animLength/4.0)])
         
         jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
         jumpAction.timingMode = .EaseInEaseOut
@@ -176,13 +176,12 @@ class Orca : Whale {
         
         super.init(onDeath: onDeath, ss: ss, animatorKey: key)
         
-        scale = 0.66
+        scale = 0.8
     }
     override func setupAnimationNode() {
         animationNode.xScale = 0.5
         animationNode.yScale = 0.5
-        setSpine("spine_whale_orca_default", animKey: "jump_normal")
-//        animator.animationSpine?.timeResolution = 5.0 / 8.0
+        setSpine("spine_whale_orca_default", animKey: "jump_white")
     }
     override func setupExposedNode() {
         let well1 = EnergyWell(radius: 25.0, duration: 0.5)
@@ -193,14 +192,14 @@ class Orca : Whale {
         well2.position = CGPoint(x:  20.0, y:   30.0)
         well3.position = CGPoint(x: -35.0, y: -112.5)
         
-        well1.xScale = 1.5
-        well1.yScale = 1.5
+        well1.xScale = 1.0 / scale
+        well1.yScale = 1.0 / scale
         
-        well2.xScale = 1.5
-        well2.yScale = 1.5
+        well2.xScale = 1.0 / scale
+        well2.yScale = 1.0 / scale
         
-        well3.xScale = 1.5
-        well3.yScale = 1.5
+        well3.xScale = 1.0 / scale
+        well3.yScale = 1.0 / scale
         
         exposedWells += [well1, well2, well3]
         
@@ -208,7 +207,6 @@ class Orca : Whale {
         exposedNode.addChild(well2)
         exposedNode.addChild(well3)
         exposedNode.zPosition = 1
-//        exposedNode.zRotation = CGFloat(M_PI) / 6.0
     }
     override func setupLockOnNode() {
         lockOnWell = EnergyWell(radius: 20.0, duration: 1.0)
@@ -240,7 +238,7 @@ class Orca : Whale {
         super.jump()
         runAction(jumpAction, completion: { self.remove() })
         lockOnNode.hidden = false
-        animator.playAnimation("jump_normal", introPeriod: 0.1)
+        animator.playAnimation("jump_white", introPeriod: 0.1)
     }
     override func stun() {
         super.stun()

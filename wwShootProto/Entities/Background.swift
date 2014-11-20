@@ -11,19 +11,21 @@ import SpriteKit
 
 class Background : NHCCenteredParallaxNode {
     
-    let sky: NHCSky
+//    let sky: NHCSky
+    let sky: SKSpriteNode
     
     init(sceneWidth: CGFloat) {
-        let skyTexture = SKTexture(imageNamed: "sky")
-        sky = NHCSky(color: SKColor.whiteColor(), size: skyTexture.size())
-        sky.texture = skyTexture // dont ask
+//        let skyTexture = SKTexture(imageNamed: "sky")
+//        sky = NHCSky(color: SKColor.whiteColor(), size: skyTexture.size())
+//        sky.texture = skyTexture // dont ask
+        sky = SKSpriteNode(imageNamed: "sky")
         
-        super.init(rangeH: sky.size.width - sceneWidth, rangeV: 0.0)
+        super.init(rangeH: 80, rangeV: 0.0)
         
         self.addChild(sky)
     }
     
     func update(time: CGFloat) {
-        sky.updateShader(time)
+//        sky.updateShader(time)
     }
 }
