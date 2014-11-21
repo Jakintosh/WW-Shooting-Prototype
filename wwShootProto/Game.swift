@@ -14,6 +14,8 @@ class Game {
     let animationManager:    AnimationManager    = AnimationManager()
     let interactionManager:  InteractionManager  = InteractionManager()
     let timeManager:         TimeManager         = TimeManager()
+    let energyManager:       EnergyManager       = EnergyManager()
+    let screamManager:       ScreamingManager    = ScreamingManager()
     let motionManager:       CMMotionManager     = CMMotionManager()
     
 }

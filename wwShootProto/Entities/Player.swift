@@ -43,7 +43,7 @@ class Player : NHCNode {
     }
     
     override init() {
-        self.animatorKey = "playerEntity"
+        self.animatorKey = "player_entity"
         
         super.init()
         
@@ -63,6 +63,9 @@ class Player : NHCNode {
         if let spineNode = animator.animationSpine {
             animationNode.addChild(spineNode)
         }
+    }
+    func shoot() {
+        animator.playAnimation("shoot", introPeriod: 0.1)
     }
     
     func setupAnimationNode() {

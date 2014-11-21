@@ -193,6 +193,7 @@ class EnergyParticle : NHCNode {
         self.active = false
         self.removeAllActions()
         runAction(collectAction, completion: {
+            game.energyManager.addEnergy(0.1)
             self.removeClosure(i: self.index)
             self.removeFromParent()
             self.reset()

@@ -15,28 +15,262 @@ class WhaleSpawnManager {
     enum HeatLevel {
         case Low, Mid, High, End
     }
+    class WhaleSpawnLayer {
+        
+        class WhaleSpawnPoint {
+            var ID: Int
+            var point: CGPoint
+            var isOccupied: Bool
+            
+            init(pos: CGPoint, id: Int) {
+                ID = id
+                point = pos
+                isOccupied = false
+            }
+            
+            func occupy() {
+                isOccupied = true
+            }
+            
+            func abandon() {
+                isOccupied = false
+            }
+        }
+        
+        var node: NHCNode
+        var spawnPoints: [WhaleSpawnPoint] = [WhaleSpawnPoint]()
+        
+        init(spawns: [CGPoint]) {
+            node = NHCNode()
+            var id = 0
+            for point in spawns {
+                spawnPoints += [WhaleSpawnPoint(pos: point, id: id++)]
+            }
+        }
+        
+        func getSpawnPoint() -> (pos: CGPoint, i: Int) {
+            var availableSpawns = [WhaleSpawnPoint]()
+            for point in spawnPoints {
+                if !point.isOccupied {
+                    availableSpawns.append(point)
+                }
+            }
+            let index = arc4random_uniform(UInt32(availableSpawns.count))
+            availableSpawns[Int(index)].occupy()
+            let selectedSpawn = availableSpawns[Int(index)]
+            return (selectedSpawn.point, selectedSpawn.ID)
+        }
+        
+        func pointsAvailable() -> Bool {
+            for point in spawnPoints {
+                if !point.isOccupied {
+                    return true
+                }
+            }
+            return false
+        }
+        
+        func clearSpawnPoint(id: Int) {
+            for i in 0..<spawnPoints.count {
+                if spawnPoints[i].ID == id {
+                    spawnPoints[i].abandon()
+                }
+            }
+        }
+    }
     
+    struct WhaleAnimation {
+        var spine: SGG_Spine
+        var owner: SKNode?
+        
+        func isAvailable() -> Bool {
+            if owner == nil {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
     
     // properties
     var heatLevel: HeatLevel
+    var timeUntilEval: NSTimeInterval = 0.0
+    var instances: Int = 0
+    
+    let backLayer: WhaleSpawnLayer  = WhaleSpawnLayer(spawns:  [CGPoint(x: -250.0, y: -250.0), CGPoint(x: 0.0, y: -250.0), CGPoint(x: 250.0, y: -250.0)])
+    let midLayer:  WhaleSpawnLayer   = WhaleSpawnLayer(spawns: [CGPoint(x: -200.0, y: -250.0), CGPoint(x: 200.0, y: -250.0)])
+    let frontLayer: WhaleSpawnLayer = WhaleSpawnLayer(spawns:  [CGPoint(x: -200.0, y: -250.0), CGPoint(x: 200.0, y: -250.0)])
     
     // components
+    var activeWhales: [Whale] = [Whale]()
+    var orcaAnimations: [WhaleAnimation] = [WhaleAnimation]()
     
-    
-    init() {
-        heatLevel = .Low
+    var particleEmitter: EnergyParticleEmitter!
+    var camCon: CameraController!
+    var baseNode: NHCNode! {
+        didSet {
+            backLayer.node.removeFromParent()
+            midLayer.node.removeFromParent()
+            frontLayer.node.removeFromParent()
+            
+            self.baseNode.addChild(backLayer.node)
+            self.baseNode.addChild(midLayer.node)
+            self.baseNode.addChild(frontLayer.node)
+        }
     }
     
-    func update() {
+    init() {
+        heatLevel = .Mid
         
+        // preload the orca animations
+        for i in 0..<5 {
+            if let spine = game.animationManager.getSpine(spineKey: "spine_whale_orca_default") {
+                orcaAnimations += [WhaleAnimation(spine: spine, owner: nil)]
+            }
+        }
+        
+        backLayer.node.zPosition = 1
+        midLayer.node.zPosition = 11
+        frontLayer.node.zPosition = 21
+        
+        backLayer.node.name = "back"
+        midLayer.node.name = "mid"
+        frontLayer.node.name = "front"
+        
+        backLayer.node.xScale = 0.6
+        backLayer.node.yScale = 0.6
+        midLayer.node.xScale = 0.85
+        midLayer.node.yScale = 0.85
+    }
+    
+    func update(screenPos: CGPoint, dt: CFTimeInterval) {
+        timeUntilEval -= dt
+        if timeUntilEval <= 0 {
+            timeUntilEval = 6.0
+            
+            // add new whales (if necessary)
+            if activeWhales.count < getMaxWhales() {
+                createWhale()
+            }
+            
+            // see if any whales should jump
+            var numWhalesJumping = 0
+            for whale in activeWhales {
+                if whale.whaleState != .Submerged { numWhalesJumping++ }
+            }
+            if numWhalesJumping < (getMaxWhales() - 1) {
+                whaleJump()
+            }
+        }
+        
+        var whaleScreamTime: CGFloat = 0.0
+        for whale in activeWhales {
+            whale.update(screenPos, dt: dt)
+            whaleScreamTime += whale.getScream()
+        }
+        game.screamManager.update(dt, totalScreams: whaleScreamTime)
     }
     
     // must keep track of the current whales in play
     func createWhale() {
+        let spawnLayer = getRandomSpawnLayer()
         
+        let newIndex = instances++
+        
+        let onDeath: (pos: CGPoint, root: SKNode) -> Void = { (pos, root) in
+            self.particleEmitter.addToQueue(200, pos: pos, root: root)
+            self.destroyWhale(newIndex)
+        }
+        let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
+        
+        let newOrca = Orca(onDeath: onDeath, ss: ss, mgrInd: newIndex)
+        
+        if connectAnimationForOrca(newOrca) {
+            newOrca.zPosition = -1
+            if arc4random_uniform(2) == 0 { newOrca.mirror(true) }
+            activeWhales += [newOrca]
+        } else {
+            println("whale creation failed due to lack of animations")
+        }
     }
-    func destroyWhale() {
+    func destroyWhale(whaleID: Int) {
+        for i in 0..<activeWhales.count {
+            if activeWhales[i].managerIndex == whaleID {
+                disconnectAnimationForOrca(activeWhales[i] as Orca)
+                activeWhales[i].onSubmerge()
+                activeWhales.removeAtIndex(i)
+                break
+            }
+        }
+    }
+    func whaleJump() {
+        for whale in activeWhales {
+            if whale.whaleState == .Submerged {
+                if var spawnLayer = getRandomSpawnLayer() {
+                    let info = spawnLayer.getSpawnPoint()
+                    whale.position = info.pos
+                    if arc4random_uniform(2) == 0 { whale.mirror(true) }
+                    else { whale.mirror(false) }
+                    spawnLayer.node.addChild(whale)
+                    whale.onSubmerge = {
+                        spawnLayer.clearSpawnPoint(info.i)
+                    }
+                    whale.jump()
+                } else {
+                    println("no layers are available to spawn in!")
+                }
+                break
+            }
+        }
+    }
+    func getRandomSpawnLayer() -> WhaleSpawnLayer? {
+        var spawnLayer: WhaleSpawnLayer?
+        var eligibleLayers = [WhaleSpawnLayer]()
         
+        if backLayer.pointsAvailable()  { eligibleLayers.append(backLayer)  }
+        if midLayer.pointsAvailable()   { eligibleLayers.append(midLayer)   }
+        if frontLayer.pointsAvailable() { eligibleLayers.append(frontLayer) }
+        
+        if !eligibleLayers.isEmpty {
+            let rand = arc4random_uniform(UInt32(eligibleLayers.count))
+            spawnLayer = eligibleLayers[Int(rand)]
+        }
+        return spawnLayer
+    }
+    func getMaxWhales() -> Int {
+        switch( heatLevel )
+        {
+            case .Low:
+                return 2
+                
+            case .Mid:
+                return 3
+                
+            case .High:
+                return 4
+                
+            case .End:
+                return 5
+        }
+    }
+    func connectAnimationForOrca(whale: Orca) -> Bool {
+        for i in 0..<orcaAnimations.count {
+            var anim = orcaAnimations[i]
+            if orcaAnimations[i].isAvailable() {
+                orcaAnimations[i].owner = whale
+                whale.setSpine(orcaAnimations[i].spine, animKey: "jump_white")
+                return true
+            }
+        }
+        return false
+    }
+    func disconnectAnimationForOrca(whale: Orca) {
+        for i in 0..<orcaAnimations.count {
+            if orcaAnimations[i].owner == whale {
+                orcaAnimations[i].owner = nil
+                whale.animator.removeSpine()
+            }
+        }
     }
     
     // must spawn new whales to keep challenge mapped to heat level

@@ -11,15 +11,18 @@
 		2102C70619E1D222008E830A /* Utilities2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2102C70519E1D222008E830A /* Utilities2D.swift */; };
 		2103B3601A11A4B600CCDCB9 /* Sky.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 2103B35F1A11A4B600CCDCB9 /* Sky.fsh */; };
 		2103B3641A11A74700CCDCB9 /* NHCSky.m in Sources */ = {isa = PBXBuildFile; fileRef = 2103B3631A11A74700CCDCB9 /* NHCSky.m */; };
+		213218AC1A1ED80F00330E1F /* EnergyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213218AB1A1ED80F00330E1F /* EnergyManager.swift */; };
+		213218AE1A1EDC7100330E1F /* EnergyHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213218AD1A1EDC7100330E1F /* EnergyHUD.swift */; };
+		213218B01A1FB65100330E1F /* ScreamingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213218AF1A1FB65100330E1F /* ScreamingManager.swift */; };
+		213218B21A1FCC9600330E1F /* whale_scream.wav in Resources */ = {isa = PBXBuildFile; fileRef = 213218B11A1FCC9600330E1F /* whale_scream.wav */; };
 		216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216101EB1A0D178B000AA0AB /* InteractiveButton.swift */; };
 		216B93861A17F3E9000F4D2D /* islandCounter.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93821A17F3E9000F4D2D /* islandCounter.png */; };
 		216B93871A17F3E9000F4D2D /* islandCounter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93831A17F3E9000F4D2D /* islandCounter@2x.png */; };
 		216B93881A17F3E9000F4D2D /* tvTable.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93841A17F3E9000F4D2D /* tvTable.png */; };
 		216B93891A17F3E9000F4D2D /* tvTable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 216B93851A17F3E9000F4D2D /* tvTable@2x.png */; };
 		216B93981A186729000F4D2D /* NORLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 216B93971A186729000F4D2D /* NORLabelNode.m */; };
-		216F548A19D114740040BB89 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 216F548819D114740040BB89 /* bokeh.png */; };
+		217072631A1EB5C700D0CFC8 /* whale_orca.json in Resources */ = {isa = PBXBuildFile; fileRef = 217072621A1EB5C700D0CFC8 /* whale_orca.json */; };
 		21AEC7411A1D99AB0052F53F /* dad_work.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21AEC7401A1D99AB0052F53F /* dad_work.atlas */; };
-		21AEC7471A1DB3960052F53F /* whale_orca.json in Resources */ = {isa = PBXBuildFile; fileRef = 21AEC7461A1DB3960052F53F /* whale_orca.json */; };
 		21AEC7491A1DB3B30052F53F /* whale_orca.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21AEC7481A1DB3B30052F53F /* whale_orca.atlas */; };
 		21AEC74B1A1DB5560052F53F /* dad_work.json in Resources */ = {isa = PBXBuildFile; fileRef = 21AEC74A1A1DB5560052F53F /* dad_work.json */; };
 		21B2E7B819F1E20200000E70 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2E7B719F1E20200000E70 /* House.swift */; };
@@ -106,6 +109,10 @@
 		2103B35F1A11A4B600CCDCB9 /* Sky.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Sky.fsh; sourceTree = "<group>"; };
 		2103B3621A11A74700CCDCB9 /* NHCSky.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NHCSky.h; sourceTree = "<group>"; };
 		2103B3631A11A74700CCDCB9 /* NHCSky.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NHCSky.m; sourceTree = "<group>"; };
+		213218AB1A1ED80F00330E1F /* EnergyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnergyManager.swift; sourceTree = "<group>"; };
+		213218AD1A1EDC7100330E1F /* EnergyHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EnergyHUD.swift; path = Entities/EnergyHUD.swift; sourceTree = "<group>"; };
+		213218AF1A1FB65100330E1F /* ScreamingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreamingManager.swift; sourceTree = "<group>"; };
+		213218B11A1FCC9600330E1F /* whale_scream.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = whale_scream.wav; sourceTree = "<group>"; };
 		2136D43019FDD31400DB07BD /* wwShootProto-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "wwShootProto-Bridging-Header.h"; sourceTree = "<group>"; };
 		216101EB1A0D178B000AA0AB /* InteractiveButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InteractiveButton.swift; sourceTree = "<group>"; };
 		216B93821A17F3E9000F4D2D /* islandCounter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = islandCounter.png; path = resources/house.atlas/islandCounter.png; sourceTree = SOURCE_ROOT; };
@@ -114,9 +121,8 @@
 		216B93851A17F3E9000F4D2D /* tvTable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tvTable@2x.png"; path = "resources/house.atlas/tvTable@2x.png"; sourceTree = SOURCE_ROOT; };
 		216B93961A186729000F4D2D /* NORLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NORLabelNode.h; sourceTree = "<group>"; };
 		216B93971A186729000F4D2D /* NORLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NORLabelNode.m; sourceTree = "<group>"; };
-		216F548819D114740040BB89 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
+		217072621A1EB5C700D0CFC8 /* whale_orca.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = whale_orca.json; path = resources/whale_orca/whale_orca.json; sourceTree = SOURCE_ROOT; };
 		21AEC7401A1D99AB0052F53F /* dad_work.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = dad_work.atlas; path = resources/dad_work/dad_work.atlas; sourceTree = SOURCE_ROOT; };
-		21AEC7461A1DB3960052F53F /* whale_orca.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = whale_orca.json; path = resources/whale_orca/whale_orca.json; sourceTree = SOURCE_ROOT; };
 		21AEC7481A1DB3B30052F53F /* whale_orca.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = whale_orca.atlas; path = resources/whale_orca/whale_orca.atlas; sourceTree = SOURCE_ROOT; };
 		21AEC74A1A1DB5560052F53F /* dad_work.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dad_work.json; path = resources/dad_work/dad_work.json; sourceTree = SOURCE_ROOT; };
 		21B2E7B719F1E20200000E70 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
@@ -275,7 +281,6 @@
 		2181E16C19D10E93009FE3FB /* Particles */ = {
 			isa = PBXGroup;
 			children = (
-				216F548819D114740040BB89 /* bokeh.png */,
 			);
 			name = Particles;
 			sourceTree = "<group>";
@@ -295,6 +300,7 @@
 				21E3B6141A191BE000195D36 /* Railing.swift */,
 				21E3B6181A191E3800195D36 /* Player.swift */,
 				21E3B61A1A191F8300195D36 /* Reticle.swift */,
+				213218AD1A1EDC7100330E1F /* EnergyHUD.swift */,
 				21E3B61C1A1921A700195D36 /* Water.swift */,
 				21E3B61E1A19228C00195D36 /* Sun.swift */,
 				21E3B6301A1929ED00195D36 /* Background.swift */,
@@ -448,6 +454,7 @@
 		21E3B60C1A190F7B00195D36 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				213218B11A1FCC9600330E1F /* whale_scream.wav */,
 				21E3B6121A19114300195D36 /* whale_explosion.caf */,
 				21E3B6101A1910E800195D36 /* whale_explosion.wav */,
 			);
@@ -498,8 +505,8 @@
 		21EA22A619FED83E00A1E612 /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				217072621A1EB5C700D0CFC8 /* whale_orca.json */,
 				21AEC74A1A1DB5560052F53F /* dad_work.json */,
-				21AEC7461A1DB3960052F53F /* whale_orca.json */,
 				21EB818E1A0A5FCB00C7525D /* daughter.json */,
 				21EB818A1A0A5FC100C7525D /* dad.json */,
 				21EA229B19FDEFA000A1E612 /* main.json */,
@@ -555,6 +562,8 @@
 				2103B3611A11A70500CCDCB9 /* Sky */,
 				21EA22E019FF1FAE00A1E612 /* TimeManager.swift */,
 				21E038DD1A1BAD8100EDC37E /* WhaleSpawnManager.swift */,
+				213218AB1A1ED80F00330E1F /* EnergyManager.swift */,
+				213218AF1A1FB65100330E1F /* ScreamingManager.swift */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -653,15 +662,15 @@
 				21EB818C1A0A5FC100C7525D /* dad.json in Resources */,
 				21EA229C19FDEFA000A1E612 /* main.json in Resources */,
 				2103B3601A11A4B600CCDCB9 /* Sky.fsh in Resources */,
+				213218B21A1FCC9600330E1F /* whale_scream.wav in Resources */,
 				21E3B6111A1910E800195D36 /* whale_explosion.wav in Resources */,
 				21E3B6131A19114300195D36 /* whale_explosion.caf in Resources */,
 				21D2072D1A105FD40019A73B /* Attic.png in Resources */,
 				21D2072E1A105FD40019A73B /* Attic@2x.png in Resources */,
-				21AEC7471A1DB3960052F53F /* whale_orca.json in Resources */,
 				21D2072F1A105FD40019A73B /* Bathroom.png in Resources */,
+				217072631A1EB5C700D0CFC8 /* whale_orca.json in Resources */,
 				21D207301A105FD40019A73B /* Bathroom@2x.png in Resources */,
 				21AEC74B1A1DB5560052F53F /* dad_work.json in Resources */,
-				216F548A19D114740040BB89 /* bokeh.png in Resources */,
 				216B93861A17F3E9000F4D2D /* islandCounter.png in Resources */,
 				216B93871A17F3E9000F4D2D /* islandCounter@2x.png in Resources */,
 				21AEC7491A1DB3B30052F53F /* whale_orca.atlas in Resources */,
@@ -706,11 +715,14 @@
 				21EA22D919FF001900A1E612 /* SGG_SkinSlot.m in Sources */,
 				21B2E7B819F1E20200000E70 /* House.swift in Sources */,
 				2103B3641A11A74700CCDCB9 /* NHCSky.m in Sources */,
+				213218B01A1FB65100330E1F /* ScreamingManager.swift in Sources */,
 				21E3B6331A19904C00195D36 /* Whale.swift in Sources */,
 				21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */,
 				21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
+				213218AE1A1EDC7100330E1F /* EnergyHUD.swift in Sources */,
 				21EA22DB19FF001900A1E612 /* SGG_Spine.m in Sources */,
+				213218AC1A1ED80F00330E1F /* EnergyManager.swift in Sources */,
 				21E3B61D1A1921A700195D36 /* Water.swift in Sources */,
 				216B93981A186729000F4D2D /* NORLabelNode.m in Sources */,
 				21E3B6311A1929ED00195D36 /* Background.swift in Sources */,

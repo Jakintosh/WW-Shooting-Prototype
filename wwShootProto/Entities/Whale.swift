@@ -13,6 +13,24 @@ class Whale : NHCNode {
     
     enum WhaleAngerState {
         case White, Yellow, Red
+        
+        mutating func increase() {
+            switch (self)
+            {
+                case .White:
+                    self = .Yellow
+                    
+                case .Yellow:
+                    self = .Red
+                    
+                case .Red:
+                    self = .Red
+            }
+        }
+    }
+    
+    enum WhaleState {
+        case Submerged, Jumping, Stunned
     }
     
     // components
@@ -27,25 +45,36 @@ class Whale : NHCNode {
     var exposedWells: [EnergyWell] = [EnergyWell]()
     
     // closures
-    let onDeath: (pos: CGPoint) -> Void
-    let screenShake: (intensity: CGFloat, duration: NSTimeInterval)->Void
+    let onDeath: (pos: CGPoint, root: SKNode) -> Void
+    let screenShake: (intensity: CGFloat, duration: NSTimeInterval) -> Void
+    var onSubmerge: () -> () = {}
     
     // properties
+    var isAlive: Bool     = true
+    var isScreaming: Bool = false
+    var isMirrored: Bool  = false
+    var managerIndex: Int
     var angerState: WhaleAngerState  = .White
+    var whaleState: WhaleState = .Submerged
+    var timeSubmerged: NSTimeInterval = 0.0
+    var timeScreaming: NSTimeInterval = 0.0
+    var dirMult: CGFloat {
+        if isMirrored { return -1.0 }
+        else { return 1.0 }
+    }
     var scale: CGFloat = 1.0 {
         didSet {
             self.xScale = self.scale
             self.yScale = self.scale
         }
     }
-    var isAlive: Bool    = true
-    var isMirrored: Bool = false
     
     // initialization
-    init(onDeath: (CGPoint) -> Void, ss: (CGFloat, NSTimeInterval)->Void, animatorKey: String) {
+    init(onDeath: (CGPoint, SKNode) -> Void, ss: (CGFloat, NSTimeInterval)->Void, mgrInd: Int, animatorKey: String) {
         self.onDeath = onDeath
         self.screenShake = ss
         self.animatorKey = animatorKey
+        self.managerIndex = mgrInd
         
         super.init()
         
@@ -77,12 +106,40 @@ class Whale : NHCNode {
             animationNode.addChild(spineNode)
         }
     }
+    func setSpine(spine: SGG_Spine, animKey: String) {
+        animationNode.removeAllChildren()
+        
+        animator.setSpine(spine)
+        animator.setupSpine(animKey, introPeriod: 0.1)
+        
+        if let spineNode = animator.animationSpine {
+            animationNode.addChild(spineNode)
+        }
+    }
+    func removeSpine() {
+        animator.removeSpine()
+    }
     
     // updates
     func update(scenePos: CGPoint, dt: CFTimeInterval) {
+        
         updateAnimationNode(dt)
-        if !exposedNode.hidden { updateExposedNode(scenePos, dt: dt) }
-        if !lockOnNode.hidden  { updateLockOnNode(scenePos, dt: dt) }
+        
+        switch( whaleState )
+        {
+            case .Jumping:
+                updateLockOnNode(scenePos, dt: dt)
+                
+            case .Submerged:
+                timeSubmerged += dt
+            
+            case .Stunned:
+                updateExposedNode(scenePos, dt: dt)
+        }
+        
+        if isScreaming {
+            timeScreaming += dt
+        }
     }
     func updateAnimationNode(dt: CFTimeInterval) {
         animator.update(dt)
@@ -95,6 +152,7 @@ class Whale : NHCNode {
                 if well.lockedOn {
                     well.burst()
                     screenShake(intensity: 5, duration: 0.25)
+                    game.animationManager.runAnimation("player_entity", animationName: "shoot", introPeriod: 0.1)
                     numFinished++
                 }
             } else {
@@ -112,6 +170,7 @@ class Whale : NHCNode {
         if lockOnWell.lockedOn {
             stun()
             screenShake(intensity: 10, duration: 0.33)
+            game.animationManager.runAnimation("player_entity", animationName: "shoot", introPeriod: 0.1)
         }
     }
     
@@ -120,12 +179,56 @@ class Whale : NHCNode {
         isMirrored = m
         if m { xScale = -scale } else { xScale = scale }
     }
-    func jump() {}
-    func stun() {}
+    func dive() {
+        whaleState = .Submerged
+        timeSubmerged = 0.0
+        stopScream()
+        
+        angerState.increase()
+        onSubmerge()
+        
+        // reset lock on mode
+        lockOnNode.hidden = true
+        lockOnWell.resetWell()
+        
+        // hide exposed
+        exposedNode.hidden = true
+        
+        // reset visual propertiess
+        self.zRotation = 0.0
+        self.removeFromParent()
+    }
+    func jump() {
+        whaleState = .Jumping
+        lockOnNode.hidden = false
+    }
+    func stun() {
+        whaleState = .Stunned
+        lockOnNode.hidden = true
+        exposedNode.hidden = false
+        stopScream()
+    }
+    func scream() {
+        isScreaming = true
+        timeScreaming = 0.0
+    }
+    func getScream() -> CGFloat {
+        if isScreaming {
+            return CGFloat(timeScreaming)
+        } else {
+            return 0.0
+        }
+    }
+    func stopScream() {
+        isScreaming = false
+        timeScreaming = 0.0
+    }
     func kill() {
         isAlive = false
+        stopScream()
     }
     func remove() {
+        stopScream()
         self.animator.removeSpine()
         self.removeFromParent()
         self.removeAllChildren()
@@ -135,22 +238,12 @@ class Whale : NHCNode {
 class Orca : Whale {
     
     // properties
-    var jumpAction: SKAction
-    var explosionSound: SKAction
-    
-    struct Stored {
-        static var instanceNum: Int = 0
-    }
-    
-    init(onDeath: (CGPoint) -> Void, ss: (CGFloat, NSTimeInterval)->Void) {
-        // setup SKActions
-        
-        // .3333 into max jump, 4.1666, 0.5
+    var jumpAction: SKAction {
         let animLength: NSTimeInterval = 8.0
         let horizontalMove = SKAction.sequence([
-            SKAction.moveByX(50, y: 0, duration: animLength/15.0),
-            SKAction.moveByX(50, y: 0, duration: (animLength*5.0)/6.0),
-            SKAction.moveByX(50, y: 0, duration: animLength/10.0) ])
+            SKAction.moveByX(25.0 * self.dirMult, y: 0, duration: animLength/15.0),
+            SKAction.moveByX(5.0 * self.dirMult, y: 0, duration: (animLength*5.0)/6.0),
+            SKAction.moveByX(25.0 * self.dirMult, y: 0, duration: animLength/10.0) ])
         horizontalMove.timingMode = .EaseInEaseOut
         let up = SKAction.moveByX(0, y: 700, duration: animLength/2.0)
         let down = up.reversedAction()
@@ -162,26 +255,59 @@ class Orca : Whale {
         }
         let verticalMovement = SKAction.sequence([up, /*SKAction.waitForDuration(animLength/3.0)*/ down])
         let rotate = SKAction.sequence([
-            SKAction.rotateByAngle(CGFloat(M_PI *  -0.05), duration: animLength/4.0),
-            SKAction.rotateByAngle(CGFloat(M_PI *  0.0), duration: animLength/2.0),
-            SKAction.rotateByAngle(CGFloat(M_PI * -0.1), duration: animLength/4.0)])
+            SKAction.rotateByAngle(CGFloat(M_PI * -0.05), duration: animLength/4.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *   0.0), duration: animLength/2.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *  -0.1), duration: animLength/4.0)])
         
-        jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
-        jumpAction.timingMode = .EaseInEaseOut
+        return SKAction.group([ horizontalMove, verticalMovement, rotate ])
+    }
+    var explosionSound: SKAction
+    var screamSound: SKAction
+    
+    struct Stored {
+        static var instanceNum: Int = 0
+    }
+    
+    init(onDeath: (CGPoint, SKNode) -> Void, ss: (CGFloat, NSTimeInterval)->Void, mgrInd: Int) {
+        // setup SKActions
+        
+//        // .3333 into max jump, 4.1666, 0.5
+//        let animLength: NSTimeInterval = 8.0
+//        let horizontalMove = SKAction.sequence([
+//            SKAction.moveByX(50, y: 0, duration: animLength/15.0),
+//            SKAction.moveByX(50, y: 0, duration: (animLength*5.0)/6.0),
+//            SKAction.moveByX(50, y: 0, duration: animLength/10.0) ])
+//        horizontalMove.timingMode = .EaseInEaseOut
+//        let up = SKAction.moveByX(0, y: 700, duration: animLength/2.0)
+//        let down = up.reversedAction()
+//        up.timingFunction  = { time in
+//            return (1.0 - ((1.0 - time)*(1.0 - time)*(1.0 - time)))
+//        }
+//        down.timingFunction = { time in
+//            return (time*time*time)
+//        }
+//        let verticalMovement = SKAction.sequence([up, /*SKAction.waitForDuration(animLength/3.0)*/ down])
+//        let rotate = SKAction.sequence([
+//            SKAction.rotateByAngle(CGFloat(M_PI * -0.05), duration: animLength/4.0),
+//            SKAction.rotateByAngle(CGFloat(M_PI *   0.0), duration: animLength/2.0),
+//            SKAction.rotateByAngle(CGFloat(M_PI *  -0.1), duration: animLength/4.0)])
+//        
+//        jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
+//        jumpAction.timingMode = .EaseInEaseOut
+        screamSound = SKAction.repeatActionForever(SKAction.playSoundFileNamed("whale_scream.wav", waitForCompletion: true))
         explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
         
         // set up key
         let key = "whale_orca\(Stored.instanceNum)"
         Stored.instanceNum++
         
-        super.init(onDeath: onDeath, ss: ss, animatorKey: key)
+        super.init(onDeath: onDeath, ss: ss, mgrInd: mgrInd, animatorKey: key)
         
         scale = 0.8
     }
     override func setupAnimationNode() {
         animationNode.xScale = 0.5
         animationNode.yScale = 0.5
-        setSpine("spine_whale_orca_default", animKey: "jump_white")
     }
     override func setupExposedNode() {
         let well1 = EnergyWell(radius: 25.0, duration: 0.5)
@@ -224,7 +350,6 @@ class Orca : Whale {
     }
     override func updateAnimationNode(dt: CFTimeInterval) {
         super.updateAnimationNode(dt)
-        // spine.activateAnimations()
     }
     override func updateExposedNode(scenePos: CGPoint, dt: CFTimeInterval) {
         super.updateExposedNode(scenePos, dt: dt)
@@ -234,21 +359,42 @@ class Orca : Whale {
     }
     
     
+    override func dive() {
+        super.dive()
+        animator.stopAnimation()
+    }
     override func jump() {
         super.jump()
-        runAction(jumpAction, completion: { self.remove() })
-        lockOnNode.hidden = false
-        animator.playAnimation("jump_white", introPeriod: 0.1)
+        switch (angerState)
+        {
+            case .White:
+                animator.playAnimation("jump_white", introPeriod: 0.1)
+            case .Yellow:
+                animator.playAnimation("jump_yellow", introPeriod: 0.1)
+            case .Red:
+                animator.playAnimation("jump_red", introPeriod: 0.1)
+                runAction(SKAction.waitForDuration(3.2), completion: { self.scream() })
+        }
+        runAction(jumpAction, completion: { self.dive() })
     }
     override func stun() {
         super.stun()
-        lockOnNode.hidden = true
-        exposedNode.hidden = false
+        animator.playAnimation("stun", introPeriod: 0.2)
+        animator.setQueuedAnimation("stun", introPeriod: 0.1)
+    }
+    override func scream() {
+        super.scream()
+        runAction(screamSound, withKey: "scream")
+    }
+    override func stopScream() {
+        super.stopScream()
+        removeActionForKey("scream")
     }
     override func kill() {
         super.kill()
+        animator.playAnimation("death", introPeriod: 0.1)
         runAction(SKAction.waitForDuration(0.5), completion: {
-            self.onDeath(pos: self.position)
+            self.onDeath(pos: self.position, root: self.parent!)
             self.screenShake(intensity: 15, duration: 0.5)
             self.runAction(self.explosionSound)
             self.remove()
@@ -265,12 +411,17 @@ class EnergyWell : NHCNode {
         case NoPower, HalfPower, FullPower
     }
     
+    enum EnergyWellType {
+        case LockOn, Exposed, Debug
+    }
+    
     // components
     let well: SKShapeNode       = SKShapeNode()
     let fillMeter: SKShapeNode  = SKShapeNode()
     var fillPath: UIBezierPath  = UIBezierPath()
     
     // properties
+    var type: EnergyWellType
     var activationLevel: EnergyWellActivation = .NoPower
     var activated: Bool         = true
     var lockDuration: CGFloat   = 2.0
@@ -278,7 +429,9 @@ class EnergyWell : NHCNode {
     var lockedOn: Bool          = false
     var lockOnRadius: CGFloat   = 10.0
     
-    init(radius: CGFloat, duration: CGFloat) {
+    init(radius: CGFloat, duration: CGFloat, type: EnergyWellType = .Debug) {
+        self.type = type
+        
         super.init()
         
         lockOnRadius = radius
@@ -292,13 +445,15 @@ class EnergyWell : NHCNode {
     }
     
     func setupWell() {
-        let rad = lockOnRadius - 3.0
-        let diameter = rad * 2.0
-        well.path = CGPathCreateWithEllipseInRect(CGRectMake(-rad, -rad, diameter, diameter), nil)
-        well.strokeColor = SKColor.orangeColor()
-        well.fillColor = SKColor.clearColor()
-        well.lineWidth = 3
-        addChild(well)
+        if type == .Debug {
+            let rad = lockOnRadius - 3.0
+            let diameter = rad * 2.0
+            well.path = CGPathCreateWithEllipseInRect(CGRectMake(-rad, -rad, diameter, diameter), nil)
+            well.strokeColor = SKColor.orangeColor()
+            well.fillColor = SKColor.clearColor()
+            well.lineWidth = 3
+            addChild(well)
+        }
     }
     
     func setupFillMeter() {
@@ -307,6 +462,12 @@ class EnergyWell : NHCNode {
         fillMeter.lineWidth = 3
         fillPath.moveToPoint(CGPointMake(0, lockOnRadius))
         addChild(fillMeter)
+    }
+    
+    func resetWell() {
+        lockProgress = 0.0
+        lockedOn = false
+        activated = true
     }
     
     func update( sceneTouch: CGPoint, dt: CFTimeInterval ) {
@@ -329,17 +490,23 @@ class EnergyWell : NHCNode {
     
     func updateProgress(dt: CFTimeInterval) {
         // update activity based on activation
+        
+        var requestedEnergy: CGFloat = 0.0
+        
         switch(activationLevel)
         {
             case .NoPower:
                 lockProgress -= CGFloat(dt/2.0)
                 
             case .HalfPower:
-                lockProgress += CGFloat(dt/3.0)
+                requestedEnergy += CGFloat(dt/3.0)
                 
             case .FullPower:
-                lockProgress += CGFloat(dt)
+                requestedEnergy += CGFloat(dt)
         }
+        
+        let allottedEnergy = game.energyManager.useEnergy(requestedEnergy)
+        lockProgress += allottedEnergy
         
         // clamp results
         lockProgress = Utilities2D.clamp(lockProgress, min: 0.0, max: lockDuration)

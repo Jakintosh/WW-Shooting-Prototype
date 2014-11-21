@@ -17,7 +17,7 @@ class Reticle : NHCNode {
     
     // parts
     let reticle: SKSpriteNode
-    let bigReticle: SKSpriteNode
+//    let bigReticle: SKSpriteNode
     
     // properties
     var targetPosition: CGPoint = CGPointZero
@@ -37,33 +37,37 @@ class Reticle : NHCNode {
     override init() {
         
         reticle = SKSpriteNode(imageNamed: "reticle")
-        bigReticle = SKSpriteNode(imageNamed: "ui_full")
+//        bigReticle = SKSpriteNode(imageNamed: "ui_full")
         
         super.init()
         
         // setup reticle
         reticle.zPosition = 1
-        bigReticle.alpha = 0.6
+//        bigReticle.alpha = 0.6
         
         addChild(reticle)
-        addChild(bigReticle)
+//        addChild(bigReticle)
         
-//        self.hidden = true
+        self.hidden = true
     }
     
     func update(touchLocation: CGPoint?) {
         if let u_touchLocation = touchLocation {
-            self.reticle.hidden = false
-            self.bigReticle.hidden = true
+//            self.reticle.hidden = false
+//            self.bigReticle.hidden = true
+//            self.hidden = false
             self.position = u_touchLocation
             self.position.y += 50
         } else {
-//            self.hidden = true
-//            self.position = CGPoint(x: -9999, y: -9999)
-            self.reticle.hidden = true
-            self.bigReticle.hidden = false
-            self.position = CGPoint(x: 0, y: 125)
+            self.hidden = true
         }
+//        else {
+////            self.hidden = true
+////            self.position = CGPoint(x: -9999, y: -9999)
+//            self.reticle.hidden = true
+//            self.bigReticle.hidden = false
+//            self.position = CGPoint(x: 0, y: 125)
+//        }
     }
     
 }

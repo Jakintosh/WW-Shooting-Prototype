@@ -111,6 +111,16 @@ class AnimationManager {
 //            println("tried to assign spine to entity but spine doesn't exist or hasn't been loaded for key")
 //        }
     }
+    func getSpine(#spineKey: String) -> SGG_Spine? {
+        if let animData = loadedAnimationData[spineKey] {
+            let newSpineAnimation = SGG_Spine()
+            newSpineAnimation.skeletonFromFileNamed(animData.json, andAtlasNamed: animData.atlas, andUseSkinNamed: nil)
+            return newSpineAnimation
+        } else {
+            println("tried to load spine, but animation data doesn't exist")
+            return nil
+        }
+    }
     func runAnimation(entityKey: String, animationName: String, introPeriod: CGFloat) {
         if let entity = animatableEntities[entityKey] {
             entity.playAnimation(animationName, introPeriod: introPeriod)
@@ -135,7 +145,7 @@ class AnimatableEntity {
     }
     
     // MARK: Spine Management
-    func setSpine(spine:SGG_Spine) {
+    func setSpine(spine: SGG_Spine) {
         if animationSpine != nil {
             removeSpine(animationSpine)
         }
@@ -150,6 +160,7 @@ class AnimatableEntity {
     func removeSpine() {
         if animationSpine != nil {
             animationSpine!.stopAnimation()
+            animationSpine!.removeFromParent()
             animationSpine = nil
         }
     }
@@ -173,6 +184,11 @@ class AnimatableEntity {
             if introPeriod != -1 {
                 spine.queueIntro = introPeriod
             }
+        }
+    }
+    func stopAnimation() {
+        if let spine = animationSpine {
+            spine.stopAnimation()
         }
     }
 }
