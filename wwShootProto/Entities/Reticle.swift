@@ -58,8 +58,10 @@ class Reticle : NHCNode {
 //            self.hidden = false
             self.position = u_touchLocation
             self.position.y += 50
+            self.targetPosition = self.position
         } else {
             self.hidden = true
+            self.position = CGPoint(x: -9999, y: -9999)
         }
 //        else {
 ////            self.hidden = true

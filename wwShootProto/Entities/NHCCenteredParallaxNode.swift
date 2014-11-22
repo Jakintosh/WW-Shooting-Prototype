@@ -43,13 +43,13 @@ class NHCCenteredParallaxSprite : NHCCenteredParallaxNode {
     let minZoom: CGFloat
     var maxZoom: CGFloat
     
-    let insetAmt: CGFloat = 0.95
+    let insetAmt: CGFloat = 0.9
     
     init(texture: SKTexture, sceneWidth: CGFloat, verticalMovement: CGFloat) {
         self.sprite = SKSpriteNode(texture: texture)
         self.sceneWidth = sceneWidth
         
-        minZoom = sceneWidth/sprite.size.width
+        minZoom = (sceneWidth/sprite.size.width)/insetAmt
         maxZoom = 1.0
         
         self.sprite.anchorPoint = CGPoint(x: 0.5, y: 0.0)

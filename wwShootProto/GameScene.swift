@@ -87,10 +87,16 @@ class GameScene: SKScene {
         whaleSpawnManager.camCon          = self.camCon
         
         // set positions
-        railing.basePosition = CGPoint(x: 0, y: -frame.height/2)
-        water.basePosition = CGPoint(x: 0, y: -frame.height/2)
+        railing.basePosition = CGPoint(x: 0, y: -frame.height/2 - 15)
+        water.basePosition = CGPoint(x: 0, y: -frame.height/2 - 10)
+//        city.basePosition = CGPoint(x: 0, y: -frame.height/2 - 15)
         sun.position = CGPoint(x: 0, y: 130)
-        sun.zPosition = -10
+        sun.zPosition = -40
+        
+        let city = SKSpriteNode(imageNamed: "City")
+        city.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        city.position = CGPoint(x: 0, y: 125)
+        city.zPosition = -35
         
         // add character to railing
         char.zPosition = 1
@@ -100,8 +106,9 @@ class GameScene: SKScene {
         
         // add sun water and background
         water.addChild(sun)
+        water.addChild(city)
         camCon.addCameraChild(bg, withZ: -500)
-        camCon.addCameraChild(water, withZ: -480)
+        camCon.addCameraChild(water, withZ: -450)
         
         // add character and railing
         camCon.addCameraChild(railing, withZ: 0)
@@ -126,7 +133,8 @@ class GameScene: SKScene {
         // update reticle/touch
         reticle.update(touchLocation)
         let sceneTouch = convertPoint(reticle.position, fromNode: camCon.rootNode)
-        eHUD.update(sceneTouch)
+        let reticlePos = convertPoint(reticle.targetPosition, fromNode: camCon.rootNode)
+        eHUD.update(reticlePos)
         
         // update big entities
         whaleSpawnManager.update(sceneTouch, dt: deltaTime)
@@ -180,7 +188,7 @@ class GameScene: SKScene {
         
         railing.updateZoom(currentZoom)
         water.updateZoom(currentZoom)
-        
+//        city.updateZoom(currentZoom)
     }
     
     func updateCameraPosition() {
@@ -220,6 +228,7 @@ class GameScene: SKScene {
         let normalizedY = currentCameraY / frame.height
         railing.updatePosition(normalizedX, modY: normalizedY)
         water.updatePosition(normalizedX, modY: normalizedY)
+//        city.updatePosition(normalizedX, modY: normalizedY)
         bg.updatePosition(normalizedX, modY: normalizedY)
         
 //      camCon.setCameraPosition(CGPoint(x:areaPos, y:0.0))

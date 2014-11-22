@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+// MARK: -
 class Whale : NHCNode {
     
     enum WhaleAngerState {
@@ -151,6 +152,7 @@ class Whale : NHCNode {
                 well.update(scenePos, dt: dt)
                 if well.lockedOn {
                     well.burst()
+//                    lockOnWell.wellLockOn.texture = lockOnWell
                     screenShake(intensity: 5, duration: 0.25)
                     game.animationManager.runAnimation("player_entity", animationName: "shoot", introPeriod: 0.1)
                     numFinished++
@@ -169,6 +171,9 @@ class Whale : NHCNode {
         lockOnWell.update(scenePos, dt: dt)
         if lockOnWell.lockedOn {
             stun()
+            for well in exposedWells {
+                well.openWell()
+            }
             screenShake(intensity: 10, duration: 0.33)
             game.animationManager.runAnimation("player_entity", animationName: "shoot", introPeriod: 0.1)
         }
@@ -235,6 +240,7 @@ class Whale : NHCNode {
     }
 }
 
+// MARK: -
 class Orca : Whale {
     
     // properties
@@ -263,6 +269,8 @@ class Orca : Whale {
     }
     var explosionSound: SKAction
     var screamSound: SKAction
+    var deathAnimation = [SKTexture]()
+    var deathSprite: SKSpriteNode
     
     struct Stored {
         static var instanceNum: Int = 0
@@ -297,11 +305,24 @@ class Orca : Whale {
         screamSound = SKAction.repeatActionForever(SKAction.playSoundFileNamed("whale_scream.wav", waitForCompletion: true))
         explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
         
+        let atlas = SKTextureAtlas(named: "whale-death")
+        for i in 0..<5 {
+            deathAnimation.append(atlas.textureNamed("whaleType01_death0\(i)"))
+        }
+        
+        deathSprite = SKSpriteNode(texture: deathAnimation[0])
+        deathSprite.xScale = 1.953
+        deathSprite.yScale = 1.953
+        deathSprite.hidden = true
+        deathSprite.anchorPoint = CGPoint(x: 0.28684211, y: 0.609375)
+        
         // set up key
         let key = "whale_orca\(Stored.instanceNum)"
         Stored.instanceNum++
         
         super.init(onDeath: onDeath, ss: ss, mgrInd: mgrInd, animatorKey: key)
+        
+        addChild(deathSprite)
         
         scale = 0.8
     }
@@ -310,9 +331,9 @@ class Orca : Whale {
         animationNode.yScale = 0.5
     }
     override func setupExposedNode() {
-        let well1 = EnergyWell(radius: 25.0, duration: 0.5)
-        let well2 = EnergyWell(radius: 20.0, duration: 0.4)
-        let well3 = EnergyWell(radius: 15.0, duration: 0.1)
+        let well1 = EnergyWell(radius: 40.0, duration: 0.5, type: .Exposed)
+        let well2 = EnergyWell(radius: 30.0, duration: 0.4, type: .Exposed)
+        let well3 = EnergyWell(radius: 20.0, duration: 0.1, type: .Exposed)
         
         well1.position = CGPoint(x: 112.5, y:  100.0)
         well2.position = CGPoint(x:  20.0, y:   30.0)
@@ -335,7 +356,7 @@ class Orca : Whale {
         exposedNode.zPosition = 1
     }
     override func setupLockOnNode() {
-        lockOnWell = EnergyWell(radius: 20.0, duration: 1.0)
+        lockOnWell = EnergyWell(radius: 30.0, duration: 1.0, type: .LockOn)
         lockOnWell.position = CGPoint(x: 0, y: 0)
         lockOnWell.xScale = 1.5
         lockOnWell.yScale = 1.5
@@ -373,30 +394,37 @@ class Orca : Whale {
                 animator.playAnimation("jump_yellow", introPeriod: 0.1)
             case .Red:
                 animator.playAnimation("jump_red", introPeriod: 0.1)
-                runAction(SKAction.waitForDuration(3.2), completion: { self.scream() })
+                runAction(SKAction.sequence([SKAction.waitForDuration(3.2), SKAction.runBlock( { self.scream() } )]), withKey: "scream")
         }
         runAction(jumpAction, completion: { self.dive() })
     }
     override func stun() {
         super.stun()
-        animator.playAnimation("stun", introPeriod: 0.2)
+        animator.playAnimation("stun", introPeriod: 0.05)
         animator.setQueuedAnimation("stun", introPeriod: 0.1)
     }
     override func scream() {
         super.scream()
-        runAction(screamSound, withKey: "scream")
+        removeActionForKey("scream")
+        SoundManager.sharedManager().playSound("whale_scream.wav", looping: true)
+//        runAction(screamSound, withKey: "scream")
     }
     override func stopScream() {
         super.stopScream()
-        removeActionForKey("scream")
+        SoundManager.sharedManager().stopSound("whale_scream.wav")
+//        removeActionForKey("scream")
     }
     override func kill() {
         super.kill()
-        animator.playAnimation("death", introPeriod: 0.1)
+        animator.stopAnimation()
+        animator.animationSpine?.hidden = true
+        deathSprite.hidden = false
+        deathSprite.runAction(SKAction.animateWithTextures(deathAnimation, timePerFrame: 0.1), withKey: "death")
         runAction(SKAction.waitForDuration(0.5), completion: {
             self.onDeath(pos: self.position, root: self.parent!)
             self.screenShake(intensity: 15, duration: 0.5)
-            self.runAction(self.explosionSound)
+//            self.runAction(self.explosionSound)
+            SoundManager.sharedManager().playSound("whale_explosion.caf")
             self.remove()
         })
     }
@@ -405,6 +433,8 @@ class Orca : Whale {
     }
 }
 
+
+// MARK: -
 class EnergyWell : NHCNode {
     
     enum EnergyWellActivation {
@@ -416,7 +446,12 @@ class EnergyWell : NHCNode {
     }
     
     // components
-    let well: SKShapeNode       = SKShapeNode()
+    let wellDebug: SKShapeNode  = SKShapeNode()
+    var wellExposed: SKSpriteNode!
+    var wellExposedOpenAnimation = [SKTexture]()
+    var wellExposedStaticAnimation = [SKTexture]()
+    var wellLockOn: SKSpriteNode!
+    var wellLockOnTextures = [SKTexture]()
     let fillMeter: SKShapeNode  = SKShapeNode()
     var fillPath: UIBezierPath  = UIBezierPath()
     
@@ -428,6 +463,7 @@ class EnergyWell : NHCNode {
     var lockProgress: CGFloat   = 0.0
     var lockedOn: Bool          = false
     var lockOnRadius: CGFloat   = 10.0
+    var lockOnRadiusSq: CGFloat = 100.0
     
     init(radius: CGFloat, duration: CGFloat, type: EnergyWellType = .Debug) {
         self.type = type
@@ -435,7 +471,19 @@ class EnergyWell : NHCNode {
         super.init()
         
         lockOnRadius = radius
+        lockOnRadiusSq = radius * radius
         lockDuration = duration
+        
+        let atlas = SKTextureAtlas(named: "textures")
+        for i in 0..<5 {
+            wellExposedOpenAnimation.append(atlas.textureNamed("hitbox-open_\(i)"))
+        }
+        for i in 0..<5 {
+            wellExposedStaticAnimation.append(atlas.textureNamed("hitbox-static_\(i)"))
+        }
+        for i in 0..<3 {
+            wellLockOnTextures.append(atlas.textureNamed("lockOn\(i)"))
+        }
         
         // set up well
         setupWell()
@@ -445,18 +493,37 @@ class EnergyWell : NHCNode {
     }
     
     func setupWell() {
-        if type == .Debug {
+        
+        switch(type)
+        {
+        case .Debug:
             let rad = lockOnRadius - 3.0
             let diameter = rad * 2.0
-            well.path = CGPathCreateWithEllipseInRect(CGRectMake(-rad, -rad, diameter, diameter), nil)
-            well.strokeColor = SKColor.orangeColor()
-            well.fillColor = SKColor.clearColor()
-            well.lineWidth = 3
-            addChild(well)
+            wellDebug.path = CGPathCreateWithEllipseInRect(CGRectMake(-rad, -rad, diameter, diameter), nil)
+            wellDebug.strokeColor = SKColor.orangeColor()
+            wellDebug.fillColor = SKColor.clearColor()
+            wellDebug.lineWidth = 3
+            addChild(wellDebug)
+            
+        case .LockOn:
+            let scale: CGFloat = lockOnRadius/40.0
+            wellLockOn = SKSpriteNode(texture: wellLockOnTextures[0])
+            addChild(wellLockOn)
+            wellLockOn.xScale = scale
+            wellLockOn.yScale = scale
+            
+        case .Exposed:
+            let scale: CGFloat = lockOnRadius/25
+            wellExposed = SKSpriteNode(texture: wellExposedOpenAnimation[0])
+            wellExposed.alpha = 0.7
+            addChild(wellExposed)
+            wellExposed.xScale = scale
+            wellExposed.yScale = scale
         }
     }
     
     func setupFillMeter() {
+        fillMeter.zPosition = 1
         fillMeter.strokeColor = SKColor.whiteColor()
         fillMeter.fillColor = SKColor.clearColor()
         fillMeter.lineWidth = 3
@@ -470,14 +537,30 @@ class EnergyWell : NHCNode {
         activated = true
     }
     
+    func openWell() {
+        switch(type)
+        {
+            case .Debug:
+                break
+                
+            case .LockOn:
+                break
+                
+            case .Exposed:
+                let openAnim = SKAction.animateWithTextures(wellExposedOpenAnimation, timePerFrame: 0.033)
+                let staticAnim = SKAction.animateWithTextures(wellExposedStaticAnimation, timePerFrame: 0.1, resize: true, restore: false)
+                wellExposed.runAction(SKAction.sequence([ openAnim, SKAction.repeatActionForever(staticAnim) ]))
+        }
+    }
+    
     func update( sceneTouch: CGPoint, dt: CFTimeInterval ) {
         if activated {
             if let u_scene = scene {
                 let touchPos = u_scene.convertPoint(sceneTouch, toNode: self)
-                let distance = Utilities2D.distanceFromPoint(CGPointZero, toPoint: touchPos)
-                if distance < lockOnRadius {
+                let distance = Utilities2D.distanceSquaredFromPoint(CGPointZero, toPoint: touchPos)
+                if distance < lockOnRadiusSq {
                     activate(activation: .FullPower)
-                } else if distance < lockOnRadius * 1.2 {
+                } else if distance < lockOnRadiusSq * 1.2 {
                     activate(activation: .HalfPower)
                 } else {
                     activate(activation: .NoPower)
@@ -485,6 +568,9 @@ class EnergyWell : NHCNode {
                 
                 updateProgress(dt)
             }
+        }
+        if let lockOn = wellLockOn {
+            lockOn.zRotation += 0.03
         }
     }
     
@@ -527,7 +613,7 @@ class EnergyWell : NHCNode {
         mod = CGFloat(M_PI)/2.0 - mod
         fillPath.removeAllPoints()
         fillPath.addArcWithCenter(  CGPointMake(0.0, 0.0),
-            radius: 25.0,
+            radius: lockOnRadius,
             startAngle: CGFloat(M_PI/2.0),
             endAngle: CGFloat(mod),
             clockwise: false )
@@ -540,16 +626,16 @@ class EnergyWell : NHCNode {
         {
             case .NoPower:
                 activationLevel = .NoPower
-                well.strokeColor = SKColor.orangeColor()
-                well.fillColor = SKColor.clearColor()
+                wellDebug.strokeColor = SKColor.orangeColor()
+                wellDebug.fillColor = SKColor.clearColor()
             case .HalfPower:
                 activationLevel = .HalfPower
-                well.strokeColor = SKColor.greenColor()
-                well.fillColor = SKColor(red: 0, green: 1, blue: 0, alpha: 0.5)
+                wellDebug.strokeColor = SKColor.greenColor()
+                wellDebug.fillColor = SKColor(red: 0, green: 1, blue: 0, alpha: 0.5)
             case .FullPower:
                 activationLevel = .FullPower
-                well.strokeColor = SKColor.greenColor()
-                well.fillColor = SKColor.greenColor()
+                wellDebug.strokeColor = SKColor.greenColor()
+                wellDebug.fillColor = SKColor.greenColor()
         }
     }
     
@@ -557,8 +643,21 @@ class EnergyWell : NHCNode {
         activated = false
         activationLevel = .NoPower
         fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
-        well.strokeColor = SKColor.grayColor()
-        well.fillColor = SKColor.clearColor()
+        switch(type)
+        {
+        case .Debug:
+            wellDebug.strokeColor = SKColor.grayColor()
+            wellDebug.fillColor = SKColor.clearColor()
+            
+        case .LockOn:
+            break
+            
+        case .Exposed:
+//            let openAnim = SKAction.animateWithTextures(wellExposedOpenAnimation, timePerFrame: 0.033)
+//            wellExposed.runAction(SKAction.sequence([ openAnim, SKAction.repeatActionForever(staticAnim) ]))
+            wellExposed.removeFromParent()
+        }
+        
     }
     
 }

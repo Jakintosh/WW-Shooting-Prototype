@@ -12,5 +12,6 @@
 #import "SpineImport.h"
 #import "NHCSky.h"
 #import "NORLabelNode.h"
+#import "SoundManager.h"
 
 #endif

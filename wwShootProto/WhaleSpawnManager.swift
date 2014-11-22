@@ -21,11 +21,13 @@ class WhaleSpawnManager {
             var ID: Int
             var point: CGPoint
             var isOccupied: Bool
+            var mirror: Int
             
-            init(pos: CGPoint, id: Int) {
+            init(pos: CGPoint, id: Int, m: Int = 0) {
                 ID = id
                 point = pos
                 isOccupied = false
+                mirror = m
             }
             
             func occupy() {
@@ -48,7 +50,7 @@ class WhaleSpawnManager {
             }
         }
         
-        func getSpawnPoint() -> (pos: CGPoint, i: Int) {
+        func getSpawnPoint() -> (pos: CGPoint, i: Int, m: Int) {
             var availableSpawns = [WhaleSpawnPoint]()
             for point in spawnPoints {
                 if !point.isOccupied {
@@ -58,7 +60,7 @@ class WhaleSpawnManager {
             let index = arc4random_uniform(UInt32(availableSpawns.count))
             availableSpawns[Int(index)].occupy()
             let selectedSpawn = availableSpawns[Int(index)]
-            return (selectedSpawn.point, selectedSpawn.ID)
+            return (selectedSpawn.point, selectedSpawn.ID, selectedSpawn.mirror)
         }
         
         func pointsAvailable() -> Bool {
@@ -129,13 +131,38 @@ class WhaleSpawnManager {
             }
         }
         
-        backLayer.node.zPosition = 1
-        midLayer.node.zPosition = 11
-        frontLayer.node.zPosition = 21
+        midLayer.spawnPoints[0].mirror = 1
+        midLayer.spawnPoints[1].mirror = 2
+        frontLayer.spawnPoints[0].mirror = 1
+        frontLayer.spawnPoints[1].mirror = 2
         
-        backLayer.node.name = "back"
-        midLayer.node.name = "mid"
+        backLayer.node.zPosition  = -25
+        midLayer.node.zPosition   = -15
+        frontLayer.node.zPosition = -5
+        
+        backLayer.node.name  = "back"
+        midLayer.node.name   = "mid"
         frontLayer.node.name = "front"
+        
+        let frontWater = SKSpriteNode(imageNamed: "WaterLayer_002")
+        let midWater   = SKSpriteNode(imageNamed: "WaterLayer_003")
+        let backWater  = SKSpriteNode(imageNamed: "WaterLayer_004")
+        
+        frontWater.zPosition = -5
+        midWater.zPosition   = -15
+        backWater.zPosition  = -25
+        
+        frontWater.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        midWater.anchorPoint   = CGPoint(x: 0.5, y: 0.0)
+        backWater.anchorPoint  = CGPoint(x: 0.5, y: 0.0)
+        
+        frontWater.position = CGPoint(x: 0, y: 44)
+        midWater.position   = CGPoint(x: 0, y: 80)
+        backWater.position  = CGPoint(x: 0, y: 110)
+        
+        frontLayer.node.addChild(backWater)
+        frontLayer.node.addChild(midWater)
+        frontLayer.node.addChild(frontWater)
         
         backLayer.node.xScale = 0.6
         backLayer.node.yScale = 0.6
@@ -166,7 +193,7 @@ class WhaleSpawnManager {
         var whaleScreamTime: CGFloat = 0.0
         for whale in activeWhales {
             whale.update(screenPos, dt: dt)
-            whaleScreamTime += whale.getScream()
+            if whale.isScreaming { whaleScreamTime += CGFloat(0.2) } // this is hardcoded ( 10(sec) * 0.02 (.98 inv) = 0.2)
         }
         game.screamManager.update(dt, totalScreams: whaleScreamTime)
     }
@@ -209,8 +236,17 @@ class WhaleSpawnManager {
                 if var spawnLayer = getRandomSpawnLayer() {
                     let info = spawnLayer.getSpawnPoint()
                     whale.position = info.pos
-                    if arc4random_uniform(2) == 0 { whale.mirror(true) }
-                    else { whale.mirror(false) }
+                    switch(info.m)
+                    {
+                        case 0:
+                            if arc4random_uniform(2) == 0 { whale.mirror(true) }
+                            else { whale.mirror(false) }
+                        case 2:
+                            whale.mirror(true)
+                        default:
+                            whale.mirror(false)
+                    }
+                    
                     spawnLayer.node.addChild(whale)
                     whale.onSubmerge = {
                         spawnLayer.clearSpawnPoint(info.i)
@@ -269,6 +305,7 @@ class WhaleSpawnManager {
             if orcaAnimations[i].owner == whale {
                 orcaAnimations[i].owner = nil
                 whale.animator.removeSpine()
+                orcaAnimations[i].spine.hidden = false
             }
         }
     }

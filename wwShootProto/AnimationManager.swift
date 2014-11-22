@@ -46,9 +46,9 @@ class AnimationManager {
                         let animationData = AnimationData(name: name, json: json, atlas: atlas)
                         loadedAnimationData[name] = animationData
                         
-//                        let newSpineAnimation = SGG_Spine()
-//                        newSpineAnimation.skeletonFromFileNamed(json, andAtlasNamed: atlas, andUseSkinNamed: nil)
-//                        loadedAnimations[name] = newSpineAnimation
+                        let newSpineAnimation = SGG_Spine()
+                        newSpineAnimation.skeletonFromFileNamed(json, andAtlasNamed: atlas, andUseSkinNamed: nil)
+                        loadedAnimations[name] = newSpineAnimation
                         
                         animationsBeingLoaded.append(name)
         }   }   }   }
