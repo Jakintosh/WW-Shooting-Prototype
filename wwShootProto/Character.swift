@@ -285,12 +285,13 @@ class Dad : Character {
     func touchDown(touch: UITouch) {
         self.touches.removeAll(keepCapacity: false)
         self.touches.append(touch)
-        let screenLoc = self.touches.last!.locationInNode(scene)
+        let scenePos = self.touches.last!.locationInNode(self.parent!)
+        let charPos = self.position
         if state != .Stairs && state != .Interacting {
             timeSinceTouchDown = 0
             
             if state != .Interacting {
-                if screenLoc.x > 0 {
+                if scenePos.x > charPos.x {
                     setOrientation(.Right)
                 } else {
                     setOrientation(.Left)
@@ -310,8 +311,10 @@ class Dad : Character {
             
             var switched: Bool = false
             if state != .Interacting {
+                let scenePos = self.touches.last!.locationInNode(self.parent!)
+                let charPos = self.position
                 self.removeActionForKey("move")
-                if screenLoc.x > 0 {
+                if scenePos.x > charPos.x {
                     if orientation == .Left { switched = true }
                     setOrientation(.Right)
                 } else {

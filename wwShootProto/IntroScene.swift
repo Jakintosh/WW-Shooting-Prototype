@@ -35,6 +35,8 @@ class IntroScene : SKFuckScene {
         camCon.disableDebug()
         addChild(camCon)
         
+        camCon.setRotiation(CGFloat(M_PI_2))
+        
         // set up dad
         var posStartLoc = house.getStartingLocation()
         if let startLoc = posStartLoc {
@@ -47,13 +49,21 @@ class IntroScene : SKFuckScene {
             self.isZoomingOut = true
             self.camCon.setCameraPosition(x: 2087, y: 150)
             self.camCon.runAction(SKAction.fadeAlphaTo(0.0, duration: 5.0))
-            self.runAction(SKAction.sequence([SKAction.waitForDuration(4.0), SKAction.runBlock({
-                NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
-                let transition = SKTransition.crossFadeWithDuration(1.0)
-                transition.pausesOutgoingScene = false
-                let nextScene = GameScene(size: CGSize(width: self.frame.height, height: self.frame.width))
-                view.presentScene(nextScene, transition: transition)
-            })]))
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+                
+                let nextScene = GameScene(size: CGSize(width: 320.0, height: 568.0))
+
+                dispatch_async(dispatch_get_main_queue(), {
+                    // set up transition
+                    let transition = SKTransition.crossFadeWithDuration(1.0)
+                    transition.pausesIncomingScene = false
+                    transition.pausesOutgoingScene = false
+                    
+                    // present scene
+                    view.presentScene(nextScene, transition: transition)
+                })
+            })
         }
         
         // set up "daughter"

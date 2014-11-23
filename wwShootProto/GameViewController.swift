@@ -52,11 +52,13 @@ class GameViewController: UIViewController {
 //        if let scene = HomeScene.unarchiveFromFile("HomeScene") as? HomeScene {
         let screenSize = UIScreen.mainScreen().bounds.size
         let scene = LoadingScene(size: screenSize)
+//        let scene = OrientationScene(size: screenSize)
+//        scene.transitionToNextScene(.Vertical, results: .Pass, nextSceneName: "")
         
         // Configure the view.
         let skView = self.view as SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
+        skView.showsFPS = false
+        skView.showsNodeCount = false
         
         /* Sprite Kit applies additional optimizations to improve rendering performance */
         skView.ignoresSiblingOrder = true
@@ -65,7 +67,6 @@ class GameViewController: UIViewController {
         scene.scaleMode = .AspectFill
         
         skView.presentScene(scene)
-        
     }
     
     override func shouldAutorotate() -> Bool {
@@ -74,15 +75,16 @@ class GameViewController: UIViewController {
     
     override func supportedInterfaceOrientations() -> Int {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            if gameOrientation == .Portrait {
-                return Int(UIInterfaceOrientationMask.Portrait.rawValue)
-            }
-            else if gameOrientation == .Landscape {
-                return Int(UIInterfaceOrientationMask.Landscape.rawValue)
-            }
-            else {
-                return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
-            }
+//            if gameOrientation == .Portrait {
+//                return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+//            }
+//            else if gameOrientation == .Landscape {
+//                return Int(UIInterfaceOrientationMask.Landscape.rawValue)
+//            }
+//            else {
+//                return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+//            }
+            return Int(UIInterfaceOrientationMask.Portrait.rawValue)
         } else {
             return Int(UIInterfaceOrientationMask.All.rawValue)
         }

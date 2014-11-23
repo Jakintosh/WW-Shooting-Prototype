@@ -25,7 +25,7 @@ class ScreamingManager {
         }
         screamingLevel += totalScreams
         camCon.shake(totalScreams, duration: (1.0/30.0))
-//        println(screamingLevel)
+        println(screamingLevel)
     }
     
     func getFade() -> CGFloat {

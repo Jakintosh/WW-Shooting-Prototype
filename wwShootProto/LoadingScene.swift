@@ -35,7 +35,7 @@ class LoadingScene : SKScene {
 //        game.animationManager.loadAnimations("home", dataFile: "home_characters")
         
 //        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil)
-        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
+//        NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToWork", object: nil)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
             
@@ -45,9 +45,11 @@ class LoadingScene : SKScene {
             game.whaleSpawnManager.loadWhaleAnimations()
             
             // set up scene
-//                let nextScene = IntroScene(size: CGSize(width: self.screen.long, height: self.screen.short))
-            let nextScene = GameScene(size: CGSize(width: self.screen.short, height: self.screen.long))
-//                let nextScene = HomeScene(size: CGSize(width: self.screen.long, height: self.screen.short))
+//            let nextScene = IntroScene(size: CGSize(width: self.screen.short, height: self.screen.long))
+//            let nextScene = GameScene(size: CGSize(width: self.screen.short, height: self.screen.long))
+//            let nextScene = HomeScene(size: CGSize(width: self.screen.long, height: self.screen.short))
+            let nextScene = OrientationScene(size: CGSize(width: self.screen.short, height: self.screen.long))
+            nextScene.transitionToNextScene(.Horizontal, results: .Pass, nextSceneName: "GameScene")
             
             dispatch_async(dispatch_get_main_queue(), {
                 self.runAction(SKAction.sequence([SKAction.waitForDuration(1.0), SKAction.runBlock({
@@ -58,10 +60,9 @@ class LoadingScene : SKScene {
                     
                     // present scene
                     view.presentScene(nextScene, transition: transition)
-                })
-                    ]))
-                });
-            });
+                })]))
+            })
+        })
     }
     
     override func update(currentTime: NSTimeInterval) {

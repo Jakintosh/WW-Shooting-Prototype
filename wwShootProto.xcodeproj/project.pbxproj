@@ -74,6 +74,9 @@
 		21D2073C1A105FD40019A73B /* ParentsRoom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */; };
 		21DFBFBD1A211C2700134AC0 /* well_explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21DFBFBC1A211C2700134AC0 /* well_explosion.wav */; };
 		21DFBFBF1A2189F600134AC0 /* DayOneFailOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBFBE1A2189F600134AC0 /* DayOneFailOne.swift */; };
+		21DFBFC11A219DC900134AC0 /* TutorialScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBFC01A219DC900134AC0 /* TutorialScene.swift */; };
+		21DFBFC31A219E6400134AC0 /* OrientationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DFBFC21A219E6400134AC0 /* OrientationScene.swift */; };
+		21DFBFC51A219FE300134AC0 /* dad_getup.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21DFBFC41A219FE300134AC0 /* dad_getup.atlas */; };
 		21E038DE1A1BAD8100EDC37E /* WhaleSpawnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E038DD1A1BAD8100EDC37E /* WhaleSpawnManager.swift */; };
 		21E038E01A1BC76000EDC37E /* IntroScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E038DF1A1BC76000EDC37E /* IntroScene.swift */; };
 		21E038E51A1BD25C00EDC37E /* Hallway_buffer.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E038E11A1BD25C00EDC37E /* Hallway_buffer.png */; };
@@ -197,6 +200,9 @@
 		21D2072C1A105FD40019A73B /* ParentsRoom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ParentsRoom@2x.png"; path = "resources/house.atlas/ParentsRoom@2x.png"; sourceTree = SOURCE_ROOT; };
 		21DFBFBC1A211C2700134AC0 /* well_explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = well_explosion.wav; sourceTree = "<group>"; };
 		21DFBFBE1A2189F600134AC0 /* DayOneFailOne.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayOneFailOne.swift; sourceTree = "<group>"; };
+		21DFBFC01A219DC900134AC0 /* TutorialScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialScene.swift; sourceTree = "<group>"; };
+		21DFBFC21A219E6400134AC0 /* OrientationScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationScene.swift; sourceTree = "<group>"; };
+		21DFBFC41A219FE300134AC0 /* dad_getup.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = dad_getup.atlas; path = resources/dad_work/dad_getup.atlas; sourceTree = SOURCE_ROOT; };
 		21E038DD1A1BAD8100EDC37E /* WhaleSpawnManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhaleSpawnManager.swift; sourceTree = "<group>"; };
 		21E038DF1A1BC76000EDC37E /* IntroScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroScene.swift; sourceTree = "<group>"; };
 		21E038E11A1BD25C00EDC37E /* Hallway_buffer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Hallway_buffer.png; path = resources/house.atlas/Hallway_buffer.png; sourceTree = SOURCE_ROOT; };
@@ -407,6 +413,7 @@
 				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
 				21EB81891A0A5FC100C7525D /* dad.atlas */,
 				21AEC7401A1D99AB0052F53F /* dad_work.atlas */,
+				21DFBFC41A219FE300134AC0 /* dad_getup.atlas */,
 				21AEC7481A1DB3B30052F53F /* whale_orca.atlas */,
 				213218BB1A20E4EB00330E1F /* whale-death.atlas */,
 			);
@@ -445,6 +452,8 @@
 			isa = PBXGroup;
 			children = (
 				21B7A46E19F058470023EAE9 /* LoadingScene.swift */,
+				21DFBFC21A219E6400134AC0 /* OrientationScene.swift */,
+				21DFBFC01A219DC900134AC0 /* TutorialScene.swift */,
 				21E038DF1A1BC76000EDC37E /* IntroScene.swift */,
 				21B5AF7919CF8D17004B00C9 /* GameScene.swift */,
 				21DFBFBE1A2189F600134AC0 /* DayOneFailOne.swift */,
@@ -729,6 +738,7 @@
 				213218B21A1FCC9600330E1F /* whale_scream.wav in Resources */,
 				213218B91A1FE87E00330E1F /* water.png in Resources */,
 				21E3B6111A1910E800195D36 /* whale_explosion.wav in Resources */,
+				21DFBFC51A219FE300134AC0 /* dad_getup.atlas in Resources */,
 				21E3B6131A19114300195D36 /* whale_explosion.caf in Resources */,
 				21D2072D1A105FD40019A73B /* Attic.png in Resources */,
 				21D2072E1A105FD40019A73B /* Attic@2x.png in Resources */,
@@ -792,6 +802,7 @@
 				21B7A46F19F058470023EAE9 /* LoadingScene.swift in Sources */,
 				21EA22DD19FF001900A1E612 /* SGG_SpineBoneAction.m in Sources */,
 				21B5AF7A19CF8D17004B00C9 /* GameScene.swift in Sources */,
+				21DFBFC11A219DC900134AC0 /* TutorialScene.swift in Sources */,
 				213218AE1A1EDC7100330E1F /* EnergyHUD.swift in Sources */,
 				213218CE1A20F40800330E1F /* City.swift in Sources */,
 				21EA22DB19FF001900A1E612 /* SGG_Spine.m in Sources */,
@@ -799,6 +810,7 @@
 				213218AC1A1ED80F00330E1F /* EnergyManager.swift in Sources */,
 				21E3B61D1A1921A700195D36 /* Water.swift in Sources */,
 				216B93981A186729000F4D2D /* NORLabelNode.m in Sources */,
+				21DFBFC31A219E6400134AC0 /* OrientationScene.swift in Sources */,
 				21E3B6311A1929ED00195D36 /* Background.swift in Sources */,
 				21E3B6171A191C2500195D36 /* NHCCenteredParallaxNode.swift in Sources */,
 				21E3B6191A191E3800195D36 /* Player.swift in Sources */,

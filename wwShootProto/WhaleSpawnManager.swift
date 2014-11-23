@@ -187,7 +187,7 @@ class WhaleSpawnManager {
         if isActive {
             timeUntilEval -= dt
             if timeUntilEval <= 0 {
-                timeUntilEval = 6.0
+                timeUntilEval = getUpdateTime()
                 
                 // add new whales (if necessary)
                 if activeWhales.count < getMaxWhales() {
@@ -199,7 +199,7 @@ class WhaleSpawnManager {
                 for whale in activeWhales {
                     if whale.whaleState != .Submerged { numWhalesJumping++ }
                 }
-                if numWhalesJumping < (getMaxWhales() - 1) {
+                if numWhalesJumping < getMaxJumping() {
                     whaleJump()
                 }
             }
@@ -339,6 +339,38 @@ class WhaleSpawnManager {
                 
             case .End:
                 return 5
+        }
+    }
+    func getUpdateTime() -> NSTimeInterval {
+        switch( heatLevel )
+        {
+        case .Low:
+            return 7.0
+            
+        case .Mid:
+            return 6.0
+            
+        case .High:
+            return 5.0
+            
+        case .End:
+            return 4.0
+        }
+    }
+    func getMaxJumping() -> Int {
+        switch( heatLevel )
+        {
+        case .Low:
+            return 1
+            
+        case .Mid:
+            return 2
+            
+        case .High:
+            return 3
+            
+        case .End:
+            return 4
         }
     }
     func connectAnimationForOrca(whale: Orca) -> Bool {

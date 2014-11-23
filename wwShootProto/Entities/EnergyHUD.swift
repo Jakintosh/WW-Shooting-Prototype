@@ -53,6 +53,7 @@ class EnergyHUD : NHCNode {
         
         // setup reticle
         reticle.zPosition = 1
+        hud.zPosition = -473
         hud.alpha = 0.5
         
         fillMeter.position.y = 1

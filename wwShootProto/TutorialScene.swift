@@ -1,14 +1,14 @@
 //
-//  GameScene.swift
+//  TutorialScene.swift
 //  wwShootProto
 //
-//  Created by Jak Tiano on 9/21/14.
+//  Created by Jak Tiano on 11/22/14.
 //  Copyright (c) 2014 not a hipster coffee shop. All rights reserved.
 //
 
 import SpriteKit
 
-class GameScene: SKScene {
+class TutorialScene: SKFuckScene {
     
     // MARK: - properties
     
@@ -35,7 +35,7 @@ class GameScene: SKScene {
     let fadeSprite = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 320, height: 568))
     let camCon: CameraController = CameraController()
     let particleEmitter = EnergyParticleEmitter(num: 500)
-//    let swipeUpGesture: UISwipeGestureRecognizer!
+    //    let swipeUpGesture: UISwipeGestureRecognizer!
     
     // scene vars
     let areaWidth: CGFloat      = 700.0
@@ -45,22 +45,13 @@ class GameScene: SKScene {
     var targetCameraY: CGFloat  = 0.0
     
     // MARK: - initializers
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-//        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-//        swipeUpGesture.numberOfTouchesRequired = 3
-//        swipeUpGesture.direction = .Up
-//        swipeUpGesture.cancelsTouchesInView = false
-    }
-    
     override init(size: CGSize) {
         super.init(size: size)
         
-//        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
-//        swipeUpGesture.numberOfTouchesRequired = 3
-//        swipeUpGesture.direction = .Up
-//        swipeUpGesture.cancelsTouchesInView = false
+        //        swipeUpGesture = UISwipeGestureRecognizer(target: self, action: "handleSwipe:")
+        //        swipeUpGesture.numberOfTouchesRequired = 3
+        //        swipeUpGesture.direction = .Up
+        //        swipeUpGesture.cancelsTouchesInView = false
     }
     
     // MARK: - UIKit
@@ -68,7 +59,7 @@ class GameScene: SKScene {
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.fadeSprite.alpha = 0.0
-//        view.addGestureRecognizer(swipeUpGesture)
+        //        view.addGestureRecognizer(swipeUpGesture)
         
         // reset resources
         game.screamManager.reset() // optional values
@@ -121,10 +112,10 @@ class GameScene: SKScene {
         camCon.addHUDChild(fadeSprite, withZ: 1000)
     }
     
-//    override func willMoveFromView(view: SKView) {
-//        view.removeGestureRecognizer(swipeUpGesture)
-//    }
-//    
+    //    override func willMoveFromView(view: SKView) {
+    //        view.removeGestureRecognizer(swipeUpGesture)
+    //    }
+    //
     // MARK: - Logic
     override func update(currentTime: CFTimeInterval) {
         // time keeping
@@ -159,7 +150,7 @@ class GameScene: SKScene {
                 let distanceSq = Utilities2D.distanceSquaredFromPoint(particle.position, toPoint: retPos)
                 if distanceSq < (30*30) {
                     particle.collect()
-        }   }   }
+                }   }   }
         particleEmitter.update(deltaTime)
         if eHUD.currentState == .ZoomedIn { particleEmitter.updateParticles(particleUpdate) }
         
@@ -169,16 +160,16 @@ class GameScene: SKScene {
         camCon.update(deltaTime)
     }
     
-//    func rotation() {
-//        let xData = game.motionManager.accelerometerData.acceleration.x
-//        let yData = game.motionManager.accelerometerData.acceleration.y
-//        let zData = game.motionManager.accelerometerData.acceleration.z
-//        var nextAngle = atan2(yData, xData)
-//        if (nextAngle < 0) { nextAngle += (M_PI * 2.0) }
-//        nextAngle = nextAngle + ((rotation - nextAngle) * 0.01)
-//        rotation = nextAngle
-//        camCon.setRotiation(CGFloat(nextAngle+(M_PI/2.0)))
-//    }
+    //    func rotation() {
+    //        let xData = game.motionManager.accelerometerData.acceleration.x
+    //        let yData = game.motionManager.accelerometerData.acceleration.y
+    //        let zData = game.motionManager.accelerometerData.acceleration.z
+    //        var nextAngle = atan2(yData, xData)
+    //        if (nextAngle < 0) { nextAngle += (M_PI * 2.0) }
+    //        nextAngle = nextAngle + ((rotation - nextAngle) * 0.01)
+    //        rotation = nextAngle
+    //        camCon.setRotiation(CGFloat(nextAngle+(M_PI/2.0)))
+    //    }
     
     func updateCameraZoom() {
         
@@ -193,7 +184,7 @@ class GameScene: SKScene {
         
         railing.updateZoom(currentZoom)
         water.updateZoom(currentZoom)
-//        city.updateZoom(currentZoom)
+        //        city.updateZoom(currentZoom)
     }
     
     func updateCameraPosition() {
@@ -249,23 +240,19 @@ class GameScene: SKScene {
     // MARK: - Touch
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
-            if char.isUp {
-                touchLocation = touch.locationInNode(camCon.rootNode)
-                self.touch = touch as? UITouch
-                targetAreaPos = water.convertPoint(touchLocation!, fromNode: camCon.rootNode).x
-                
-                char.currentState = .Aim
-                eHUD.currentState = .ZoomedIn
-            }
+            touchLocation = touch.locationInNode(camCon.rootNode)
+            self.touch = touch as? UITouch
+            targetAreaPos = water.convertPoint(touchLocation!, fromNode: camCon.rootNode).x
+            
+            char.currentState = .Aim
+            eHUD.currentState = .ZoomedIn
         }
     }
     
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
-            if char.isUp {
-                touchLocation = touch.locationInNode(camCon.rootNode)
-                self.touch = touch as? UITouch
-            }
+            touchLocation = touch.locationInNode(camCon.rootNode)
+            self.touch = touch as? UITouch
         }
     }
     
@@ -287,8 +274,8 @@ class GameScene: SKScene {
             }))
         }
     }
-//    
-//    func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
-//        transitionHome()
-//    }
+    //
+    //    func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
+    //        transitionHome()
+    //    }
 }

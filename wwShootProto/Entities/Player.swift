@@ -17,6 +17,8 @@ class Player : NHCNode {
     
     // animation
     let animationNode = NHCNode()
+    var getUpSprite: SKSpriteNode!
+    var getUpFrames: [SKTexture]! = []
     let animatorKey: String
     var animator: AnimatableEntity!
     var animationScale: CGFloat = 1.0 {
@@ -41,15 +43,36 @@ class Player : NHCNode {
             }
         }
     }
+    var isUp: Bool = false
     
     override init() {
         self.animatorKey = "player_entity"
         
         super.init()
         
+        let atlas = SKTextureAtlas(named: "dad_getup")
+//        for i in 0..<6 {
+//            getUpFrames.append(atlas.textureNamed("dadStart\(i)"))
+//        }
+        getUpFrames.append(atlas.textureNamed("dadStart0"))
+        getUpFrames.append(atlas.textureNamed("dadStart1"))
+        getUpFrames.append(atlas.textureNamed("dadStart1"))
+        getUpFrames.append(atlas.textureNamed("dadStart2"))
+        getUpFrames.append(atlas.textureNamed("dadStart2"))
+        getUpFrames.append(atlas.textureNamed("dadStart3"))
+        getUpFrames.append(atlas.textureNamed("dadStart3"))
+        getUpFrames.append(atlas.textureNamed("dadStart4"))
+        getUpFrames.append(atlas.textureNamed("dadStart5"))
+        
+        getUpSprite = SKSpriteNode(texture: getUpFrames[0])
+        getUpSprite.anchorPoint = CGPoint(x: 0.49833333, y: 0.03166667)
+        getUpSprite.xScale = 2.0
+        getUpSprite.yScale = 2.0
+        animationNode.addChild(getUpSprite)
+        
         animator = game.animationManager.registerEntity(animatorKey, owner: self)
         
-        setupAnimationNode()
+//        setupAnimationNode()
         addChild(animationNode)
     }
     
@@ -67,6 +90,19 @@ class Player : NHCNode {
     func shoot() {
         animator.playAnimation("shoot", introPeriod: 0.1)
     }
+    func getUp() {
+        if !isUp {
+            getUpSprite.runAction(SKAction.animateWithTextures(getUpFrames, timePerFrame: 0.2222), completion: {
+                self.setupAnimationNode()
+                self.animator.playAnimation("start", introPeriod: 0.1)
+                self.animator.setQueuedAnimation("idle", introPeriod: 0.1)
+                self.getUpSprite.hidden = true
+                self.getUpSprite = nil
+                self.getUpFrames = nil
+                self.isUp = true
+            })
+        }
+    }
     
     func setupAnimationNode() {
 //        let char = SKSpriteNode(imageNamed: "idle01")
@@ -74,7 +110,7 @@ class Player : NHCNode {
 //        char.xScale = 2.5
 //        char.yScale = 2.5
 //        animationNode.addChild(char)
-        setSpine("spine_player_entity", animKey: "idle")
+        setSpine("spine_player_entity", animKey: "start")
     }
     
     func update(dt: CFTimeInterval) {
