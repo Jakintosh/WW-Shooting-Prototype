@@ -153,7 +153,7 @@ class Whale : NHCNode {
                 if well.lockedOn {
                     well.burst()
 //                    lockOnWell.wellLockOn.texture = lockOnWell
-                    screenShake(intensity: 5, duration: 0.25)
+                    screenShake(intensity: 8, duration: 0.2)
                     game.animationManager.runAnimation("player_entity", animationName: "shoot", introPeriod: 0.1)
                     numFinished++
                 }
@@ -206,6 +206,11 @@ class Whale : NHCNode {
     func jump() {
         whaleState = .Jumping
         lockOnNode.hidden = false
+        var x: Int = 0
+        for well in exposedWells {
+            if well.activated { x++ }
+        }
+        lockOnWell.updateLockOnTexture(x)
     }
     func stun() {
         whaleState = .Stunned
@@ -244,47 +249,12 @@ class Whale : NHCNode {
 class Orca : Whale {
     
     // properties
-    var jumpAction: SKAction {
-        let animLength: NSTimeInterval = 8.0
-        let horizontalMove = SKAction.sequence([
-            SKAction.moveByX(25.0 * self.dirMult, y: 0, duration: animLength/15.0),
-            SKAction.moveByX(5.0 * self.dirMult, y: 0, duration: (animLength*5.0)/6.0),
-            SKAction.moveByX(25.0 * self.dirMult, y: 0, duration: animLength/10.0) ])
-        horizontalMove.timingMode = .EaseInEaseOut
-        let up = SKAction.moveByX(0, y: 700, duration: animLength/2.0)
-        let down = up.reversedAction()
-        up.timingFunction  = { time in
-            return (1.0 - ((1.0 - time)*(1.0 - time)*(1.0 - time)))
-        }
-        down.timingFunction = { time in
-            return (time*time*time)
-        }
-        let verticalMovement = SKAction.sequence([up, /*SKAction.waitForDuration(animLength/3.0)*/ down])
-        let rotate = SKAction.sequence([
-            SKAction.rotateByAngle(CGFloat(M_PI * -0.05), duration: animLength/4.0),
-            SKAction.rotateByAngle(CGFloat(M_PI *   0.0), duration: animLength/2.0),
-            SKAction.rotateByAngle(CGFloat(M_PI *  -0.1), duration: animLength/4.0)])
-        
-        return SKAction.group([ horizontalMove, verticalMovement, rotate ])
-    }
-    var explosionSound: SKAction
-    var screamSound: SKAction
-    var deathAnimation = [SKTexture]()
-    var deathSprite: SKSpriteNode
-    
-    struct Stored {
-        static var instanceNum: Int = 0
-    }
-    
-    init(onDeath: (CGPoint, SKNode) -> Void, ss: (CGFloat, NSTimeInterval)->Void, mgrInd: Int) {
-        // setup SKActions
-        
-//        // .3333 into max jump, 4.1666, 0.5
+    var jumpAction: SKAction// {
 //        let animLength: NSTimeInterval = 8.0
 //        let horizontalMove = SKAction.sequence([
-//            SKAction.moveByX(50, y: 0, duration: animLength/15.0),
-//            SKAction.moveByX(50, y: 0, duration: (animLength*5.0)/6.0),
-//            SKAction.moveByX(50, y: 0, duration: animLength/10.0) ])
+//            SKAction.moveByX(25.0 * self.dirMult, y: 0, duration: animLength/15.0),
+//            SKAction.moveByX(5.0 * self.dirMult, y: 0, duration: (animLength*5.0)/6.0),
+//            SKAction.moveByX(25.0 * self.dirMult, y: 0, duration: animLength/10.0) ])
 //        horizontalMove.timingMode = .EaseInEaseOut
 //        let up = SKAction.moveByX(0, y: 700, duration: animLength/2.0)
 //        let down = up.reversedAction()
@@ -300,8 +270,43 @@ class Orca : Whale {
 //            SKAction.rotateByAngle(CGFloat(M_PI *   0.0), duration: animLength/2.0),
 //            SKAction.rotateByAngle(CGFloat(M_PI *  -0.1), duration: animLength/4.0)])
 //        
-//        jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
-//        jumpAction.timingMode = .EaseInEaseOut
+//        return SKAction.group([ horizontalMove, verticalMovement, rotate ])
+//    }
+    var explosionSound: SKAction
+    var screamSound: SKAction
+    var deathAnimation = [SKTexture]()
+    var deathSprite: SKSpriteNode
+    
+    struct Stored {
+        static var instanceNum: Int = 0
+    }
+    
+    init(onDeath: (CGPoint, SKNode) -> Void, ss: (CGFloat, NSTimeInterval)->Void, mgrInd: Int) {
+        // setup SKActions
+        
+//        // .3333 into max jump, 4.1666, 0.5
+        let animLength: NSTimeInterval = 8.0
+        let horizontalMove = SKAction.sequence([
+            SKAction.moveByX(50, y: 0, duration: animLength/15.0),
+            SKAction.moveByX(50, y: 0, duration: (animLength*5.0)/6.0),
+            SKAction.moveByX(50, y: 0, duration: animLength/10.0) ])
+        horizontalMove.timingMode = .EaseInEaseOut
+        let up = SKAction.moveByX(0, y: 700, duration: animLength/2.0)
+        let down = up.reversedAction()
+        up.timingFunction  = { time in
+            return (1.0 - ((1.0 - time)*(1.0 - time)*(1.0 - time)))
+        }
+        down.timingFunction = { time in
+            return (time*time*time)
+        }
+        let verticalMovement = SKAction.sequence([up, /*SKAction.waitForDuration(animLength/3.0)*/ down])
+        let rotate = SKAction.sequence([
+            SKAction.rotateByAngle(CGFloat(M_PI * -0.05), duration: animLength/4.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *   0.0), duration: animLength/2.0),
+            SKAction.rotateByAngle(CGFloat(M_PI *  -0.1), duration: animLength/4.0)])
+        
+        jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
+        jumpAction.timingMode = .EaseInEaseOut
         screamSound = SKAction.repeatActionForever(SKAction.playSoundFileNamed("whale_scream.wav", waitForCompletion: true))
         explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
         
@@ -390,16 +395,20 @@ class Orca : Whale {
         {
             case .White:
                 animator.playAnimation("jump_white", introPeriod: 0.1)
+                animator.setQueuedAnimation("jump_white", introPeriod: 0.1)
             case .Yellow:
                 animator.playAnimation("jump_yellow", introPeriod: 0.1)
+                animator.setQueuedAnimation("jump_yellow", introPeriod: 0.1)
             case .Red:
                 animator.playAnimation("jump_red", introPeriod: 0.1)
+                animator.setQueuedAnimation("scream", introPeriod: 0.1)
                 runAction(SKAction.sequence([SKAction.waitForDuration(3.2), SKAction.runBlock( { self.scream() } )]), withKey: "scream")
         }
         runAction(jumpAction, completion: { self.dive() })
     }
     override func stun() {
         super.stun()
+        removeActionForKey("scream")
         animator.playAnimation("stun", introPeriod: 0.05)
         animator.setQueuedAnimation("stun", introPeriod: 0.1)
     }
@@ -419,7 +428,7 @@ class Orca : Whale {
         animator.stopAnimation()
         animator.animationSpine?.hidden = true
         deathSprite.hidden = false
-        deathSprite.runAction(SKAction.animateWithTextures(deathAnimation, timePerFrame: 0.1), withKey: "death")
+        deathSprite.runAction( SKAction.group( [SKAction.waitForDuration(0.2), SKAction.animateWithTextures(deathAnimation, timePerFrame: 0.1)]), withKey: "death")
         runAction(SKAction.waitForDuration(0.5), completion: {
             self.onDeath(pos: self.position, root: self.parent!)
             self.screenShake(intensity: 15, duration: 0.5)
@@ -452,6 +461,7 @@ class EnergyWell : NHCNode {
     var wellExposedStaticAnimation = [SKTexture]()
     var wellLockOn: SKSpriteNode!
     var wellLockOnTextures = [SKTexture]()
+    var wellExplosionTextures = [SKTexture]()
     let fillMeter: SKShapeNode  = SKShapeNode()
     var fillPath: UIBezierPath  = UIBezierPath()
     
@@ -484,6 +494,9 @@ class EnergyWell : NHCNode {
         for i in 0..<3 {
             wellLockOnTextures.append(atlas.textureNamed("lockOn\(i)"))
         }
+        for i in 0..<3 {
+            wellExplosionTextures.append(atlas.textureNamed("explosion\(i)"))
+        }
         
         // set up well
         setupWell()
@@ -508,6 +521,7 @@ class EnergyWell : NHCNode {
         case .LockOn:
             let scale: CGFloat = lockOnRadius/40.0
             wellLockOn = SKSpriteNode(texture: wellLockOnTextures[0])
+            wellLockOn.alpha = 0.7
             addChild(wellLockOn)
             wellLockOn.xScale = scale
             wellLockOn.yScale = scale
@@ -515,7 +529,6 @@ class EnergyWell : NHCNode {
         case .Exposed:
             let scale: CGFloat = lockOnRadius/25
             wellExposed = SKSpriteNode(texture: wellExposedOpenAnimation[0])
-            wellExposed.alpha = 0.7
             addChild(wellExposed)
             wellExposed.xScale = scale
             wellExposed.yScale = scale
@@ -529,6 +542,25 @@ class EnergyWell : NHCNode {
         fillMeter.lineWidth = 3
         fillPath.moveToPoint(CGPointMake(0, lockOnRadius))
         addChild(fillMeter)
+    }
+    
+    func updateLockOnTexture(numWells: Int) {
+        if let lockOn = wellLockOn {
+            switch numWells
+            {
+                case 1:
+                    lockOn.texture = wellLockOnTextures[2]
+                    
+                case 2:
+                    lockOn.texture = wellLockOnTextures[1]
+                    
+                case 3:
+                    lockOn.texture = wellLockOnTextures[0]
+                
+                default:
+                    lockOn.texture = wellLockOnTextures[0]
+            }
+        }
     }
     
     func resetWell() {
@@ -570,7 +602,7 @@ class EnergyWell : NHCNode {
             }
         }
         if let lockOn = wellLockOn {
-            lockOn.zRotation += 0.03
+            lockOn.zRotation += 0.01
         }
     }
     
@@ -645,17 +677,19 @@ class EnergyWell : NHCNode {
         fillMeter.runAction(SKAction.fadeOutWithDuration(0.5))
         switch(type)
         {
-        case .Debug:
-            wellDebug.strokeColor = SKColor.grayColor()
-            wellDebug.fillColor = SKColor.clearColor()
-            
-        case .LockOn:
-            break
-            
-        case .Exposed:
-//            let openAnim = SKAction.animateWithTextures(wellExposedOpenAnimation, timePerFrame: 0.033)
-//            wellExposed.runAction(SKAction.sequence([ openAnim, SKAction.repeatActionForever(staticAnim) ]))
-            wellExposed.removeFromParent()
+            case .Debug:
+                wellDebug.strokeColor = SKColor.grayColor()
+                wellDebug.fillColor = SKColor.clearColor()
+                
+            case .LockOn:
+                break
+                
+            case .Exposed:
+                let explodeAnim = SKAction.animateWithTextures(wellExplosionTextures, timePerFrame: 0.1, resize: true, restore: false)
+                wellExposed.runAction(SKAction.sequence( [explodeAnim, SKAction.runBlock({
+                    self.wellExposed.removeFromParent()
+                })]))
+                SoundManager.sharedManager().playSound("well_explosion.wav")
         }
         
     }

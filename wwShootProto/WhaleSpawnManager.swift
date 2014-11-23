@@ -60,6 +60,7 @@ class WhaleSpawnManager {
             let index = arc4random_uniform(UInt32(availableSpawns.count))
             availableSpawns[Int(index)].occupy()
             let selectedSpawn = availableSpawns[Int(index)]
+            spawnPoints[selectedSpawn.ID].occupy()
             return (selectedSpawn.point, selectedSpawn.ID, selectedSpawn.mirror)
         }
         
@@ -95,13 +96,17 @@ class WhaleSpawnManager {
     }
     
     // properties
+    var isActive: Bool = false
     var heatLevel: HeatLevel
     var timeUntilEval: NSTimeInterval = 0.0
     var instances: Int = 0
     
     let backLayer: WhaleSpawnLayer  = WhaleSpawnLayer(spawns:  [CGPoint(x: -250.0, y: -250.0), CGPoint(x: 0.0, y: -250.0), CGPoint(x: 250.0, y: -250.0)])
-    let midLayer:  WhaleSpawnLayer   = WhaleSpawnLayer(spawns: [CGPoint(x: -200.0, y: -250.0), CGPoint(x: 200.0, y: -250.0)])
+    let midLayer:  WhaleSpawnLayer  = WhaleSpawnLayer(spawns:  [CGPoint(x: -200.0, y: -250.0), CGPoint(x: 200.0, y: -250.0)])
     let frontLayer: WhaleSpawnLayer = WhaleSpawnLayer(spawns:  [CGPoint(x: -200.0, y: -250.0), CGPoint(x: 200.0, y: -250.0)])
+    
+    var nextSpawnLocation: (pos: CGPoint, i: Int, m: Int)!
+    var nextSpawnLayer: WhaleSpawnLayer!
     
     // components
     var activeWhales: [Whale] = [Whale]()
@@ -123,13 +128,6 @@ class WhaleSpawnManager {
     
     init() {
         heatLevel = .Mid
-        
-        // preload the orca animations
-        for i in 0..<5 {
-            if let spine = game.animationManager.getSpine(spineKey: "spine_whale_orca_default") {
-                orcaAnimations += [WhaleAnimation(spine: spine, owner: nil)]
-            }
-        }
         
         midLayer.spawnPoints[0].mirror = 1
         midLayer.spawnPoints[1].mirror = 2
@@ -168,57 +166,76 @@ class WhaleSpawnManager {
         backLayer.node.yScale = 0.6
         midLayer.node.xScale = 0.85
         midLayer.node.yScale = 0.85
+        
+        setNextSpawnPoint()
+    }
+    
+    func reset() {
+        isActive = false
+    }
+    
+    func loadWhaleAnimations() {
+        // preload the orca animations
+        for i in 0..<5 {
+            if let spine = game.animationManager.getSpine(spineKey: "spine_whale_orca_\(i)") {
+                orcaAnimations += [WhaleAnimation(spine: spine, owner: nil)]
+            }
+        }
     }
     
     func update(screenPos: CGPoint, dt: CFTimeInterval) {
-        timeUntilEval -= dt
-        if timeUntilEval <= 0 {
-            timeUntilEval = 6.0
-            
-            // add new whales (if necessary)
-            if activeWhales.count < getMaxWhales() {
-                createWhale()
+        if isActive {
+            timeUntilEval -= dt
+            if timeUntilEval <= 0 {
+                timeUntilEval = 6.0
+                
+                // add new whales (if necessary)
+                if activeWhales.count < getMaxWhales() {
+                    createWhale()
+                }
+                
+                // see if any whales should jump
+                var numWhalesJumping = 0
+                for whale in activeWhales {
+                    if whale.whaleState != .Submerged { numWhalesJumping++ }
+                }
+                if numWhalesJumping < (getMaxWhales() - 1) {
+                    whaleJump()
+                }
             }
             
-            // see if any whales should jump
-            var numWhalesJumping = 0
+            var whaleScreamTime: CGFloat = 0.0
             for whale in activeWhales {
-                if whale.whaleState != .Submerged { numWhalesJumping++ }
+                whale.update(screenPos, dt: dt)
+                if whale.isScreaming { whaleScreamTime += CGFloat(0.2) } // this is hardcoded ( 10(sec) * 0.02 (.98 inv) = 0.2)
             }
-            if numWhalesJumping < (getMaxWhales() - 1) {
-                whaleJump()
-            }
+            game.screamManager.update(dt, totalScreams: whaleScreamTime)
         }
-        
-        var whaleScreamTime: CGFloat = 0.0
-        for whale in activeWhales {
-            whale.update(screenPos, dt: dt)
-            if whale.isScreaming { whaleScreamTime += CGFloat(0.2) } // this is hardcoded ( 10(sec) * 0.02 (.98 inv) = 0.2)
-        }
-        game.screamManager.update(dt, totalScreams: whaleScreamTime)
     }
     
     // must keep track of the current whales in play
     func createWhale() {
-        let spawnLayer = getRandomSpawnLayer()
-        
-        let newIndex = instances++
-        
-        let onDeath: (pos: CGPoint, root: SKNode) -> Void = { (pos, root) in
-            self.particleEmitter.addToQueue(200, pos: pos, root: root)
-            self.destroyWhale(newIndex)
-        }
-        let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
-        
-        let newOrca = Orca(onDeath: onDeath, ss: ss, mgrInd: newIndex)
-        
-        if connectAnimationForOrca(newOrca) {
-            newOrca.zPosition = -1
-            if arc4random_uniform(2) == 0 { newOrca.mirror(true) }
-            activeWhales += [newOrca]
-        } else {
-            println("whale creation failed due to lack of animations")
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+            
+            let spawnLayer = self.getRandomSpawnLayer()
+            let newIndex = self.instances++
+            let onDeath: (pos: CGPoint, root: SKNode) -> Void = { (pos, root) in
+                self.particleEmitter.addToQueue(200, pos: pos, root: root)
+                self.destroyWhale(newIndex)
+            }
+            let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
+            let newOrca = Orca(onDeath: onDeath, ss: ss, mgrInd: newIndex)
+            if self.connectAnimationForOrca(newOrca) {
+                newOrca.zPosition = -1
+                if arc4random_uniform(2) == 0 { newOrca.mirror(true) }
+                self.activeWhales += [newOrca]
+            } else {
+                println("whale creation failed due to lack of animations")
+            }
+//            dispatch_async(dispatch_get_main_queue(), {
+//                println("built a whale on a different thread and returned to the main thread")
+//            });
+        });
     }
     func destroyWhale(whaleID: Int) {
         for i in 0..<activeWhales.count {
@@ -233,27 +250,53 @@ class WhaleSpawnManager {
     func whaleJump() {
         for whale in activeWhales {
             if whale.whaleState == .Submerged {
-                if var spawnLayer = getRandomSpawnLayer() {
-                    let info = spawnLayer.getSpawnPoint()
-                    whale.position = info.pos
-                    switch(info.m)
+                
+                if nextSpawnLayer != nil && nextSpawnLocation != nil {
+                    whale.position = nextSpawnLocation.pos
+                    switch(nextSpawnLocation.m)
                     {
-                        case 0:
-                            if arc4random_uniform(2) == 0 { whale.mirror(true) }
-                            else { whale.mirror(false) }
-                        case 2:
-                            whale.mirror(true)
-                        default:
-                            whale.mirror(false)
+                    case 0:
+                        if arc4random_uniform(2) == 0 { whale.mirror(true) }
+                        else { whale.mirror(false) }
+                    case 2:
+                        whale.mirror(true)
+                    default:
+                        whale.mirror(false)
                     }
                     
-                    spawnLayer.node.addChild(whale)
+                    nextSpawnLayer.node.addChild(whale)
+                    let thisLayer = nextSpawnLayer
+                    let index = nextSpawnLocation.i
                     whale.onSubmerge = {
-                        spawnLayer.clearSpawnPoint(info.i)
+                        thisLayer.clearSpawnPoint(index)
                     }
                     whale.jump()
+                    nextSpawnLocation = nil
+                    nextSpawnLayer = nil
+                    setNextSpawnPoint()
                 } else {
-                    println("no layers are available to spawn in!")
+                    if var spawnLayer = getRandomSpawnLayer() {
+                        let info = spawnLayer.getSpawnPoint()
+                        whale.position = info.pos
+                        switch(info.m)
+                        {
+                            case 0:
+                                if arc4random_uniform(2) == 0 { whale.mirror(true) }
+                                else { whale.mirror(false) }
+                            case 2:
+                                whale.mirror(true)
+                            default:
+                                whale.mirror(false)
+                        }
+                        
+                        spawnLayer.node.addChild(whale)
+                        whale.onSubmerge = {
+                            spawnLayer.clearSpawnPoint(info.i)
+                        }
+                        whale.jump()
+                    } else {
+                        println("no layers are available to spawn in!")
+                    }
                 }
                 break
             }
@@ -272,6 +315,15 @@ class WhaleSpawnManager {
             spawnLayer = eligibleLayers[Int(rand)]
         }
         return spawnLayer
+    }
+    func setNextSpawnPoint() {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+            self.nextSpawnLayer = self.getRandomSpawnLayer()
+            self.nextSpawnLocation = self.nextSpawnLayer.getSpawnPoint()
+//            dispatch_async(dispatch_get_main_queue(), {
+//                println("found a spawn point on a different thread and returned to main thread")
+//            });
+        });
     }
     func getMaxWhales() -> Int {
         switch( heatLevel )

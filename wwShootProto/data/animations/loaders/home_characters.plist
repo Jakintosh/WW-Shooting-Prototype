@@ -20,7 +20,39 @@
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>spine_whale_orca_default</string>
+		<string>spine_whale_orca_0</string>
+		<key>json</key>
+		<string>whale_orca</string>
+		<key>atlas</key>
+		<string>whale_orca</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_whale_orca_1</string>
+		<key>json</key>
+		<string>whale_orca</string>
+		<key>atlas</key>
+		<string>whale_orca</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_whale_orca_2</string>
+		<key>json</key>
+		<string>whale_orca</string>
+		<key>atlas</key>
+		<string>whale_orca</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_whale_orca_3</string>
+		<key>json</key>
+		<string>whale_orca</string>
+		<key>atlas</key>
+		<string>whale_orca</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_whale_orca_4</string>
 		<key>json</key>
 		<string>whale_orca</string>
 		<key>atlas</key>

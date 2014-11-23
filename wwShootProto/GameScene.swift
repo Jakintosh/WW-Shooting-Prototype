@@ -32,9 +32,9 @@ class GameScene: SKScene {
     let water: Water       = Water(sceneWidth: 320.0)
     
     // systems
+    let fadeSprite = SKSpriteNode(color: SKColor.whiteColor(), size: CGSize(width: 320, height: 568))
     let camCon: CameraController = CameraController()
     let particleEmitter = EnergyParticleEmitter(num: 500)
-    let whaleSpawnManager = WhaleSpawnManager()
 //    let swipeUpGesture: UISwipeGestureRecognizer!
     
     // scene vars
@@ -67,12 +67,14 @@ class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        self.fadeSprite.alpha = 0.0
 //        view.addGestureRecognizer(swipeUpGesture)
         
         // reset resources
         game.screamManager.reset() // optional values
         game.screamManager.camCon = self.camCon
         game.energyManager.reset()
+        game.whaleSpawnManager.reset()
         
         // setup camera
         camCon.zPosition = 0.0
@@ -82,14 +84,13 @@ class GameScene: SKScene {
         self.addChild(camCon)
         
         // setup spawn mgr
-        whaleSpawnManager.baseNode        = self.water
-        whaleSpawnManager.particleEmitter = self.particleEmitter
-        whaleSpawnManager.camCon          = self.camCon
+        game.whaleSpawnManager.baseNode        = self.water
+        game.whaleSpawnManager.particleEmitter = self.particleEmitter
+        game.whaleSpawnManager.camCon          = self.camCon
         
         // set positions
         railing.basePosition = CGPoint(x: 0, y: -frame.height/2 - 15)
         water.basePosition = CGPoint(x: 0, y: -frame.height/2 - 10)
-//        city.basePosition = CGPoint(x: 0, y: -frame.height/2 - 15)
         sun.position = CGPoint(x: 0, y: 130)
         sun.zPosition = -40
         
@@ -116,12 +117,14 @@ class GameScene: SKScene {
         // add reticle
         camCon.addCameraChild(reticle, withZ: -10)
         camCon.addCameraChild(eHUD, withZ: -11)
+        
+        camCon.addHUDChild(fadeSprite, withZ: 1000)
     }
     
 //    override func willMoveFromView(view: SKView) {
 //        view.removeGestureRecognizer(swipeUpGesture)
 //    }
-    
+//    
     // MARK: - Logic
     override func update(currentTime: CFTimeInterval) {
         // time keeping
@@ -137,7 +140,7 @@ class GameScene: SKScene {
         eHUD.update(reticlePos)
         
         // update big entities
-        whaleSpawnManager.update(sceneTouch, dt: deltaTime)
+        game.whaleSpawnManager.update(sceneTouch, dt: deltaTime)
         char.update(deltaTime)
         
         
@@ -159,6 +162,8 @@ class GameScene: SKScene {
         }   }   }
         particleEmitter.update(deltaTime)
         if eHUD.currentState == .ZoomedIn { particleEmitter.updateParticles(particleUpdate) }
+        
+        fadeSprite.alpha = game.screamManager.getFade()
         
         // finally, update all of the camera changes
         camCon.update(deltaTime)
@@ -198,7 +203,6 @@ class GameScene: SKScene {
             
             // get X stuff
             let sceneX = u_touch.locationInNode(scene).x
-//            targetAreaPos = sceneX * ( areaWidth / frame.width )
             let limit = frame.width/6.0
             if sceneX > limit {
                 let mod: CGFloat = (sceneX-limit)/limit * (sceneX-limit)/limit + 1
@@ -228,39 +232,8 @@ class GameScene: SKScene {
         let normalizedY = currentCameraY / frame.height
         railing.updatePosition(normalizedX, modY: normalizedY)
         water.updatePosition(normalizedX, modY: normalizedY)
-//        city.updatePosition(normalizedX, modY: normalizedY)
         bg.updatePosition(normalizedX, modY: normalizedY)
-        
-//      camCon.setCameraPosition(CGPoint(x:areaPos, y:0.0))
     }
-    
-//    func addWhale(position pos: CGPoint, mirrored: Bool) {
-//        
-//        let orca = true
-//        
-//        if orca {
-//            let onDeath: (pos: CGPoint) -> Void = { pos in self.particleEmitter.addToQueue(200, pos: pos, root: self.water) }
-//            let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
-//            
-//            let newWhale = Orca(onDeath: onDeath, ss)
-//            newWhale.zPosition = 1
-//            water.addChild(newWhale)
-//            whales += [newWhale]
-//            
-//            newWhale.position = pos
-//            newWhale.mirror(mirrored)
-//            newWhale.jump()
-//        }
-//    }
-//    
-//    func removeWhale(#whale: Whale) {
-//        for i in 0..<whales.count {
-//            if whales[i] === whale {
-//                whales.removeAtIndex(i)
-//                return
-//            }
-//        }
-//    }
     
     func transitionHome() {
         
@@ -298,10 +271,11 @@ class GameScene: SKScene {
         
         char.currentState = .Idle
         eHUD.currentState = .ZoomedOut
+        
+        if !game.whaleSpawnManager.isActive { game.whaleSpawnManager.isActive = true }
     }
-    
+//    
 //    func handleSwipe(gestureRecognizer: UISwipeGestureRecognizer) {
-//
-//        camCon.shake(20.0, duration: 2.0)
+//        transitionHome()
 //    }
 }

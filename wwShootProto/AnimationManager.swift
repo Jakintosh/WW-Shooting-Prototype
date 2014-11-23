@@ -43,9 +43,9 @@ class AnimationManager {
                         let json = definition["json"] as String
                         let atlas = definition["atlas"] as String
                         
-                        let animationData = AnimationData(name: name, json: json, atlas: atlas)
-                        loadedAnimationData[name] = animationData
-                        
+//                        let animationData = AnimationData(name: name, json: json, atlas: atlas)
+//                        loadedAnimationData[name] = animationData
+//                        
                         let newSpineAnimation = SGG_Spine()
                         newSpineAnimation.skeletonFromFileNamed(json, andAtlasNamed: atlas, andUseSkinNamed: nil)
                         loadedAnimations[name] = newSpineAnimation
@@ -95,29 +95,36 @@ class AnimationManager {
             return animatableEntities[key]
     }
     func setSpineForEntity(spineKey: String, entityKey: String) {
-//        if let spine = loadedAnimations[spineKey] {
+        if let spine = loadedAnimations[spineKey] {
             if let entity = animatableEntities[entityKey] {
-                if let animData = loadedAnimationData[spineKey] {
-                    let newSpineAnimation = SGG_Spine()
-                    newSpineAnimation.skeletonFromFileNamed(animData.json, andAtlasNamed: animData.atlas, andUseSkinNamed: nil)
-                    entity.setSpine(newSpineAnimation)
-                } else {
-                    println("tried to assign spine to entity but spine data doesn't exist for key")
-                }
+                entity.setSpine(spine)
+//                if let animData = loadedAnimationData[spineKey] {
+//                    let newSpineAnimation = SGG_Spine()
+//                    newSpineAnimation.skeletonFromFileNamed(animData.json, andAtlasNamed: animData.atlas, andUseSkinNamed: nil)
+//                    entity.setSpine(newSpineAnimation)
+//                } else {
+//                    println("tried to assign spine to entity but spine data doesn't exist for key")
+//                }
             } else {
                 println("tried to assign spine to entity but entitiy doesn't exist for key")
             }
-//        } else {
-//            println("tried to assign spine to entity but spine doesn't exist or hasn't been loaded for key")
-//        }
+        } else {
+            println("tried to assign spine to entity but spine doesn't exist or hasn't been loaded for key")
+        }
     }
     func getSpine(#spineKey: String) -> SGG_Spine? {
-        if let animData = loadedAnimationData[spineKey] {
-            let newSpineAnimation = SGG_Spine()
-            newSpineAnimation.skeletonFromFileNamed(animData.json, andAtlasNamed: animData.atlas, andUseSkinNamed: nil)
-            return newSpineAnimation
+//        if let animData = loadedAnimationData[spineKey] {
+//            let newSpineAnimation = SGG_Spine()
+//            newSpineAnimation.skeletonFromFileNamed(animData.json, andAtlasNamed: animData.atlas, andUseSkinNamed: nil)
+//            return newSpineAnimation
+//        } else {
+//            println("tried to load spine, but animation data doesn't exist")
+//            return nil
+//        }
+        if let spine = loadedAnimations[spineKey] {
+            return spine
         } else {
-            println("tried to load spine, but animation data doesn't exist")
+            println("tried to load spine, but animation spine doesn't exist")
             return nil
         }
     }

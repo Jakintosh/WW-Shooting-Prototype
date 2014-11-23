@@ -49,9 +49,6 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        game.interactionManager.loadInteractions("home", dataFile: "testDayOne")
-        game.animationManager.loadAnimations("home", dataFile: "home_characters")
-        
 //        if let scene = HomeScene.unarchiveFromFile("HomeScene") as? HomeScene {
         let screenSize = UIScreen.mainScreen().bounds.size
         let scene = LoadingScene(size: screenSize)

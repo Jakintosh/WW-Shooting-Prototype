@@ -18,14 +18,18 @@ class ScreamingManager {
     }
     
     func update(dt: CFTimeInterval, totalScreams: CGFloat) {
-        if screamingLevel < 1.0 {
+        if screamingLevel < 0.01 {
             screamingLevel = 0.0
         } else {
             screamingLevel *= 0.98
         }
         screamingLevel += totalScreams
         camCon.shake(totalScreams, duration: (1.0/30.0))
-        println(screamingLevel)
+//        println(screamingLevel)
+    }
+    
+    func getFade() -> CGFloat {
+        return (screamingLevel/10.0)
     }
     
 }
