@@ -201,6 +201,27 @@ class GameScene: SKScene {
             self.isTransitioning = true
         }
         
+        if game.whaleSpawnManager.bowIsDead && !isTransitioning {
+            
+            isTransitioning = true
+            
+            let nextScene = OrientationScene(size: CGSize(width: 320.0, height: 568.0))
+            nextScene.transitionToNextScene(.Vertical, results: .Fail, nextSceneName: "DayOneSuccess")
+            game.currentFail = "DayZeroSuccess"
+            
+            // set up transition
+            let transition = SKTransition.crossFadeWithDuration(1.0)
+            transition.pausesIncomingScene = true
+            transition.pausesOutgoingScene = true
+            
+            // present scene
+            view!.presentScene(nextScene, transition: transition)
+            
+            game.whaleSpawnManager.shutdown()
+            char.shutdown()
+            self.isTransitioning = true
+        }
+        
         // finally, update all of the camera changes
         camCon.update(deltaTime)
     }
@@ -321,6 +342,7 @@ class GameScene: SKScene {
         
         if !game.whaleSpawnManager.isActive {
             game.whaleSpawnManager.isActive = true
+            SoundManager.sharedManager().playSound("start.wav")
             char.getUp()
             eHUD.xScale = 1.2
             eHUD.yScale = 1.2

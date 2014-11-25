@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "I0Jt4/1jpaVRRvDQUu4W0rwvwOA", "spine": "2.1.04", "width": 423.02, "height": 288, "images": "" },
+"skeleton": { "hash": "+b7DKvW5lJ9xobTDbY4t09Got1c", "spine": "2.1.04", "width": 423.61, "height": 287.54, "images": "" },
 "bones": [
 	{ "name": "root", "y": 33.61 },
 	{ "name": "body", "parent": "root", "length": 115.31, "x": 7.25, "y": 9.54, "rotation": 83.7 },
@@ -1025,15 +1025,6 @@
 		}
 	},
 	"happyAction": {
-		"slots": {
-			"pupil": {
-				"attachment": [
-					{ "time": 0, "name": "pupil" },
-					{ "time": 0.0666, "name": null },
-					{ "time": 0.4, "name": null }
-				]
-			}
-		},
 		"bones": {
 			"root": {
 				"rotate": [
@@ -1470,10 +1461,9 @@
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.0666, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.1333, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.2666, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.4, "x": 1, "y": 1 }
+					{ "time": 0.0666, "x": 1, "y": 1 },
+					{ "time": 0.1, "x": 0, "y": 1, "curve": "stepped" },
+					{ "time": 0.4, "x": 0, "y": 1 }
 				]
 			},
 			"rHand": {
@@ -1579,14 +1569,6 @@
 		}
 	},
 	"happyIdle": {
-		"slots": {
-			"pupil": {
-				"attachment": [
-					{ "time": 0, "name": null },
-					{ "time": 1.6, "name": null }
-				]
-			}
-		},
 		"bones": {
 			"lQuads": {
 				"rotate": [
@@ -1622,10 +1604,8 @@
 					{ "time": 1.6, "x": 0, "y": 0 }
 				],
 				"scale": [
-					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.5333, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 1.0666, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 1.6, "x": 1, "y": 1 }
+					{ "time": 0, "x": 0, "y": 1, "curve": "stepped" },
+					{ "time": 1.6, "x": 0, "y": 1 }
 				]
 			},
 			"lPalm": {
@@ -4137,18 +4117,6 @@
 		}
 	},
 	"ughAction": {
-		"slots": {
-			"pupil": {
-				"attachment": [
-					{ "time": 0, "name": "pupil" },
-					{ "time": 0.1666, "name": null },
-					{ "time": 0.8666, "name": null },
-					{ "time": 1.0666, "name": null },
-					{ "time": 1.2, "name": "pupil" },
-					{ "time": 1.4666, "name": "pupil" }
-				]
-			}
-		},
 		"bones": {
 			"root": {
 				"rotate": [
@@ -4650,9 +4618,10 @@
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.1666, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 0.8666, "x": 1, "y": 1, "curve": "stepped" },
-					{ "time": 1.0666, "x": 1, "y": 1, "curve": "stepped" },
+					{ "time": 0.1333, "x": 1, "y": 1 },
+					{ "time": 0.1666, "x": 0, "y": 1, "curve": "stepped" },
+					{ "time": 1.0666, "x": 0, "y": 1 },
+					{ "time": 1.2333, "x": 1, "y": 1, "curve": "stepped" },
 					{ "time": 1.4666, "x": 1, "y": 1 }
 				]
 			},

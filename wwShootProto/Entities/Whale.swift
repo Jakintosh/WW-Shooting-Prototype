@@ -274,7 +274,7 @@ class Orca : Whale {
 //        
 //        return SKAction.group([ horizontalMove, verticalMovement, rotate ])
 //    }
-    var explosionSound: SKAction
+//    var explosionSound: SKAction
     var screamSound: Sound = Sound(named: "whale_scream.mp3")
     var deathAnimation = [SKTexture]()
     var deathSprite: SKSpriteNode
@@ -310,7 +310,7 @@ class Orca : Whale {
         
         jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
         jumpAction.timingMode = .EaseInEaseOut
-        explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
+//        explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
         
         let atlas = SKTextureAtlas(named: "whale-death")
         for i in 0..<5 {
@@ -327,7 +327,12 @@ class Orca : Whale {
         let key = "whale_orca\(Stored.instanceNum)"
         Stored.instanceNum++
         
-        layoutType = Int(arc4random_uniform(2))
+        let rando = Int(arc4random_uniform(3))
+        if rando == 0 || rando == 1 {
+            layoutType = 0
+        } else {
+            layoutType = 1
+        }
         
         super.init(onDeath: onDeath, ss: ss, mgrInd: mgrInd, animatorKey: key)
         
@@ -520,7 +525,7 @@ class Orca : Whale {
             self.onDeath(pos: self.position, root: self.parent!)
             self.screenShake(intensity: 15, duration: 0.5)
 //            self.runAction(self.explosionSound)
-            SoundManager.sharedManager().playSound("whale_explosion.caf")
+            SoundManager.sharedManager().playSound("whale_explosion.wav")
             self.remove()
         })
     }
@@ -534,7 +539,7 @@ class Bow : Whale {
     
     // properties
     var jumpAction: SKAction
-    var explosionSound: SKAction
+//    var explosionSound: SKAction
     var screamSound: Sound = Sound(named: "whale_scream.mp3")
     var deathAnimation = [SKTexture]()
     var deathSprite: SKSpriteNode
@@ -550,7 +555,7 @@ class Bow : Whale {
         jumpAction = SKAction.group([ firstJump, secondJump ])
         jumpAction.timingMode = .EaseOut
 //        screamSound = SKAction.repeatActionForever(SKAction.playSoundFileNamed("whale_scream.wav", waitForCompletion: true))
-        explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
+//        explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
         
         let atlas = SKTextureAtlas(named: "whale_bow_death")
         for i in 0..<5 {
@@ -576,34 +581,20 @@ class Bow : Whale {
         animationNode.yScale = 0.8
     }
     override func setupExposedNode() {
-        let well1 = EnergyWell(radius: 40.0, duration: 0.5, type: .Exposed)
-        let well2 = EnergyWell(radius: 30.0, duration: 0.4, type: .Exposed)
-        let well3 = EnergyWell(radius: 20.0, duration: 0.1, type: .Exposed)
+        let well1 = EnergyWell(radius: 30.0, duration: 0.05, type: .Exposed)
         
-        well1.position = CGPoint(x: 104.0, y:   48.0)
-        well2.position = CGPoint(x:   5.0, y:   -8.0)
-        well3.position = CGPoint(x:   0.0, y: -102.0)
+        well1.position = CGPoint(x: 0.0, y: 0.0)
         
         well1.xScale = 1.0 / scale
         well1.yScale = 1.0 / scale
         
-        well2.xScale = 1.0 / scale
-        well2.yScale = 1.0 / scale
-        well2.zRotation = CGFloat(M_PI/6.0)
-        
-        well3.xScale = 1.0 / scale
-        well3.yScale = 1.0 / scale
-        well2.zRotation = CGFloat(M_PI/3.0)
-        
-        exposedWells += [well1, well2, well3]
+        exposedWells += [well1]
         
         exposedNode.addChild(well1)
-        exposedNode.addChild(well2)
-        exposedNode.addChild(well3)
         exposedNode.zPosition = 1
     }
     override func setupLockOnNode() {
-        lockOnWell = EnergyWell(radius: 30.0, duration: 1.0, type: .LockOn)
+        lockOnWell = EnergyWell(radius: 30.0, duration: 3.0, type: .LockOn)
         lockOnWell.position = CGPoint(x: 0, y: 0)
         lockOnWell.xScale = 1.5
         lockOnWell.yScale = 1.5
@@ -665,7 +656,7 @@ class Bow : Whale {
         runAction(SKAction.waitForDuration(0.5), completion: {
             self.onDeath(pos: self.position, root: self.parent!)
             self.screenShake(intensity: 15, duration: 0.5)
-            SoundManager.sharedManager().playSound("whale_explosion.caf")
+            SoundManager.sharedManager().playSound("whale_explosion.wav")
             self.remove()
         })
     }

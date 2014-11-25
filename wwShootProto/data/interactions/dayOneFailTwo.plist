@@ -156,7 +156,7 @@
 						<key>animation</key>
 						<string>oops</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>oops</string>
 						<key>nextMomentKey</key>
 						<string>m2</string>
 						<key>text</key>

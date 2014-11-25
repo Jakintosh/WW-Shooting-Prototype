@@ -108,7 +108,7 @@ class OrientationScene : SKFuckScene {
                 
                 nextScene = LighthouseScene(size: CGSize(width: 320.0, height: 568.0))
                 (nextScene as LighthouseScene).cameraRotation = CGFloat(M_PI/2.0)
-                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Pass, "GameScene")
+                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Fail, "GameScene")
                 game.interactionManager.loadInteractions("default", dataFile: "dayZero")
                 
             } else if self.nextSceneName == "GameScene" {
@@ -134,7 +134,7 @@ class OrientationScene : SKFuckScene {
                 
                 nextScene = LighthouseScene(size: CGSize(width: 320.0, height: 568.0))
                 (nextScene as LighthouseScene).cameraRotation = CGFloat(M_PI/2.0)
-                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Pass, "TutorialScene")
+                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Pass, "GameScene")
                 game.interactionManager.loadInteractions("default", dataFile: "dayOneSuccess")
                 
             }

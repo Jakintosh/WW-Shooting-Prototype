@@ -761,7 +761,7 @@ your old life anyway?</string>
 						<key>animation</key>
 						<string>oops</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>oops</string>
 						<key>nextMomentKey</key>
 						<string>m12</string>
 						<key>text</key>

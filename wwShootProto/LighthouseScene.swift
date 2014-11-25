@@ -74,6 +74,9 @@ class LighthouseScene : SKFuckScene {
                 nextScene.transitionToNextScene(self.nextSceneInfo.prev, results: self.nextSceneInfo.pass, nextSceneName: self.nextSceneInfo.name)
                 dispatch_async(dispatch_get_main_queue(), {
                     self.runAction(SKAction.sequence([SKAction.waitForDuration(3.0), SKAction.runBlock({
+                        SoundManager.sharedManager().stopSound("fireplace.wav")
+                        self.daughter.shutdown()
+                        self.dad.shutdown()
                         let transition = SKTransition.crossFadeWithDuration(1.0)
                         transition.pausesIncomingScene = false
                         transition.pausesOutgoingScene = false
@@ -110,6 +113,8 @@ class LighthouseScene : SKFuckScene {
         anchorPoint = CGPointMake(0.5, 0.5)
         backgroundColor = SKColor.blackColor()
         setup(view)
+        
+        SoundManager.sharedManager().playSound("fireplace.wav", looping: true)
     }
     
     override func willMoveFromView(view: SKView) {

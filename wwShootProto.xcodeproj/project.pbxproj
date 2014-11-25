@@ -33,6 +33,9 @@
 		216101EC1A0D178B000AA0AB /* InteractiveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216101EB1A0D178B000AA0AB /* InteractiveButton.swift */; };
 		216B93981A186729000F4D2D /* NORLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 216B93971A186729000F4D2D /* NORLabelNode.m */; };
 		217072631A1EB5C700D0CFC8 /* whale_orca.json in Resources */ = {isa = PBXBuildFile; fileRef = 217072621A1EB5C700D0CFC8 /* whale_orca.json */; };
+		21988EEA1A2520F100B4D685 /* dad_work.json in Resources */ = {isa = PBXBuildFile; fileRef = 21988EE91A2520F100B4D685 /* dad_work.json */; };
+		21988EEC1A2521EA00B4D685 /* dad_work.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21988EEB1A2521EA00B4D685 /* dad_work.atlas */; };
+		21988EEE1A25290E00B4D685 /* start.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21988EED1A25290E00B4D685 /* start.wav */; };
 		21A4C5081A230C9B00E966D6 /* whale_bow_death.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21A4C5071A230C9B00E966D6 /* whale_bow_death.atlas */; };
 		21A4C5131A24561600E966D6 /* energy_collect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21A4C5091A24561600E966D6 /* energy_collect.wav */; };
 		21A4C5141A24561600E966D6 /* enter_water.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21A4C50A1A24561600E966D6 /* enter_water.wav */; };
@@ -45,7 +48,6 @@
 		21A4C51B1A24561600E966D6 /* reticle_zoom_out.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21A4C5111A24561600E966D6 /* reticle_zoom_out.wav */; };
 		21A4C51E1A24678300E966D6 /* waves.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21A4C51D1A24678300E966D6 /* waves.wav */; };
 		21A4C5201A24689A00E966D6 /* shoot_missile.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21A4C51F1A24689A00E966D6 /* shoot_missile.wav */; };
-		21AEC7411A1D99AB0052F53F /* dad_work.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21AEC7401A1D99AB0052F53F /* dad_work.atlas */; };
 		21AEC7491A1DB3B30052F53F /* whale_orca.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21AEC7481A1DB3B30052F53F /* whale_orca.atlas */; };
 		21B2E7B819F1E20200000E70 /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2E7B719F1E20200000E70 /* House.swift */; };
 		21B2E7BC19F46C5E00000E70 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2E7BB19F46C5E00000E70 /* Character.swift */; };
@@ -73,7 +75,6 @@
 		21BC58831A2290580094DD81 /* LighthouseRoom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC58791A2290580094DD81 /* LighthouseRoom@2x.png */; };
 		21BC58851A22A03E0094DD81 /* daughter_sit.json in Resources */ = {isa = PBXBuildFile; fileRef = 21BC58841A22A03E0094DD81 /* daughter_sit.json */; };
 		21BC58871A22A0980094DD81 /* daughter_sit.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 21BC58861A22A0980094DD81 /* daughter_sit.atlas */; };
-		21BC58891A22AE240094DD81 /* dad_work.json in Resources */ = {isa = PBXBuildFile; fileRef = 21BC58881A22AE240094DD81 /* dad_work.json */; };
 		21BC588C1A22D1930094DD81 /* LoadingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC588A1A22D1930094DD81 /* LoadingScreen.png */; };
 		21BC588D1A22D1930094DD81 /* LoadingScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC588B1A22D1930094DD81 /* LoadingScreen@2x.png */; };
 		21BC588F1A22E6A70094DD81 /* whale_bow.json in Resources */ = {isa = PBXBuildFile; fileRef = 21BC588E1A22E6A60094DD81 /* whale_bow.json */; };
@@ -159,6 +160,9 @@
 		216B93961A186729000F4D2D /* NORLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NORLabelNode.h; sourceTree = "<group>"; };
 		216B93971A186729000F4D2D /* NORLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NORLabelNode.m; sourceTree = "<group>"; };
 		217072621A1EB5C700D0CFC8 /* whale_orca.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = whale_orca.json; path = resources/whale_orca/whale_orca.json; sourceTree = SOURCE_ROOT; };
+		21988EE91A2520F100B4D685 /* dad_work.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dad_work.json; path = resources/dad_work/dad_work.json; sourceTree = SOURCE_ROOT; };
+		21988EEB1A2521EA00B4D685 /* dad_work.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = dad_work.atlas; path = resources/dad_work/dad_work.atlas; sourceTree = SOURCE_ROOT; };
+		21988EED1A25290E00B4D685 /* start.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = start.wav; sourceTree = "<group>"; };
 		21A4C5071A230C9B00E966D6 /* whale_bow_death.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = whale_bow_death.atlas; path = resources/whale_bow/whale_bow_death.atlas; sourceTree = SOURCE_ROOT; };
 		21A4C5091A24561600E966D6 /* energy_collect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = energy_collect.wav; sourceTree = "<group>"; };
 		21A4C50A1A24561600E966D6 /* enter_water.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = enter_water.wav; sourceTree = "<group>"; };
@@ -171,7 +175,6 @@
 		21A4C5111A24561600E966D6 /* reticle_zoom_out.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = reticle_zoom_out.wav; sourceTree = "<group>"; };
 		21A4C51D1A24678300E966D6 /* waves.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = waves.wav; sourceTree = "<group>"; };
 		21A4C51F1A24689A00E966D6 /* shoot_missile.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = shoot_missile.wav; sourceTree = "<group>"; };
-		21AEC7401A1D99AB0052F53F /* dad_work.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = dad_work.atlas; path = resources/dad_work/dad_work.atlas; sourceTree = SOURCE_ROOT; };
 		21AEC7481A1DB3B30052F53F /* whale_orca.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = whale_orca.atlas; path = resources/whale_orca/whale_orca.atlas; sourceTree = SOURCE_ROOT; };
 		21B2E7B719F1E20200000E70 /* House.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		21B2E7BB19F46C5E00000E70 /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
@@ -203,7 +206,6 @@
 		21BC58791A2290580094DD81 /* LighthouseRoom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LighthouseRoom@2x.png"; sourceTree = "<group>"; };
 		21BC58841A22A03E0094DD81 /* daughter_sit.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = daughter_sit.json; path = resources/daughter_sit/daughter_sit.json; sourceTree = SOURCE_ROOT; };
 		21BC58861A22A0980094DD81 /* daughter_sit.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = daughter_sit.atlas; path = resources/daughter_sit/daughter_sit.atlas; sourceTree = SOURCE_ROOT; };
-		21BC58881A22AE240094DD81 /* dad_work.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dad_work.json; path = resources/dad_work/dad_work.json; sourceTree = SOURCE_ROOT; };
 		21BC588A1A22D1930094DD81 /* LoadingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingScreen.png; sourceTree = "<group>"; };
 		21BC588B1A22D1930094DD81 /* LoadingScreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LoadingScreen@2x.png"; sourceTree = "<group>"; };
 		21BC588E1A22E6A60094DD81 /* whale_bow.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = whale_bow.json; path = resources/whale_bow/whale_bow.json; sourceTree = SOURCE_ROOT; };
@@ -409,11 +411,11 @@
 				2103B35D1A11A3A700CCDCB9 /* Shaders */,
 				21BC586F1A2290580094DD81 /* LighthouseImages */,
 				21B7A46B19F0516E0023EAE9 /* additional images */,
+				21988EEB1A2521EA00B4D685 /* dad_work.atlas */,
 				21B5AF9919CF8D80004B00C9 /* textures.atlas */,
 				21EB818D1A0A5FCB00C7525D /* daughter.atlas */,
 				21BC58861A22A0980094DD81 /* daughter_sit.atlas */,
 				21EB81891A0A5FC100C7525D /* dad.atlas */,
-				21AEC7401A1D99AB0052F53F /* dad_work.atlas */,
 				21DFBFC41A219FE300134AC0 /* dad_getup.atlas */,
 				21AEC7481A1DB3B30052F53F /* whale_orca.atlas */,
 				21BC58901A22E6BF0094DD81 /* whale_bow.atlas */,
@@ -524,6 +526,7 @@
 		21E3B60C1A190F7B00195D36 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				21988EED1A25290E00B4D685 /* start.wav */,
 				214CF8181A24DAD400204B63 /* whale_scream.mp3 */,
 				21A4C51F1A24689A00E966D6 /* shoot_missile.wav */,
 				21A4C51D1A24678300E966D6 /* waves.wav */,
@@ -589,8 +592,8 @@
 		21EA22A619FED83E00A1E612 /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				21988EE91A2520F100B4D685 /* dad_work.json */,
 				21BC588E1A22E6A60094DD81 /* whale_bow.json */,
-				21BC58881A22AE240094DD81 /* dad_work.json */,
 				21BC58841A22A03E0094DD81 /* daughter_sit.json */,
 				217072621A1EB5C700D0CFC8 /* whale_orca.json */,
 				21EB818E1A0A5FCB00C7525D /* daughter.json */,
@@ -732,7 +735,6 @@
 				213218B61A1FE7F100330E1F /* sky@2x.png in Resources */,
 				21B5AF7819CF8D17004B00C9 /* HomeScene.sks in Resources */,
 				21DFBFD81A228B8000134AC0 /* dayZero.plist in Resources */,
-				21BC58891A22AE240094DD81 /* dad_work.json in Resources */,
 				21BC58871A22A0980094DD81 /* daughter_sit.atlas in Resources */,
 				21B5AF8119CF8D17004B00C9 /* Images.xcassets in Resources */,
 				213218D11A20F59900330E1F /* City.png in Resources */,
@@ -766,6 +768,7 @@
 				21DFBFD71A228B8000134AC0 /* dayOneSuccess.plist in Resources */,
 				21BC588F1A22E6A70094DD81 /* whale_bow.json in Resources */,
 				21A4C5171A24561600E966D6 /* open_exposed_nodes.wav in Resources */,
+				21988EEC1A2521EA00B4D685 /* dad_work.atlas in Resources */,
 				21BC58821A2290580094DD81 /* LighthouseRoom.png in Resources */,
 				213218D21A20F59900330E1F /* City@2x.png in Resources */,
 				21A4C51E1A24678300E966D6 /* waves.wav in Resources */,
@@ -773,6 +776,7 @@
 				213218CB1A20F0E800330E1F /* WaterLayer_004.png in Resources */,
 				21BC587D1A2290580094DD81 /* Fire1@2x.png in Resources */,
 				21A4C5151A24561600E966D6 /* exit_water.wav in Resources */,
+				21988EEA1A2520F100B4D685 /* dad_work.json in Resources */,
 				21A4C5201A24689A00E966D6 /* shoot_missile.wav in Resources */,
 				21BC587E1A2290580094DD81 /* Fire2.png in Resources */,
 				21BC587A1A2290580094DD81 /* Fire0.png in Resources */,
@@ -780,6 +784,7 @@
 				21DFBFD61A228B8000134AC0 /* dayOneFailTwo.plist in Resources */,
 				21A4C5161A24561600E966D6 /* fireplace.wav in Resources */,
 				21BC587C1A2290580094DD81 /* Fire1.png in Resources */,
+				21988EEE1A25290E00B4D685 /* start.wav in Resources */,
 				21BC58831A2290580094DD81 /* LighthouseRoom@2x.png in Resources */,
 				21DFBFD51A228B8000134AC0 /* dayOneFailOne.plist in Resources */,
 				21BC58811A2290580094DD81 /* LighthouseHallway@2x.png in Resources */,
@@ -789,7 +794,6 @@
 				21BC58801A2290580094DD81 /* LighthouseHallway.png in Resources */,
 				21A4C5081A230C9B00E966D6 /* whale_bow_death.atlas in Resources */,
 				21DFBFBD1A211C2700134AC0 /* well_explosion.wav in Resources */,
-				21AEC7411A1D99AB0052F53F /* dad_work.atlas in Resources */,
 				213218C91A20F0E800330E1F /* WaterLayer_003.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

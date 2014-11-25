@@ -68,6 +68,7 @@ class Button : NHCNode {
             
             if defaultState.containsPoint(location) {
                 completionAction()
+                SoundManager.sharedManager().playSound("pick_text.wav")
             }
             
             activeState.hidden = true

@@ -58,7 +58,7 @@ class EnergyHUD : NHCNode {
         
         fillMeter.position.y = 1
         fillMeter.zPosition = -2
-        fillMeter.strokeColor = SKColor.greenColor()
+        fillMeter.strokeColor = SKColor(red: (254.0/255.0), green:  (232.0/255.0), blue:  (143.0/255.0), alpha: 0.75)
         fillMeter.fillColor = SKColor.clearColor()
         fillMeter.lineWidth = 3
         fillPath.moveToPoint(CGPointMake(0, lockOnRadius))

@@ -136,6 +136,9 @@ class Character : NHCNode {
             animationNode.addChild(spineNode)
         }
     }
+    func shutdown() {
+        animator.removeSpine()
+    }
     
 }
 

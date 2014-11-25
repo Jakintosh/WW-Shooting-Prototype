@@ -45,8 +45,10 @@ class LoadingScene : SKScene {
             SoundManager.initialize()
             
             // set up scene
-            let nextScene = OrientationScene(size: CGSize(width: self.screen.short, height: self.screen.long))
-            nextScene.transitionToNextScene(.Vertical, results: .Fail, nextSceneName: "GameScene")
+//            let nextScene = OrientationScene(size: CGSize(width: self.screen.short, height: self.screen.long))
+//            nextScene.transitionToNextScene(.Vertical, results: .Fail, nextSceneName: "GameScene")
+            
+            let nextScene = GameScene(size: CGSize(width: self.screen.short, height: self.screen.long))
             
             dispatch_async(dispatch_get_main_queue(), {
                 SoundManager.sharedManager().playMusic("waves.wav", looping: true, fadeIn: true)

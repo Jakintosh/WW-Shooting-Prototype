@@ -54,11 +54,11 @@ class InteractiveButton : Button {
             if targetPosition.x > 0 {
                 self.defaultState.xScale = 1.0
                 self.activeState.xScale = 1.0
-                self.label.position.x = 6.5
+                //self.label.position.x = 6.5
             } else {
                 self.defaultState.xScale = -1.0
                 self.activeState.xScale = -1.0
-                self.label.position.x = -6.5
+                //self.label.position.x = -6.5
             }
             self.position = targetPosition
         }
@@ -79,12 +79,9 @@ class InteractiveButton : Button {
             case .Speech:
                 super.init(activeImageName: "button_speech", defaultImageName: "button_speech", action: {} )
                 label.fontName = "HelveticaNeue-Light"
+                self.activeState.alpha = 0.0
+                self.defaultState.alpha = 0.0
         }
-        
-        self.activeState.alpha = 0.0
-        self.defaultState.alpha = 0.0
-        
-        if type == .Option { targetAlpha = 0.75 }
         
         // label setup
         label.verticalAlignmentMode   = .Center

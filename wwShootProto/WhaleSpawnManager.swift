@@ -106,6 +106,7 @@ class WhaleSpawnManager {
     // properties
     var isActive: Bool = false
     var bowExists: Bool = false
+    var bowIsDead: Bool = false
     var heatLevel: HeatLevel
     var timeUntilEval: NSTimeInterval = 4.0
     var instances: Int = 0
@@ -195,6 +196,7 @@ class WhaleSpawnManager {
         
         isActive = false
         bowExists = false
+        bowIsDead = false
         
         for whale in activeWhales {
             if whale.isOrca {
@@ -284,6 +286,7 @@ class WhaleSpawnManager {
             let newIndex = self.instances++
             let onDeath: (pos: CGPoint, root: SKNode) -> Void = { (pos, root) in
                 self.particleEmitter.addToQueue(500, pos: pos, root: root)
+                self.bowIsDead = true
             }
             let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
             let newBow = Bow(onDeath: onDeath, ss: ss, mgrInd: newIndex)

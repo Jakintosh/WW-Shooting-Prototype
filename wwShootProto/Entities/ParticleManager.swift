@@ -163,7 +163,7 @@ class EnergyParticle : NHCNode {
         reset()
         
         sprite.zPosition = 1
-        sprite.color = SKColor.greenColor()
+        sprite.color = SKColor.whiteColor()
         sprite.colorBlendFactor = 1.0
         sprite.blendMode = .Add
         self.addChild(sprite)
@@ -194,7 +194,7 @@ class EnergyParticle : NHCNode {
         self.active = false
         self.removeAllActions()
         runAction(collectAction, completion: {
-            game.energyManager.addEnergy(0.02)
+            game.energyManager.addEnergy(0.0225) // should be 0.02
             self.removeClosure(i: self.index)
             self.removeFromParent()
             self.reset()

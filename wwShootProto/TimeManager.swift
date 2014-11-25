@@ -12,7 +12,7 @@ class TimeManager {
     
     // MARK: Properties
     private var currentTimeOfDaySeconds: CGFloat = 0
-    private var secondsPerSecond: CGFloat = 960.0 / 5.0 // divisor is num minutes
+    private var secondsPerSecond: CGFloat = 960.0 / 3.0 // divisor is num minutes
     private var militaryTime: Bool = false
     
     // MARK: Initializers

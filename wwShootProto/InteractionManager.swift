@@ -283,10 +283,10 @@ class InteractiveEntity {
     init(owner: NHCNode) {
         self.owner = owner
         
-        slot2.targetPosition = CGPoint(x: -60, y:  60)
-        slot1.targetPosition = CGPoint(x: -90, y:   0)
-        slot3.targetPosition = CGPoint(x: -80, y: -60)
-        speech.targetPosition = CGPoint(x: 75, y:  10)
+        slot2.targetPosition = CGPoint(x:  -70, y:  60)
+        slot1.targetPosition = CGPoint(x: -100, y:   0)
+        slot3.targetPosition = CGPoint(x:  -90, y: -60)
+        speech.targetPosition = CGPoint(x:  75, y:  10)
         
         displayNode.addChild(slot1)
         displayNode.addChild(slot2)
@@ -297,13 +297,13 @@ class InteractiveEntity {
     // MARK: Methods
     func setMirrored(mirrored: Bool) {
         if !mirrored {
-            slot2.targetPosition = CGPoint(x: -60, y:  60)
-            slot1.targetPosition = CGPoint(x: -90, y:   0)
-            slot3.targetPosition = CGPoint(x: -80, y: -60)
+            slot2.targetPosition = CGPoint(x: -70, y:  60)
+            slot1.targetPosition = CGPoint(x:-100, y:   0)
+            slot3.targetPosition = CGPoint(x: -90, y: -60)
             speech.targetPosition = CGPoint(x: 75, y:  10)
         } else {
-            slot2.targetPosition = CGPoint(x:  60, y:  60)
-            slot1.targetPosition = CGPoint(x:  90, y:   0)
+            slot2.targetPosition = CGPoint(x:  70, y:  60)
+            slot1.targetPosition = CGPoint(x: 100, y:   0)
             slot3.targetPosition = CGPoint(x:  80, y: -60)
             speech.targetPosition = CGPoint(x:-75, y:  10)
         }

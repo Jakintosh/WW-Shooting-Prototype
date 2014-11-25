@@ -128,9 +128,9 @@
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>surpriseAction</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>surpriseIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
@@ -215,9 +215,9 @@ are you?</string>
 				<array>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>normalAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>normalIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment3</string>
 						<key>text</key>
@@ -227,9 +227,9 @@ are you?</string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>sadAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>sadIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment4</string>
 						<key>text</key>
@@ -239,9 +239,9 @@ are you?</string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>normalAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>normalIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment5</string>
 						<key>text</key>
@@ -272,9 +272,9 @@ are you?</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>happyAction</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
@@ -332,9 +332,9 @@ my question</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>sadAction</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>sadIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
@@ -392,9 +392,9 @@ before it gets better.</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>happyAction</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
@@ -453,9 +453,9 @@ or whatever.</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
@@ -479,9 +479,9 @@ or whatever.</string>
 				<array>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>handHipAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>handHipIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment7</string>
 						<key>text</key>
@@ -492,9 +492,9 @@ are we right now?</string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>twoHandsAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>twoHandsIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment7</string>
 						<key>text</key>
@@ -504,9 +504,9 @@ are we right now?</string>
 					</dict>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>pocketsAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>pocketsIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment7</string>
 						<key>text</key>
@@ -537,9 +537,9 @@ are we right now?</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>furrowedAction</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>furrowedIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
@@ -597,7 +597,7 @@ questions, man</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>ughAction</string>
 						<key>queue</key>
 						<string>idle</string>
 					</dict>
@@ -625,13 +625,13 @@ is all totally normal.</string>
 				<array>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>sadAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>sadIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment9</string>
 						<key>text</key>
-						<string>. . .</string>
+						<string>helpful...</string>
 						<key>speech</key>
 						<string>That doesn&apos;t really help.</string>
 					</dict>
@@ -666,9 +666,252 @@ is all totally normal.</string>
 				<key>endAnimations</key>
 				<dict/>
 				<key>responseText</key>
-				<string>Eh, that’s more advice than I
-got, so that’s all you’re
-getting from me.</string>
+				<string>Hmm… I have a few important suggestions.</string>
+				<key>timeOut</key>
+				<dict>
+					<key>animation</key>
+					<string>int2_oneshot</string>
+					<key>animationQueue</key>
+					<string>idle</string>
+					<key>nextMomentKey</key>
+					<string>end</string>
+					<key>text</key>
+					<string>I aint no homie</string>
+					<key>speech</key>
+					<string>I aint no homie</string>
+				</dict>
+				<key>choices</key>
+				<array>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>mX</string>
+						<key>text</key>
+						<string>. . .</string>
+						<key>speech</key>
+						<string></string>
+					</dict>
+				</array>
+			</dict>
+			<key>mX</key>
+			<dict>
+				<key>cameraInfo</key>
+				<dict>
+					<key>zoom</key>
+					<real>1.2</real>
+					<key>position</key>
+					<dict>
+						<key>x</key>
+						<integer>800</integer>
+						<key>y</key>
+						<real>160</real>
+					</dict>
+				</dict>
+				<key>decisionLength</key>
+				<integer>10</integer>
+				<key>startAnimations</key>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>idle</string>
+						<key>queue</key>
+						<string>idle</string>
+					</dict>
+				</dict>
+				<key>endAnimations</key>
+				<dict/>
+				<key>responseText</key>
+				<string>Focusing on something
+requires energy, and if
+you’re not careful
+you will run out.</string>
+				<key>timeOut</key>
+				<dict>
+					<key>animation</key>
+					<string>int2_oneshot</string>
+					<key>animationQueue</key>
+					<string>idle</string>
+					<key>nextMomentKey</key>
+					<string>end</string>
+					<key>text</key>
+					<string>I aint no homie</string>
+					<key>speech</key>
+					<string>I aint no homie</string>
+				</dict>
+				<key>choices</key>
+				<array>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>mY</string>
+						<key>text</key>
+						<string>got it</string>
+						<key>speech</key>
+						<string></string>
+					</dict>
+				</array>
+			</dict>
+			<key>mY</key>
+			<dict>
+				<key>cameraInfo</key>
+				<dict>
+					<key>zoom</key>
+					<real>1.2</real>
+					<key>position</key>
+					<dict>
+						<key>x</key>
+						<integer>800</integer>
+						<key>y</key>
+						<real>160</real>
+					</dict>
+				</dict>
+				<key>decisionLength</key>
+				<integer>10</integer>
+				<key>startAnimations</key>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>idle</string>
+						<key>queue</key>
+						<string>idle</string>
+					</dict>
+				</dict>
+				<key>endAnimations</key>
+				<dict/>
+				<key>responseText</key>
+				<string>Completing a task rewards you
+with a burst of energy. Make
+sure to collect as much of it
+as you can.</string>
+				<key>timeOut</key>
+				<dict>
+					<key>animation</key>
+					<string>int2_oneshot</string>
+					<key>animationQueue</key>
+					<string>idle</string>
+					<key>nextMomentKey</key>
+					<string>end</string>
+					<key>text</key>
+					<string>I aint no homie</string>
+					<key>speech</key>
+					<string>I aint no homie</string>
+				</dict>
+				<key>choices</key>
+				<array>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>mZ</string>
+						<key>text</key>
+						<string>got it</string>
+						<key>speech</key>
+						<string></string>
+					</dict>
+				</array>
+			</dict>
+			<key>mZ</key>
+			<dict>
+				<key>cameraInfo</key>
+				<dict>
+					<key>zoom</key>
+					<real>1.2</real>
+					<key>position</key>
+					<dict>
+						<key>x</key>
+						<integer>800</integer>
+						<key>y</key>
+						<real>160</real>
+					</dict>
+				</dict>
+				<key>decisionLength</key>
+				<integer>10</integer>
+				<key>startAnimations</key>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>idle</string>
+						<key>queue</key>
+						<string>idle</string>
+					</dict>
+				</dict>
+				<key>endAnimations</key>
+				<dict/>
+				<key>responseText</key>
+				<string>Lastly, sometimes things
+get out of hand.</string>
+				<key>timeOut</key>
+				<dict>
+					<key>animation</key>
+					<string>int2_oneshot</string>
+					<key>animationQueue</key>
+					<string>idle</string>
+					<key>nextMomentKey</key>
+					<string>end</string>
+					<key>text</key>
+					<string>I aint no homie</string>
+					<key>speech</key>
+					<string>I aint no homie</string>
+				</dict>
+				<key>choices</key>
+				<array>
+					<dict>
+						<key>animation</key>
+						<string>idle</string>
+						<key>animationQueue</key>
+						<string>idle</string>
+						<key>nextMomentKey</key>
+						<string>mA</string>
+						<key>text</key>
+						<string>. . .</string>
+						<key>speech</key>
+						<string></string>
+					</dict>
+				</array>
+			</dict>
+			<key>mA</key>
+			<dict>
+				<key>cameraInfo</key>
+				<dict>
+					<key>zoom</key>
+					<real>1.2</real>
+					<key>position</key>
+					<dict>
+						<key>x</key>
+						<integer>800</integer>
+						<key>y</key>
+						<real>160</real>
+					</dict>
+				</dict>
+				<key>decisionLength</key>
+				<integer>10</integer>
+				<key>startAnimations</key>
+				<dict>
+					<key>entity_daughter</key>
+					<dict>
+						<key>key</key>
+						<string>idle</string>
+						<key>queue</key>
+						<string>idle</string>
+					</dict>
+				</dict>
+				<key>endAnimations</key>
+				<dict/>
+				<key>responseText</key>
+				<string>Cut those things off as soon
+as possible, or they will
+consume you.</string>
 				<key>timeOut</key>
 				<dict>
 					<key>animation</key>
@@ -692,7 +935,7 @@ getting from me.</string>
 						<key>nextMomentKey</key>
 						<string>moment10</string>
 						<key>text</key>
-						<string>. . .</string>
+						<string>got it</string>
 						<key>speech</key>
 						<string></string>
 					</dict>
@@ -719,17 +962,17 @@ getting from me.</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>happyAction</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
 				<dict/>
 				<key>responseText</key>
-				<string>Anyway, try to make the
-best of it. If all goes right, you’ll
-be here for a while.</string>
+				<string>Anyway, try to make the best
+of it. If all goes right, you’ll be
+here for a while.</string>
 				<key>timeOut</key>
 				<dict>
 					<key>animation</key>
@@ -747,13 +990,13 @@ be here for a while.</string>
 				<array>
 					<dict>
 						<key>animation</key>
-						<string>idle</string>
+						<string>sucksAction</string>
 						<key>animationQueue</key>
-						<string>idle</string>
+						<string>sucksIdle</string>
 						<key>nextMomentKey</key>
 						<string>moment11</string>
 						<key>text</key>
-						<string>damn</string>
+						<string>ugh</string>
 						<key>speech</key>
 						<string>Well, this sucks.</string>
 					</dict>
@@ -780,9 +1023,9 @@ be here for a while.</string>
 					<key>entity_daughter</key>
 					<dict>
 						<key>key</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 						<key>queue</key>
-						<string>idle</string>
+						<string>happyIdle</string>
 					</dict>
 				</dict>
 				<key>endAnimations</key>
