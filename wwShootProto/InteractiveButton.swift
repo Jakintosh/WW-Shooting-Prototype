@@ -32,11 +32,11 @@ class InteractiveButton : Button {
                     self.removeActionForKey("completion")
                     self.activate()
                     
-                    moveTo(self.targetPosition)
+//                    moveTo(self.targetPosition)
                     scaleFade(present: true)
                 } else {
                     self.deactivate()
-                    moveTo(CGPointZero)
+//                    moveTo(CGPointZero)
                     scaleFade(present: false)
                     self.runAction(SKAction.sequence([SKAction.waitForDuration(PRESENTATION_TIME),SKAction.runBlock({
                         self.text = ""
@@ -49,7 +49,7 @@ class InteractiveButton : Button {
     var targetPosition: CGPoint {
         didSet {
             if isPresented {
-                moveTo(targetPosition)
+//                moveTo(targetPosition)
             }
             if targetPosition.x > 0 {
                 self.defaultState.xScale = 1.0
@@ -60,6 +60,7 @@ class InteractiveButton : Button {
                 self.activeState.xScale = -1.0
                 self.label.position.x = -6.5
             }
+            self.position = targetPosition
         }
     }
     var targetAlpha: CGFloat = 1.0
@@ -71,13 +72,13 @@ class InteractiveButton : Button {
         
         switch type
         {
-        case .Option:
-            super.init(activeImageName: "button_default", defaultImageName: "button_default", action: {} )
-            label.fontName = "HelveticaNeue-LightItalic"
-            
-        case .Speech:
-            super.init(activeImageName: "button_speech", defaultImageName: "button_speech", action: {} )
-            label.fontName = "HelveticaNeue-Light"
+            case .Option:
+                super.init(activeImageName: "button_default", defaultImageName: "button_default", action: {} )
+                label.fontName = "HelveticaNeue-LightItalic"
+                
+            case .Speech:
+                super.init(activeImageName: "button_speech", defaultImageName: "button_speech", action: {} )
+                label.fontName = "HelveticaNeue-Light"
         }
         
         self.activeState.alpha = 0.0
@@ -92,10 +93,7 @@ class InteractiveButton : Button {
         label.lineSpacing = 1.2
         self.addChild(label)
         
-        self.xScale = 0.05
-        self.yScale = 0.05
         self.alpha = 0.0
-        
     }
     
     func updateSpeechAlpha(newAlpha: CGFloat) {
@@ -113,13 +111,13 @@ class InteractiveButton : Button {
         self.removeActionForKey("scale_alpha")
         
         if present {
-            let scale = SKAction.scaleTo(1.0, duration: PRESENTATION_TIME)
+//            let scale = SKAction.scaleTo(1.0, duration: PRESENTATION_TIME)
             let alpha = SKAction.fadeAlphaTo(targetAlpha, duration: PRESENTATION_TIME)
-            self.runAction(SKAction.group([scale, alpha]), withKey: "scale_alpha")
+            self.runAction(/*SKAction.group([scale, */alpha/*])*/, withKey: "scale_alpha")
         } else {
-            let scale = SKAction.scaleTo(0.05, duration: PRESENTATION_TIME)
+//            let scale = SKAction.scaleTo(0.05, duration: PRESENTATION_TIME)
             let alpha = SKAction.fadeAlphaTo(0.0, duration: PRESENTATION_TIME)
-            self.runAction(SKAction.group([scale, alpha]), withKey: "scale_alpha")
+            self.runAction(/*SKAction.group([scale, */alpha/*])*/, withKey: "scale_alpha")
         }
     }
     

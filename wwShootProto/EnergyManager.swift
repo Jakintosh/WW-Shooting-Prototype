@@ -10,10 +10,10 @@ import Foundation
 
 class EnergyManager {
     
-    var currentEnergy: CGFloat = 50.0
-    let energyCap: CGFloat = 100.0
+    var currentEnergy: CGFloat = 10.0
+    let energyCap: CGFloat = 30.0
     
-    func reset(startValue: CGFloat = 50.0) {
+    func reset(startValue: CGFloat = 10.0) {
         currentEnergy = startValue
     }
     

@@ -11,6 +11,8 @@ import CoreMotion
 
 class Game {
     
+    var currentFail: String = "DayZeroSuccess"
+    
     let animationManager:    AnimationManager    = AnimationManager()
     let interactionManager:  InteractionManager  = InteractionManager()
     let timeManager:         TimeManager         = TimeManager()

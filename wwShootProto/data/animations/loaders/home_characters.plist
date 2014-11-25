@@ -14,9 +14,9 @@
 		<key>name</key>
 		<string>spine_daughter_home_default</string>
 		<key>json</key>
-		<string>daughter</string>
+		<string>daughter_sit</string>
 		<key>atlas</key>
-		<string>daughter</string>
+		<string>daughter_sit</string>
 	</dict>
 	<dict>
 		<key>name</key>
@@ -57,6 +57,14 @@
 		<string>whale_orca</string>
 		<key>atlas</key>
 		<string>whale_orca</string>
+	</dict>
+	<dict>
+		<key>name</key>
+		<string>spine_whale_bow</string>
+		<key>json</key>
+		<string>whale_bow</string>
+		<key>atlas</key>
+		<string>whale_bow</string>
 	</dict>
 	<dict>
 		<key>name</key>

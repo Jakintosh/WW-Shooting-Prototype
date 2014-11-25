@@ -51,6 +51,7 @@ class Whale : NHCNode {
     var onSubmerge: () -> () = {}
     
     // properties
+    var isOrca = false
     var isAlive: Bool     = true
     var isScreaming: Bool = false
     var isMirrored: Bool  = false
@@ -152,9 +153,9 @@ class Whale : NHCNode {
                 well.update(scenePos, dt: dt)
                 if well.lockedOn {
                     well.burst()
-//                    lockOnWell.wellLockOn.texture = lockOnWell
-                    screenShake(intensity: 8, duration: 0.2)
+                    self.runAction(SKAction.sequence([SKAction.waitForDuration(0.25), SKAction.runBlock({ self.screenShake(intensity: 8, duration: 0.2) })]))
                     game.animationManager.runAnimation("player_entity", animationName: "shoot", introPeriod: 0.1)
+                    well.runAction(SKAction.sequence([ SKAction.waitForDuration(0.1), SKAction.runBlock({ SoundManager.sharedManager().playSound("shoot_missile.wav") }) ]))
                     numFinished++
                 }
             } else {
@@ -170,6 +171,7 @@ class Whale : NHCNode {
     func updateLockOnNode(scenePos: CGPoint, dt: CFTimeInterval) {
         lockOnWell.update(scenePos, dt: dt)
         if lockOnWell.lockedOn {
+            SoundManager.sharedManager().playSound("lock_on.wav")
             stun()
             for well in exposedWells {
                 well.openWell()
@@ -216,7 +218,7 @@ class Whale : NHCNode {
         whaleState = .Stunned
         lockOnNode.hidden = true
         exposedNode.hidden = false
-        stopScream()
+//        stopScream()
     }
     func scream() {
         isScreaming = true
@@ -273,9 +275,10 @@ class Orca : Whale {
 //        return SKAction.group([ horizontalMove, verticalMovement, rotate ])
 //    }
     var explosionSound: SKAction
-    var screamSound: SKAction
+    var screamSound: Sound = Sound(named: "whale_scream.mp3")
     var deathAnimation = [SKTexture]()
     var deathSprite: SKSpriteNode
+    var layoutType: Int = 0
     
     struct Stored {
         static var instanceNum: Int = 0
@@ -307,7 +310,6 @@ class Orca : Whale {
         
         jumpAction = SKAction.group([ horizontalMove, verticalMovement, rotate ])
         jumpAction.timingMode = .EaseInEaseOut
-        screamSound = SKAction.repeatActionForever(SKAction.playSoundFileNamed("whale_scream.wav", waitForCompletion: true))
         explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
         
         let atlas = SKTextureAtlas(named: "whale-death")
@@ -325,7 +327,11 @@ class Orca : Whale {
         let key = "whale_orca\(Stored.instanceNum)"
         Stored.instanceNum++
         
+        layoutType = Int(arc4random_uniform(2))
+        
         super.init(onDeath: onDeath, ss: ss, mgrInd: mgrInd, animatorKey: key)
+        
+        self.isOrca = true
         
         addChild(deathSprite)
         
@@ -336,32 +342,111 @@ class Orca : Whale {
         animationNode.yScale = 0.5
     }
     override func setupExposedNode() {
-        let well1 = EnergyWell(radius: 40.0, duration: 0.5, type: .Exposed)
-        let well2 = EnergyWell(radius: 30.0, duration: 0.4, type: .Exposed)
-        let well3 = EnergyWell(radius: 20.0, duration: 0.1, type: .Exposed)
         
-        well1.position = CGPoint(x: 112.5, y:  100.0)
-        well2.position = CGPoint(x:  20.0, y:   30.0)
-        well3.position = CGPoint(x: -35.0, y: -112.5)
-        
-        well1.xScale = 1.0 / scale
-        well1.yScale = 1.0 / scale
-        
-        well2.xScale = 1.0 / scale
-        well2.yScale = 1.0 / scale
-        
-        well3.xScale = 1.0 / scale
-        well3.yScale = 1.0 / scale
-        
-        exposedWells += [well1, well2, well3]
-        
-        exposedNode.addChild(well1)
-        exposedNode.addChild(well2)
-        exposedNode.addChild(well3)
-        exposedNode.zPosition = 1
+        if layoutType == 0 {
+            let well1 = EnergyWell(radius: 40.0, duration: 0.75, type: .Exposed)
+            let well2 = EnergyWell(radius: 30.0, duration: 0.6, type: .Exposed)
+            let well3 = EnergyWell(radius: 20.0, duration: 0.15, type: .Exposed)
+            
+            well1.position = CGPoint(x: 104.0, y:   48.0)
+            well2.position = CGPoint(x:   5.0, y:   -8.0)
+            well3.position = CGPoint(x:   0.0, y: -102.0)
+            
+            well1.xScale = 1.0 / scale
+            well1.yScale = 1.0 / scale
+            
+            well2.xScale = 1.0 / scale
+            well2.yScale = 1.0 / scale
+            well2.zRotation = CGFloat(M_PI/6.0)
+            
+            well3.xScale = 1.0 / scale
+            well3.yScale = 1.0 / scale
+            well3.zRotation = CGFloat(M_PI/3.0)
+            
+            exposedWells += [well1, well2, well3]
+            
+            exposedNode.addChild(well1)
+            exposedNode.addChild(well2)
+            exposedNode.addChild(well3)
+            exposedNode.zPosition = 1
+        } else {
+            let well1 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well2 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well3 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well4 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well5 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well6 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well7 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            let well8 = EnergyWell(radius: 20.0, duration: 0.1875, type: .Exposed)
+            
+            let baseX = 117
+            let baseY = 317
+            
+            // 1 = 110, 190
+            // 2 = 85, 225
+            // 3 = 123, 238
+            // 4 = 69, 309
+            // 5 = 145, 301
+            // 6 = 115, 380
+            // 7 = 178, 370
+            
+            well1.position = CGPoint(x: 122 - 117, y:   175 - 317)
+            well2.position = CGPoint(x:  99 - 117, y:   215 - 317)
+            well3.position = CGPoint(x: 123 - 117, y:   255 - 317)
+            well4.position = CGPoint(x:  90 - 117, y:   295 - 317)
+            well5.position = CGPoint(x: 145 - 117, y:   301 - 317)
+            well6.position = CGPoint(x: 115 - 117, y:   360 - 317)
+            well7.position = CGPoint(x: 190 - 117, y:   335 - 317)
+            well8.position = CGPoint(x: 165 - 117, y:   400 - 317)
+            
+            well1.xScale = 1.0 / scale
+            well1.yScale = 1.0 / scale
+            well1.zRotation = CGFloat(M_PI/3.0)
+            
+            well2.xScale = 1.0 / scale
+            well2.yScale = 1.0 / scale
+            well2.zRotation = CGFloat(M_PI/4.0)
+            
+            well3.xScale = 1.0 / scale
+            well3.yScale = 1.0 / scale
+            well3.zRotation = CGFloat(M_PI/3.0)
+            
+            well4.xScale = 1.0 / scale
+            well4.yScale = 1.0 / scale
+            well4.zRotation = CGFloat(M_PI/6.0)
+            
+            well5.xScale = 1.0 / scale
+            well5.yScale = 1.0 / scale
+            well5.zRotation = CGFloat(M_PI/3.0)
+            
+            well6.xScale = 1.0 / scale
+            well6.yScale = 1.0 / scale
+            well6.zRotation = CGFloat(M_PI/4.0)
+            
+            well7.xScale = 1.0 / scale
+            well7.yScale = 1.0 / scale
+            well7.zRotation = CGFloat(M_PI/3.0)
+            
+            well8.xScale = 1.0 / scale
+            well8.yScale = 1.0 / scale
+            well8.zRotation = CGFloat(M_PI/6.0)
+            
+            exposedWells += [well1, well2, well3, well4, well5, well6, well7, well8]
+            
+            exposedNode.addChild(well1)
+            exposedNode.addChild(well2)
+            exposedNode.addChild(well3)
+            exposedNode.addChild(well4)
+            exposedNode.addChild(well5)
+            exposedNode.addChild(well6)
+            exposedNode.addChild(well7)
+            exposedNode.addChild(well8)
+            exposedNode.zPosition = 1
+        }
     }
     override func setupLockOnNode() {
-        lockOnWell = EnergyWell(radius: 30.0, duration: 1.0, type: .LockOn)
+        lockOnWell = EnergyWell(radius: 30.0, duration: 1.0, type: .LockOn, lockOnType: layoutType)
+//        lockOnWell.loadLockOnFrames(layoutType)
         lockOnWell.position = CGPoint(x: 0, y: 0)
         lockOnWell.xScale = 1.5
         lockOnWell.yScale = 1.5
@@ -404,23 +489,25 @@ class Orca : Whale {
                 animator.setQueuedAnimation("scream", introPeriod: 0.1)
                 runAction(SKAction.sequence([SKAction.waitForDuration(3.2), SKAction.runBlock( { self.scream() } )]), withKey: "scream")
         }
+        runAction(SKAction.sequence([SKAction.waitForDuration(0.4), SKAction.runBlock({SoundManager.sharedManager().playSound("exit_water.wav")}), SKAction.waitForDuration(6.9),SKAction.runBlock({SoundManager.sharedManager().playSound("enter_water.wav")})]))
         runAction(jumpAction, completion: { self.dive() })
     }
     override func stun() {
         super.stun()
-        removeActionForKey("scream")
+        stopScream()
         animator.playAnimation("stun", introPeriod: 0.05)
         animator.setQueuedAnimation("stun", introPeriod: 0.1)
     }
     override func scream() {
         super.scream()
         removeActionForKey("scream")
-        SoundManager.sharedManager().playSound("whale_scream.wav", looping: true)
+        SoundManager.sharedManager().playSound(screamSound)
 //        runAction(screamSound, withKey: "scream")
     }
     override func stopScream() {
         super.stopScream()
-        SoundManager.sharedManager().stopSound("whale_scream.wav")
+        removeActionForKey("scream")
+        SoundManager.sharedManager().stopSound(screamSound)
 //        removeActionForKey("scream")
     }
     override func kill() {
@@ -428,7 +515,7 @@ class Orca : Whale {
         animator.stopAnimation()
         animator.animationSpine?.hidden = true
         deathSprite.hidden = false
-        deathSprite.runAction( SKAction.group( [SKAction.waitForDuration(0.2), SKAction.animateWithTextures(deathAnimation, timePerFrame: 0.1)]), withKey: "death")
+        deathSprite.runAction( SKAction.sequence( [SKAction.waitForDuration(0.25), SKAction.animateWithTextures(deathAnimation, timePerFrame: 0.1)]), withKey: "death")
         runAction(SKAction.waitForDuration(0.5), completion: {
             self.onDeath(pos: self.position, root: self.parent!)
             self.screenShake(intensity: 15, duration: 0.5)
@@ -442,6 +529,150 @@ class Orca : Whale {
     }
 }
 
+// MARK: -
+class Bow : Whale {
+    
+    // properties
+    var jumpAction: SKAction
+    var explosionSound: SKAction
+    var screamSound: Sound = Sound(named: "whale_scream.mp3")
+    var deathAnimation = [SKTexture]()
+    var deathSprite: SKSpriteNode
+    
+    init(onDeath: (CGPoint, SKNode) -> Void, ss: (CGFloat, NSTimeInterval)->Void, mgrInd: Int) {
+        // setup SKActions
+        
+        // .3333 into max jump, 4.1666, 0.5
+        let firstJump = SKAction.moveByX(0, y: 500, duration: 2.5)
+        firstJump.timingMode = .EaseOut
+        let secondJump = SKAction.moveByX(0, y: 200, duration: 4.0)
+        secondJump.timingMode = .EaseOut
+        jumpAction = SKAction.group([ firstJump, secondJump ])
+        jumpAction.timingMode = .EaseOut
+//        screamSound = SKAction.repeatActionForever(SKAction.playSoundFileNamed("whale_scream.wav", waitForCompletion: true))
+        explosionSound = SKAction.playSoundFileNamed("whale_explosion.caf", waitForCompletion: false)
+        
+        let atlas = SKTextureAtlas(named: "whale_bow_death")
+        for i in 0..<5 {
+            deathAnimation.append(atlas.textureNamed("whaleType02Death\(i)"))
+        }
+        
+        deathSprite = SKSpriteNode(texture: deathAnimation[0])
+        deathSprite.xScale = 1.6
+        deathSprite.yScale = 1.6
+        deathSprite.hidden = true
+        deathSprite.anchorPoint = CGPoint(x: 0.31533477, y: 0.58913413)
+        
+        super.init(onDeath: onDeath, ss: ss, mgrInd: mgrInd, animatorKey: "whale_bow")
+        
+        setSpine("spine_whale_bow", animKey: "jump")
+        
+        addChild(deathSprite)
+        
+        scale = 1.0
+    }
+    override func setupAnimationNode() {
+        animationNode.xScale = 0.8
+        animationNode.yScale = 0.8
+    }
+    override func setupExposedNode() {
+        let well1 = EnergyWell(radius: 40.0, duration: 0.5, type: .Exposed)
+        let well2 = EnergyWell(radius: 30.0, duration: 0.4, type: .Exposed)
+        let well3 = EnergyWell(radius: 20.0, duration: 0.1, type: .Exposed)
+        
+        well1.position = CGPoint(x: 104.0, y:   48.0)
+        well2.position = CGPoint(x:   5.0, y:   -8.0)
+        well3.position = CGPoint(x:   0.0, y: -102.0)
+        
+        well1.xScale = 1.0 / scale
+        well1.yScale = 1.0 / scale
+        
+        well2.xScale = 1.0 / scale
+        well2.yScale = 1.0 / scale
+        well2.zRotation = CGFloat(M_PI/6.0)
+        
+        well3.xScale = 1.0 / scale
+        well3.yScale = 1.0 / scale
+        well2.zRotation = CGFloat(M_PI/3.0)
+        
+        exposedWells += [well1, well2, well3]
+        
+        exposedNode.addChild(well1)
+        exposedNode.addChild(well2)
+        exposedNode.addChild(well3)
+        exposedNode.zPosition = 1
+    }
+    override func setupLockOnNode() {
+        lockOnWell = EnergyWell(radius: 30.0, duration: 1.0, type: .LockOn)
+        lockOnWell.position = CGPoint(x: 0, y: 0)
+        lockOnWell.xScale = 1.5
+        lockOnWell.yScale = 1.5
+        
+        lockOnNode.addChild(lockOnWell)
+        lockOnNode.zPosition = 1
+    }
+    
+    
+    override func update(scenePos: CGPoint, dt: CFTimeInterval) {
+        super.update(scenePos, dt: dt)
+    }
+    override func updateAnimationNode(dt: CFTimeInterval) {
+        super.updateAnimationNode(dt)
+    }
+    override func updateExposedNode(scenePos: CGPoint, dt: CFTimeInterval) {
+        super.updateExposedNode(scenePos, dt: dt)
+    }
+    override func updateLockOnNode(scenePos: CGPoint, dt: CFTimeInterval) {
+        super.updateLockOnNode(scenePos, dt: dt)
+    }
+    
+    
+    override func dive() {
+        super.dive()
+        animator.stopAnimation()
+    }
+    override func jump() {
+        super.jump()
+        animator.playAnimation("jump", introPeriod: 0.1)
+        animator.setQueuedAnimation("scream", introPeriod: 0.1)
+        runAction(SKAction.sequence([SKAction.waitForDuration(3.2), SKAction.runBlock( { self.scream() } )]), withKey: "scream")
+        runAction(jumpAction)
+    }
+    override func stun() {
+        super.stun()
+//        animator.playAnimation("stun", introPeriod: 0.05)
+//        animator.setQueuedAnimation("stun", introPeriod: 0.1)
+    }
+    override func scream() {
+        super.scream()
+        removeActionForKey("scream")
+//        SoundManager.sharedManager().playSound("whale_scream.mp3", looping: true)
+        SoundManager.sharedManager().playSound(screamSound)
+        //        runAction(screamSound, withKey: "scream")
+    }
+    override func stopScream() {
+        super.stopScream()
+//        SoundManager.sharedManager().stopSound("whale_scream.wav")
+        SoundManager.sharedManager().stopSound(screamSound)
+        //        removeActionForKey("scream")
+    }
+    override func kill() {
+        super.kill()
+        animator.stopAnimation()
+        animator.animationSpine?.hidden = true
+        deathSprite.hidden = false
+        deathSprite.runAction( SKAction.sequence( [SKAction.waitForDuration(0.25), SKAction.animateWithTextures(deathAnimation, timePerFrame: 0.1)]), withKey: "death")
+        runAction(SKAction.waitForDuration(0.5), completion: {
+            self.onDeath(pos: self.position, root: self.parent!)
+            self.screenShake(intensity: 15, duration: 0.5)
+            SoundManager.sharedManager().playSound("whale_explosion.caf")
+            self.remove()
+        })
+    }
+    override func remove() {
+        super.remove()
+    }
+}
 
 // MARK: -
 class EnergyWell : NHCNode {
@@ -475,14 +706,18 @@ class EnergyWell : NHCNode {
     var lockOnRadius: CGFloat   = 10.0
     var lockOnRadiusSq: CGFloat = 100.0
     
-    init(radius: CGFloat, duration: CGFloat, type: EnergyWellType = .Debug) {
+    var lockOnType: Int
+    
+    init(radius: CGFloat, duration: CGFloat, type: EnergyWellType = .Debug, lockOnType: Int = 0) {
         self.type = type
+        self.lockOnType = lockOnType
         
         super.init()
         
         lockOnRadius = radius
         lockOnRadiusSq = radius * radius
         lockDuration = duration
+        
         
         let atlas = SKTextureAtlas(named: "textures")
         for i in 0..<5 {
@@ -491,18 +726,35 @@ class EnergyWell : NHCNode {
         for i in 0..<5 {
             wellExposedStaticAnimation.append(atlas.textureNamed("hitbox-static_\(i)"))
         }
-        for i in 0..<3 {
-            wellLockOnTextures.append(atlas.textureNamed("lockOn\(i)"))
-        }
+//        for i in 0..<3 {
+//            wellLockOnTextures.append(atlas.textureNamed("lockOn\(i)"))
+//        }
         for i in 0..<3 {
             wellExplosionTextures.append(atlas.textureNamed("explosion\(i)"))
         }
+        
+        loadLockOnFrames()
         
         // set up well
         setupWell()
         
         // set up fill meter
         setupFillMeter()
+    }
+    
+    func loadLockOnFrames() {
+        let atlas = SKTextureAtlas(named: "textures")
+        if lockOnType == 0 {
+            for i in 0..<3 {
+                wellLockOnTextures.append(atlas.textureNamed("lockOn\(i)"))
+            }
+            wellLockOn = SKSpriteNode(texture: wellLockOnTextures[0])
+        } else {
+            for i in 0..<8 {
+                wellLockOnTextures.append(atlas.textureNamed("lockOnEight\(i)"))
+            }
+            wellLockOn = SKSpriteNode(texture: wellLockOnTextures[0])
+        }
     }
     
     func setupWell() {
@@ -546,20 +798,23 @@ class EnergyWell : NHCNode {
     
     func updateLockOnTexture(numWells: Int) {
         if let lockOn = wellLockOn {
-            switch numWells
-            {
-                case 1:
-                    lockOn.texture = wellLockOnTextures[2]
-                    
-                case 2:
-                    lockOn.texture = wellLockOnTextures[1]
-                    
-                case 3:
-                    lockOn.texture = wellLockOnTextures[0]
-                
-                default:
-                    lockOn.texture = wellLockOnTextures[0]
-            }
+
+            lockOn.texture = wellLockOnTextures[wellLockOnTextures.count - numWells]
+            
+//            switch numWells
+//            {
+//                case 1:
+//                    lockOn.texture = wellLockOnTextures[2]
+//                    
+//                case 2:
+//                    lockOn.texture = wellLockOnTextures[1]
+//                    
+//                case 3:
+//                    lockOn.texture = wellLockOnTextures[0]
+//                
+//                default:
+//                    lockOn.texture = wellLockOnTextures[0]
+//            }
         }
     }
     
@@ -685,11 +940,14 @@ class EnergyWell : NHCNode {
                 break
                 
             case .Exposed:
+                wellExposed.removeAllActions()
+                wellExposed.texture = SKTexture(imageNamed: "hitbox-static_5")
+                SoundManager.sharedManager().playSound("open_exposed_nodes.wav")
                 let explodeAnim = SKAction.animateWithTextures(wellExplosionTextures, timePerFrame: 0.1, resize: true, restore: false)
-                wellExposed.runAction(SKAction.sequence( [explodeAnim, SKAction.runBlock({
+                wellExposed.runAction(SKAction.sequence( [SKAction.waitForDuration(0.25), explodeAnim, SKAction.runBlock({
+                    SoundManager.sharedManager().playSound("well_explosion.wav")
                     self.wellExposed.removeFromParent()
                 })]))
-                SoundManager.sharedManager().playSound("well_explosion.wav")
         }
         
     }

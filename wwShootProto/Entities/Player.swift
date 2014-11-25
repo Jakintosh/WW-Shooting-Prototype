@@ -17,6 +17,7 @@ class Player : NHCNode {
     
     // animation
     let animationNode = NHCNode()
+    let muzzleFlash = SKSpriteNode(imageNamed: "muzzleFlash")
     var getUpSprite: SKSpriteNode!
     var getUpFrames: [SKTexture]! = []
     let animatorKey: String
@@ -72,6 +73,10 @@ class Player : NHCNode {
         
         animator = game.animationManager.registerEntity(animatorKey, owner: self)
         
+        muzzleFlash.zPosition = -5
+        muzzleFlash.position = CGPoint(x: 75.0, y: 10.0)
+        muzzleFlash.hidden = true
+        
 //        setupAnimationNode()
         addChild(animationNode)
     }
@@ -89,6 +94,7 @@ class Player : NHCNode {
     }
     func shoot() {
         animator.playAnimation("shoot", introPeriod: 0.1)
+        muzzleFlash.hidden = false
     }
     func getUp() {
         if !isUp {
@@ -103,6 +109,9 @@ class Player : NHCNode {
             })
         }
     }
+    func shutdown() {
+        animator.removeSpine()
+    }
     
     func setupAnimationNode() {
 //        let char = SKSpriteNode(imageNamed: "idle01")
@@ -115,6 +124,7 @@ class Player : NHCNode {
     
     func update(dt: CFTimeInterval) {
         animator.update(dt)
+        if !muzzleFlash.hidden { muzzleFlash.hidden = true }
     }
     
 }

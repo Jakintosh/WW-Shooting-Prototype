@@ -52,7 +52,7 @@ class Character : NHCNode {
         animator = game.animationManager.registerEntity(animatorKey, owner: self)
         interactor = game.interactionManager.registerEntity(interactorKey, owner: self)
         
-        interactionNode.position = CGPoint(x: 0, y: 125)
+        interactionNode.position = CGPoint(x: 0, y: 0)
         interactionNode.addChild(interactor.displayNode)
         
         interactor.setMirrored(false)
@@ -150,6 +150,7 @@ class Daughter : Character {
         animationNode.xScale = SCALE_THING
         animationNode.yScale = SCALE_THING
         setSpine("spine_daughter_home_default")
+        interactionNode.position = CGPoint(x: 12, y: 72)
     }
     
     override func update(dt: NSTimeInterval) {
@@ -178,6 +179,8 @@ class Dad : Character {
         currentPath.setActive()
         
         super.init(animatorKey: "entity_dad", interactorKey: "entity_dad")
+        
+        interactionNode.position = CGPoint(x: 10, y: 125)
         
         // additional spine setup
         animationNode.position = CGPoint(x: 0, y: -15)

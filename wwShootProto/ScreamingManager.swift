@@ -10,26 +10,32 @@ import Foundation
 
 class ScreamingManager {
     
-    var screamingLevel: CGFloat = 0.0
     var camCon: CameraController! = nil
+    var maxScreaming: CGFloat = 5.0
+    var screamingLevel: CGFloat = 0.0
+    var percentage: CGFloat {
+        return self.screamingLevel/self.maxScreaming
+    }
     
     func reset(startValue: CGFloat = 0.0) {
         screamingLevel = startValue
     }
     
     func update(dt: CFTimeInterval, totalScreams: CGFloat) {
-        if screamingLevel < 0.01 {
-            screamingLevel = 0.0
+        
+        if totalScreams == 0.0 {
+            screamingLevel -= CGFloat(dt)*2.0
         } else {
-            screamingLevel *= 0.98
+            screamingLevel += totalScreams
         }
-        screamingLevel += totalScreams
-        camCon.shake(totalScreams, duration: (1.0/30.0))
-        println(screamingLevel)
+        
+        screamingLevel = Utilities2D.clamp(screamingLevel, min: 0, max: maxScreaming)
+        
+        camCon.shake(percentage * 20.0, duration: 1.0)
+//        println(screamingLevel)
     }
     
     func getFade() -> CGFloat {
-        return (screamingLevel/10.0)
+        return percentage
     }
-    
 }

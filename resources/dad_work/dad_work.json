@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "Bei56meAqP60+q95KsNCdbc4ABY", "spine": "2.1.04", "width": 306.01, "height": 597.99, "images": "" },
+"skeleton": { "hash": "1AMoONR09xEVm+Qo9FpIUkENJTw", "spine": "2.1.04", "width": 306.01, "height": 597.99, "images": "" },
 "bones": [
 	{ "name": "root", "y": 341.36 },
 	{ "name": "body", "parent": "root", "length": 122.44, "x": -1.01, "y": 0.15, "rotation": 95.44 },
@@ -39,8 +39,8 @@
 	{ "name": "lArm", "bone": "lArm", "attachment": "lArm" },
 	{ "name": "coatTail", "bone": "coatTail", "attachment": "coatTail" },
 	{ "name": "rArm", "bone": "rArm", "attachment": "rArm" },
-	{ "name": "rocketLauncherNose", "bone": "rocketLauncherNose", "attachment": "rocketLauncherNose" },
-	{ "name": "rocketLauncherBase", "bone": "rocketLauncherBase", "attachment": "rocketLauncherBase" }
+	{ "name": "rocketLauncherNose", "bone": "rocketLauncherNose" },
+	{ "name": "rocketLauncherBase", "bone": "rocketLauncherBase" }
 ],
 "skins": {
 	"default": {
@@ -111,7 +111,38 @@
 		"slots": {
 			"lArm": {
 				"attachment": [
+					{ "time": 0, "name": "lArm" },
 					{ "time": 0.3333, "name": null }
+				]
+			},
+			"lArm2": {
+				"attachment": [
+					{ "time": 0, "name": "lArm" },
+					{ "time": 0.3333, "name": "lArm" }
+				]
+			},
+			"rocketLauncherBase": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase" },
+					{ "time": 0.3333, "name": "rocketLauncherBase" }
+				]
+			},
+			"rocketLauncherBase2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase2" },
+					{ "time": 0.3333, "name": "rocketLauncherBase2" }
+				]
+			},
+			"rocketLauncherNose": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose" },
+					{ "time": 0.3333, "name": "rocketLauncherNose" }
+				]
+			},
+			"rocketLauncherNose2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose2" },
+					{ "time": 0.3333, "name": "rocketLauncherNose2" }
 				]
 			}
 		},
@@ -364,7 +395,38 @@
 		"slots": {
 			"lArm": {
 				"attachment": [
-					{ "time": 0, "name": null }
+					{ "time": 0, "name": null },
+					{ "time": 0.7333, "name": null }
+				]
+			},
+			"lArm2": {
+				"attachment": [
+					{ "time": 0, "name": "lArm" },
+					{ "time": 0.7333, "name": "lArm" }
+				]
+			},
+			"rocketLauncherBase": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase" },
+					{ "time": 0.7333, "name": "rocketLauncherBase" }
+				]
+			},
+			"rocketLauncherBase2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase2" },
+					{ "time": 0.7333, "name": "rocketLauncherBase2" }
+				]
+			},
+			"rocketLauncherNose": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose" },
+					{ "time": 0.7333, "name": "rocketLauncherNose" }
+				]
+			},
+			"rocketLauncherNose2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose2" },
+					{ "time": 0.7333, "name": "rocketLauncherNose2" }
 				]
 			}
 		},
@@ -626,6 +688,44 @@
 		}
 	},
 	"idle": {
+		"slots": {
+			"lArm": {
+				"attachment": [
+					{ "time": 0, "name": "lArm" },
+					{ "time": 1, "name": "lArm" }
+				]
+			},
+			"lArm2": {
+				"attachment": [
+					{ "time": 0, "name": "lArm" },
+					{ "time": 1, "name": "lArm" }
+				]
+			},
+			"rocketLauncherBase": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase" },
+					{ "time": 1, "name": "rocketLauncherBase" }
+				]
+			},
+			"rocketLauncherBase2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase2" },
+					{ "time": 1, "name": "rocketLauncherBase2" }
+				]
+			},
+			"rocketLauncherNose": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose" },
+					{ "time": 1, "name": "rocketLauncherNose" }
+				]
+			},
+			"rocketLauncherNose2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose2" },
+					{ "time": 1, "name": "rocketLauncherNose2" }
+				]
+			}
+		},
 		"bones": {
 			"body": {
 				"rotate": [
@@ -922,6 +1022,36 @@
 					{ "time": 0, "name": null },
 					{ "time": 0.3333, "name": null }
 				]
+			},
+			"lArm2": {
+				"attachment": [
+					{ "time": 0, "name": "lArm" },
+					{ "time": 0.3333, "name": "lArm" }
+				]
+			},
+			"rocketLauncherBase": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase" },
+					{ "time": 0.3333, "name": "rocketLauncherBase" }
+				]
+			},
+			"rocketLauncherBase2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherBase2" },
+					{ "time": 0.3333, "name": "rocketLauncherBase2" }
+				]
+			},
+			"rocketLauncherNose": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose" },
+					{ "time": 0.3333, "name": "rocketLauncherNose" }
+				]
+			},
+			"rocketLauncherNose2": {
+				"attachment": [
+					{ "time": 0, "name": "rocketLauncherNose2" },
+					{ "time": 0.3333, "name": "rocketLauncherNose2" }
+				]
 			}
 		},
 		"bones": {
@@ -1199,6 +1329,18 @@
 	},
 	"start": {
 		"slots": {
+			"body": {
+				"attachment": [
+					{ "time": 0, "name": "body" },
+					{ "time": 1.1333, "name": "body" }
+				]
+			},
+			"lArm": {
+				"attachment": [
+					{ "time": 0, "name": "lArm" },
+					{ "time": 1.1333, "name": "lArm" }
+				]
+			},
 			"lArm2": {
 				"attachment": [
 					{ "time": 0, "name": null },

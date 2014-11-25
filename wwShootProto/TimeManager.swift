@@ -12,12 +12,16 @@ class TimeManager {
     
     // MARK: Properties
     private var currentTimeOfDaySeconds: CGFloat = 0
-    private var secondsPerSecond: CGFloat =  90.0
+    private var secondsPerSecond: CGFloat = 960.0 / 5.0 // divisor is num minutes
     private var militaryTime: Bool = false
     
     // MARK: Initializers
     init() {
-        currentTimeOfDaySeconds = 8 * (60*60) // start off at 8am
+        reset()
+    }
+    
+    func reset() {
+        currentTimeOfDaySeconds = 8 * (60*60) // start off at 5pm
     }
     
     // MARK: Methods

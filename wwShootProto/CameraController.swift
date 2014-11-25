@@ -97,18 +97,21 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     func shake(intensity: CGFloat, duration: NSTimeInterval) {
         if intensity > 0.0 {
             isShaking = true
-            if intensity > shakeIntensity {
-                shakeIntensity = intensity      // if the new intensity is stronger, overwrite
-            } else if shakeIntensity > 0.0 {
-                shakeIntensity += intensity/2.0 // if it's already shaking stronger, just add a little bit more
-            }
-            if duration > shakeRemaining {
-                shakeDuration = duration      // if the new duration is longer, overwrite
-                shakeRemaining = duration
-            } else if shakeRemaining > 0.0 {
-                shakeDuration += duration/2.0 // if it's already shaking longer, just add a little bit more
-                shakeRemaining += duration/2.0
-            }
+            shakeIntensity = intensity
+            shakeDuration = duration
+            shakeRemaining = duration
+//            if intensity > shakeIntensity {
+//                shakeIntensity = intensity      // if the new intensity is stronger, overwrite
+//            } else if shakeIntensity > 0.0 {
+//                //shakeIntensity += intensity/2.0 // if it's already shaking stronger, just add a little bit more
+//            }
+//            if duration > shakeRemaining {
+//                shakeDuration = duration      // if the new duration is longer, overwrite
+//                shakeRemaining = duration
+//            } else if shakeRemaining > 0.0 {
+//                //shakeDuration += duration/2.0 // if it's already shaking longer, just add a little bit more
+//                //shakeRemaining += duration/2.0
+//            }
         }
     }
     
@@ -138,7 +141,8 @@ class CameraController : SKNode, UIGestureRecognizerDelegate {
     
     func setCameraStartingPosition(position: CGPoint) {
         setCameraPosition(position)
-        rootNode.position = CGPointMake(-position.x, -position.y)
+        lastPoint = CGPointMake(-position.x, -position.y)
+        rootNode.position = lastPoint
     }
     
     func setCameraStartingPosition(#x: CGFloat, y: CGFloat) {

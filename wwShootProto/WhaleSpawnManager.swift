@@ -80,6 +80,14 @@ class WhaleSpawnManager {
                 }
             }
         }
+        
+        func reset() {
+            for spawn in spawnPoints {
+                spawn.abandon()
+            }
+            self.node.removeFromParent()
+            self.node.removeAllChildren()
+        }
     }
     
     struct WhaleAnimation {
@@ -97,8 +105,9 @@ class WhaleSpawnManager {
     
     // properties
     var isActive: Bool = false
+    var bowExists: Bool = false
     var heatLevel: HeatLevel
-    var timeUntilEval: NSTimeInterval = 0.0
+    var timeUntilEval: NSTimeInterval = 4.0
     var instances: Int = 0
     
     let backLayer: WhaleSpawnLayer  = WhaleSpawnLayer(spawns:  [CGPoint(x: -250.0, y: -250.0), CGPoint(x: 0.0, y: -250.0), CGPoint(x: 250.0, y: -250.0)])
@@ -111,6 +120,8 @@ class WhaleSpawnManager {
     // components
     var activeWhales: [Whale] = [Whale]()
     var orcaAnimations: [WhaleAnimation] = [WhaleAnimation]()
+//    var bowWhales: [Bow] = [Bow]()
+//    var bowWhale: Bow?
     
     var particleEmitter: EnergyParticleEmitter!
     var camCon: CameraController!
@@ -127,7 +138,7 @@ class WhaleSpawnManager {
     }
     
     init() {
-        heatLevel = .Mid
+        heatLevel = .Low
         
         midLayer.spawnPoints[0].mirror = 1
         midLayer.spawnPoints[1].mirror = 2
@@ -141,6 +152,20 @@ class WhaleSpawnManager {
         backLayer.node.name  = "back"
         midLayer.node.name   = "mid"
         frontLayer.node.name = "front"
+        
+        reset()
+        
+        backLayer.node.xScale = 0.6
+        backLayer.node.yScale = 0.6
+        midLayer.node.xScale = 0.85
+        midLayer.node.yScale = 0.85
+        
+        setNextSpawnPoint()
+    }
+    
+    func reset() {
+        heatLevel = .Low
+        timeUntilEval = 4.0
         
         let frontWater = SKSpriteNode(imageNamed: "WaterLayer_002")
         let midWater   = SKSpriteNode(imageNamed: "WaterLayer_003")
@@ -161,17 +186,32 @@ class WhaleSpawnManager {
         frontLayer.node.addChild(backWater)
         frontLayer.node.addChild(midWater)
         frontLayer.node.addChild(frontWater)
-        
-        backLayer.node.xScale = 0.6
-        backLayer.node.yScale = 0.6
-        midLayer.node.xScale = 0.85
-        midLayer.node.yScale = 0.85
-        
-        setNextSpawnPoint()
     }
     
-    func reset() {
+    func shutdown() {
+        backLayer.reset()
+        midLayer.reset()
+        frontLayer.reset()
+        
         isActive = false
+        bowExists = false
+        
+        for whale in activeWhales {
+            if whale.isOrca {
+                disconnectAnimationForOrca(whale as Orca)
+            } else {
+                whale.animator.removeSpine()
+            }
+            whale.stopScream()
+            whale.removeFromParent()
+            whale.removeAllActions()
+        }
+        
+        for i in 0..<orcaAnimations.count {
+            orcaAnimations[i].owner = nil
+        }
+        
+        activeWhales.removeAll(keepCapacity: false)
     }
     
     func loadWhaleAnimations() {
@@ -186,19 +226,21 @@ class WhaleSpawnManager {
     func update(screenPos: CGPoint, dt: CFTimeInterval) {
         if isActive {
             timeUntilEval -= dt
-            if timeUntilEval <= 0 {
+            updateHeatLevel()
+            if timeUntilEval <= 0 && !bowExists {
                 timeUntilEval = getUpdateTime()
                 
                 // add new whales (if necessary)
                 if activeWhales.count < getMaxWhales() {
                     createWhale()
                 }
-                
+
                 // see if any whales should jump
                 var numWhalesJumping = 0
                 for whale in activeWhales {
                     if whale.whaleState != .Submerged { numWhalesJumping++ }
                 }
+                
                 if numWhalesJumping < getMaxJumping() {
                     whaleJump()
                 }
@@ -207,20 +249,65 @@ class WhaleSpawnManager {
             var whaleScreamTime: CGFloat = 0.0
             for whale in activeWhales {
                 whale.update(screenPos, dt: dt)
-                if whale.isScreaming { whaleScreamTime += CGFloat(0.2) } // this is hardcoded ( 10(sec) * 0.02 (.98 inv) = 0.2)
+                if whale.isScreaming { whaleScreamTime += CGFloat(dt) }
             }
             game.screamManager.update(dt, totalScreams: whaleScreamTime)
         }
     }
     
+    func updateHeatLevel() {
+        switch heatLevel
+        {
+            case .Low:
+                if game.timeManager.currentHour() >= 12 {
+                    increaseHeatLevel()
+                }
+                
+            case .Mid:
+                if game.timeManager.currentHour() >= 18 {
+                    increaseHeatLevel()
+                }
+                
+                
+            case .High:
+                if game.timeManager.currentHour() >= 23 {
+                    increaseHeatLevel()
+                }
+                
+            default:
+                break
+        }
+    }
+    
+    func spawnBow() {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+            let newIndex = self.instances++
+            let onDeath: (pos: CGPoint, root: SKNode) -> Void = { (pos, root) in
+                self.particleEmitter.addToQueue(500, pos: pos, root: root)
+            }
+            let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
+            let newBow = Bow(onDeath: onDeath, ss: ss, mgrInd: newIndex)
+            newBow.zPosition = -5
+            if arc4random_uniform(2) == 0 { newBow.mirror(true) }
+            self.activeWhales += [newBow]
+            self.bowExists = true
+            
+            newBow.position = CGPoint(x: 0.0, y: -250.0)
+            
+            if arc4random_uniform(2) == 0 { newBow.mirror(true) }
+            else { newBow.mirror(false) }
+            
+            self.midLayer.node.addChild(newBow)
+            newBow.jump()
+        })
+    }
+    
     // must keep track of the current whales in play
     func createWhale() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
-            
-            let spawnLayer = self.getRandomSpawnLayer()
             let newIndex = self.instances++
             let onDeath: (pos: CGPoint, root: SKNode) -> Void = { (pos, root) in
-                self.particleEmitter.addToQueue(200, pos: pos, root: root)
+                self.particleEmitter.addToQueue(225, pos: pos, root: root)
                 self.destroyWhale(newIndex)
             }
             let ss: (CGFloat, NSTimeInterval)->Void = { (intensity, duration) in self.camCon.shake(intensity, duration: duration) }
@@ -232,10 +319,7 @@ class WhaleSpawnManager {
             } else {
                 println("whale creation failed due to lack of animations")
             }
-//            dispatch_async(dispatch_get_main_queue(), {
-//                println("built a whale on a different thread and returned to the main thread")
-//            });
-        });
+        })
     }
     func destroyWhale(whaleID: Int) {
         for i in 0..<activeWhales.count {
@@ -345,16 +429,16 @@ class WhaleSpawnManager {
         switch( heatLevel )
         {
         case .Low:
-            return 7.0
+            return 9.5
             
         case .Mid:
-            return 6.0
+            return 6.5
             
         case .High:
-            return 5.0
+            return 4.0
             
         case .End:
-            return 4.0
+            return 2.5
         }
     }
     func getMaxJumping() -> Int {
@@ -394,9 +478,27 @@ class WhaleSpawnManager {
         }
     }
     
-    // must spawn new whales to keep challenge mapped to heat level
-    
-    
     // must increase heat level appropriately
+    func increaseHeatLevel() {
+        switch heatLevel
+        {
+            case .Low:
+                heatLevel = .Mid
+                println(".Mid")
+            
+            case .Mid:
+                heatLevel = .High
+                println(".High")
+            
+            case .High:
+                heatLevel = .End
+                if !bowExists { spawnBow() }
+                println(".End")
+            
+            default:
+                break
+        }
+    }
+    
     
 }

@@ -11,6 +11,8 @@ import SpriteKit
 
 class Sun : NHCNode {
     
+    var hasSet = false
+    
     override init() {
         super.init()
         
@@ -19,9 +21,14 @@ class Sun : NHCNode {
     }
     
     func update() {
-//        self.position.y = (game.timeManager.currentDecimalTime() * -150.0) + 2700
-        let pixPerHour: CGFloat = 25
-        self.position.y = (130 + (pixPerHour*8)) - (game.timeManager.currentDecimalTime() * pixPerHour)
+        if !hasSet {
+            let time = game.timeManager.currentDecimalTime()
+            if time < 8.0 {
+                hasSet = true
+                return
+            }
+            let pixPerHour: CGFloat = (250/16)
+            self.position.y = (250 + (pixPerHour*8)) - (game.timeManager.currentDecimalTime() * pixPerHour)
+        }
     }
-    
 }

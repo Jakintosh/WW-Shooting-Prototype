@@ -190,10 +190,11 @@ class EnergyParticle : NHCNode {
     }
     
     func collect() {
+//        SoundManager.sharedManager().playSound("energy_collect.wav")
         self.active = false
         self.removeAllActions()
         runAction(collectAction, completion: {
-            game.energyManager.addEnergy(0.1)
+            game.energyManager.addEnergy(0.02)
             self.removeClosure(i: self.index)
             self.removeFromParent()
             self.reset()

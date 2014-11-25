@@ -37,6 +37,10 @@ class OrientationScene : SKFuckScene {
     var lastRotation: Double = 0.0
     var rotation: Double = 0.0
     
+    var shouldTransition: Bool = false
+    var isLoaded: Bool = false
+    var transitionScene: SKScene?
+    
     override init(size: CGSize) {
         super.init(size: size)
         addChild(compass)
@@ -47,23 +51,39 @@ class OrientationScene : SKFuckScene {
         if prevScene == .Vertical {
             switch results
             {
-            case .Pass:
-                compass.runAction(SKAction.rotateByAngle(CGFloat(-M_PI/2.0), duration: 1.5))
-                
-            case .Fail:
-                compass.runAction(SKAction.rotateByAngle(CGFloat(M_PI/2.0), duration: 1.5))
+                case .Pass:
+                    let rotateAction = SKAction.rotateByAngle(CGFloat(M_PI/2.0), duration: 1.5)
+                    rotateAction.timingMode = .EaseInEaseOut
+                    compass.runAction(rotateAction, completion: {
+                        self.shouldTransition = true
+                    })
+                    
+                case .Fail:
+                    let rotateAction = SKAction.rotateByAngle(CGFloat(-M_PI/2.0), duration: 1.5)
+                    rotateAction.timingMode = .EaseInEaseOut
+                    compass.runAction(rotateAction, completion: {
+                        self.shouldTransition = true
+                    })
             }
         }
         else if prevScene == .Horizontal {
             switch results
             {
-            case .Pass:
-                compass.zRotation = CGFloat(M_PI/2.0)
-                compass.runAction(SKAction.rotateByAngle(CGFloat((3.0*M_PI)/2.0), duration: 4.5))
-                
-            case .Fail:
-                compass.zRotation = CGFloat(-M_PI/2.0)
-                compass.runAction(SKAction.rotateByAngle(CGFloat(M_PI/2.0), duration: 1.5))
+                case .Pass:
+                    compass.zRotation = CGFloat(M_PI/2.0)
+                    let rotateAction = SKAction.rotateByAngle(CGFloat((3.0*M_PI)/2.0), duration: 4.5)
+                    rotateAction.timingMode = .EaseInEaseOut
+                    compass.runAction(rotateAction, completion: {
+                        self.shouldTransition = true
+                    })
+                    
+                case .Fail:
+                    compass.zRotation = CGFloat(-M_PI/2.0)
+                    let rotateAction = SKAction.rotateByAngle(CGFloat(M_PI/2.0), duration: 1.5)
+                    rotateAction.timingMode = .EaseInEaseOut
+                    compass.runAction(rotateAction, completion: {
+                        self.shouldTransition = true
+                    })
             }
         }
         
@@ -80,31 +100,47 @@ class OrientationScene : SKFuckScene {
             
             var nextScene: SKScene? = nil
             if self.nextSceneName == "TutorialScene" {
+                
                 nextScene = TutorialScene(size: CGSize(width: 320.0, height: 568.0))
-            } else if self.nextSceneName == "IntroScene" {
-                nextScene = IntroScene(size: CGSize(width: 320.0, height: 568.0))
+                game.interactionManager.releaseInteractions(nil)
+                
+            } else if self.nextSceneName == "DayZeroSuccess" {
+                
+                nextScene = LighthouseScene(size: CGSize(width: 320.0, height: 568.0))
+                (nextScene as LighthouseScene).cameraRotation = CGFloat(M_PI/2.0)
+                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Pass, "GameScene")
+                game.interactionManager.loadInteractions("default", dataFile: "dayZero")
+                
             } else if self.nextSceneName == "GameScene" {
+                
                 nextScene = GameScene(size: CGSize(width: 320.0, height: 568.0))
+                game.interactionManager.releaseInteractions(nil)
+                
             } else if self.nextSceneName == "DayOneFailOne" {
-                nextScene = DayOneFailOne(size: CGSize(width: 320.0, height: 568.0))
+                
+                nextScene = LighthouseScene(size: CGSize(width: 320.0, height: 568.0))
+                (nextScene as LighthouseScene).cameraRotation = CGFloat(-M_PI/2.0)
+                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Fail, "GameScene")
+                game.interactionManager.loadInteractions("default", dataFile: "dayOneFailOne")
+                
             } else if self.nextSceneName == "DayOneFailTwo" {
-//                nextScene = TutorialScene(size: CGSize(width: 320.0, height: 568.0))
+                
+                nextScene = LighthouseScene(size: CGSize(width: 320.0, height: 568.0))
+                (nextScene as LighthouseScene).cameraRotation = CGFloat(-M_PI/2.0)
+                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Fail, "GameScene")
+                game.interactionManager.loadInteractions("default", dataFile: "dayOneFailTwo")
+                
             } else if self.nextSceneName == "DayOneSuccess" {
-//                nextScene = TutorialScene(size: CGSize(width: 320.0, height: 568.0))
+                
+                nextScene = LighthouseScene(size: CGSize(width: 320.0, height: 568.0))
+                (nextScene as LighthouseScene).cameraRotation = CGFloat(M_PI/2.0)
+                (nextScene as LighthouseScene).nextSceneInfo = (.Horizontal, .Pass, "TutorialScene")
+                game.interactionManager.loadInteractions("default", dataFile: "dayOneSuccess")
+                
             }
             
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                self.runAction(SKAction.sequence([SKAction.waitForDuration(1.0), SKAction.runBlock({
-                    // set up transition
-                    let transition = SKTransition.crossFadeWithDuration(1.0)
-                    transition.pausesIncomingScene = false
-                    transition.pausesOutgoingScene = false
-                    
-                    // present scene
-                    view.presentScene(nextScene, transition: transition)
-                })]))
-            })
+            self.transitionScene = nextScene
+            self.isLoaded = true
         })
     }
     
@@ -117,6 +153,17 @@ class OrientationScene : SKFuckScene {
 //    }
     
     override func update(currentTime: NSTimeInterval) {
+        if isLoaded && shouldTransition {
+            // set up transition
+            let transition = SKTransition.crossFadeWithDuration(1.0)
+            transition.pausesIncomingScene = false
+            transition.pausesOutgoingScene = false
+            
+            // present scene
+            view!.presentScene(transitionScene, transition: transition)
+            shouldTransition = false
+        }
+        
 //        // update time
 //        updateTime(currentTime)
 //        

@@ -21,6 +21,9 @@ class GameScene: SKScene {
     var touchLocation: CGPoint?
     var touch: UITouch?
     
+    var isTransitioning: Bool = false
+    var nextScene: String!
+    
     // entities
     var whales = [Whale]()
     let char: Player       = Player()
@@ -74,7 +77,9 @@ class GameScene: SKScene {
         game.screamManager.reset() // optional values
         game.screamManager.camCon = self.camCon
         game.energyManager.reset()
+        game.timeManager.reset()
         game.whaleSpawnManager.reset()
+        
         
         // setup camera
         camCon.zPosition = 0.0
@@ -87,6 +92,9 @@ class GameScene: SKScene {
         game.whaleSpawnManager.baseNode        = self.water
         game.whaleSpawnManager.particleEmitter = self.particleEmitter
         game.whaleSpawnManager.camCon          = self.camCon
+        game.whaleSpawnManager.createWhale()
+        
+        if game.currentFail == "DayZeroSuccess" { game.whaleSpawnManager.heatLevel = .High }
         
         // set positions
         railing.basePosition = CGPoint(x: 0, y: -frame.height/2)
@@ -98,6 +106,8 @@ class GameScene: SKScene {
         city.anchorPoint = CGPoint(x: 0.5, y: 0.0)
         city.position = CGPoint(x: 0, y: 125)
         city.zPosition = -35
+        
+        eHUD.alpha = 0.0
         
         // add character to railing
         char.zPosition = 1
@@ -119,6 +129,9 @@ class GameScene: SKScene {
         camCon.addCameraChild(eHUD, withZ: -11)
         
         camCon.addHUDChild(fadeSprite, withZ: 1000)
+        
+        SoundManager.sharedManager().playMusic("waves.wav", looping: true, fadeIn: false)
+        SoundManager.sharedManager().musicVolume = 0.33
     }
     
 //    override func willMoveFromView(view: SKView) {
@@ -129,8 +142,9 @@ class GameScene: SKScene {
     override func update(currentTime: CFTimeInterval) {
         // time keeping
         deltaTime = Utilities2D.clamp(currentTime - lastTime, min: 0.0, max: 1.0)
-        game.timeManager.update(deltaTime)
         lastTime = currentTime
+        
+        if char.isUp { game.timeManager.update(deltaTime) }
         
         
         // update reticle/touch
@@ -164,6 +178,28 @@ class GameScene: SKScene {
         if eHUD.currentState == .ZoomedIn { particleEmitter.updateParticles(particleUpdate) }
         
         fadeSprite.alpha = game.screamManager.getFade()
+        if game.screamManager.percentage == 1.0 && !isTransitioning {
+            let transitionName = game.currentFail
+            if transitionName == "DayZeroSuccess" {
+                game.currentFail = "DayOneFailOne"
+            } else if transitionName == "DayOneFailOne" {
+                game.currentFail = "DayOneFailTwo"
+            }
+            let nextScene = OrientationScene(size: CGSize(width: 320.0, height: 568.0))
+            nextScene.transitionToNextScene(.Vertical, results: .Fail, nextSceneName: transitionName)
+            
+            // set up transition
+            let transition = SKTransition.crossFadeWithDuration(1.0)
+            transition.pausesIncomingScene = true
+            transition.pausesOutgoingScene = true
+            
+            // present scene
+            view!.presentScene(nextScene, transition: transition)
+            
+            game.whaleSpawnManager.shutdown()
+            char.shutdown()
+            self.isTransitioning = true
+        }
         
         // finally, update all of the camera changes
         camCon.update(deltaTime)
@@ -237,13 +273,15 @@ class GameScene: SKScene {
     
     func transitionHome() {
         
-        let transitionDuration = 1.0
-        var transition: SKTransition = SKTransition.fadeWithDuration(transitionDuration)
-        transition.pausesIncomingScene = false
-        transition.pausesOutgoingScene = false
-        let homeScene = HomeScene(size: CGSize(width: frame.height, height: frame.width))
-        view?.presentScene(homeScene, transition: transition)
-        homeScene.runAction(SKAction.sequence([SKAction.waitForDuration(transitionDuration/2.0), SKAction.runBlock({ NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil) })]))
+        
+        
+//        let transitionDuration = 1.0
+//        var transition: SKTransition = SKTransition.fadeWithDuration(transitionDuration)
+//        transition.pausesIncomingScene = false
+//        transition.pausesOutgoingScene = false
+//        let homeScene = HomeScene(size: CGSize(width: frame.height, height: frame.width))
+//        view?.presentScene(homeScene, transition: transition)
+//        homeScene.runAction(SKAction.sequence([SKAction.waitForDuration(transitionDuration/2.0), SKAction.runBlock({ NSNotificationCenter.defaultCenter().postNotificationName("NHCSWillTransitionToHome", object: nil) })]))
     }
     
     // MARK: - Touch
@@ -253,6 +291,8 @@ class GameScene: SKScene {
                 touchLocation = touch.locationInNode(camCon.rootNode)
                 self.touch = touch as? UITouch
                 targetAreaPos = water.convertPoint(touchLocation!, fromNode: camCon.rootNode).x
+                
+                SoundManager.sharedManager().playSound("reticle_zoom_in.wav")
                 
                 char.currentState = .Aim
                 eHUD.currentState = .ZoomedIn
@@ -273,12 +313,18 @@ class GameScene: SKScene {
         touchLocation = nil
         touch = nil
         
-        char.currentState = .Idle
-        eHUD.currentState = .ZoomedOut
+        if char.isUp {
+            char.currentState = .Idle
+            eHUD.currentState = .ZoomedOut
+            SoundManager.sharedManager().playSound("reticle_zoom_out.wav")
+        }
         
         if !game.whaleSpawnManager.isActive {
             game.whaleSpawnManager.isActive = true
             char.getUp()
+            eHUD.xScale = 1.2
+            eHUD.yScale = 1.2
+            eHUD.runAction( SKAction.group( [SKAction.scaleTo(1.0, duration: 1.5), SKAction.fadeAlphaTo(1.0, duration: 1.5)] ) )
             water.runAction(SKAction.customActionWithDuration(2.0, actionBlock: { (node, elapsedTime) in
                 (node as Water).basePosition.y = (((elapsedTime/2.0)*(elapsedTime/2.0)) * -10.0) - self.frame.height/2.0
             }))
